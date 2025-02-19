@@ -1,0 +1,82 @@
+<div class="flex items-center justify-center w-full mx-10">
+    <div class="h-fit w-full shadow-xl rounded-md border-[1px] md:flex p-5 bg-white lg:w-fit gap-10">
+        <!-- Image Login -->
+        <img src="images/cards/02-320x200.jpg" alt="" class="hidden md:block md:w-1/2 bg-cover bg-center rounded">
+
+
+        <!-- Form Login -->
+        <div class="md:w-1/2">
+            <img src="images/logo/commandcenter.png" alt="" class="w-16 mb-5">
+            <h1 class="font-bold text-4xl max-sm:text-2xl">Create an Account</h1>
+            <p class="opacity-80">Don't have an account? <span [routerLink]="['/sign-up']" class="hover:cursor-pointer text-blue-800
+                    font-semibold">Sign Up</span> </p>
+
+            @if (showAlert) {
+            <fuse-alert class="mt-8" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
+                [@shake]="alert.type === 'error'">
+                {{ alert.message }}
+            </fuse-alert>
+            }
+
+            <div>
+                <!-- Sign in form -->
+                <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
+                    <!-- Email field -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Email address</mat-label>
+                        <input id="email" matInput [formControlName]="'email'" placeholder="Your Email"/>
+                        @if (signInForm.get('email').hasError('required')) {
+                        <mat-error> Email address is required </mat-error>
+                        }
+                        @if (signInForm.get('email').hasError('email')) {
+                        <mat-error>
+                            Please enter a valid email address
+                        </mat-error>
+                        }
+                    </mat-form-field>
+
+                    <!-- Password field -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Password</mat-label>
+                        <input id="password" matInput type="password" [formControlName]="'password'" #passwordField placeholder="Your Password" />
+                        <button mat-icon-button type="button" (click)="
+                                                passwordField.type === 'password'
+                                                    ? (passwordField.type = 'text')
+                                                    : (passwordField.type = 'password')
+                                            " matSuffix>
+                            @if (passwordField.type === 'password') {
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye'"></mat-icon>
+                            }
+                            @if (passwordField.type === 'text') {
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:eye-slash'"></mat-icon>
+                            }
+                        </button>
+                        <mat-error> Password is required </mat-error>
+                    </mat-form-field>
+
+                    <!-- Actions -->
+                    <div class="mt-1.5 inline-flex w-full items-center justify-between">
+                        <mat-checkbox class="-ml-2" [color]="'primary'" [formControlName]="'rememberMe'">
+                            Remember me
+                        </mat-checkbox>
+                        <a class="text-md font-medium text-primary-500 hover:underline"
+                            [routerLink]="['/forgot-password']">Forgot
+                            password?
+                        </a>
+                    </div>
+
+                    <!-- Submit button -->
+                    <button class="fuse-mat-button-large mt-6 w-full" mat-flat-button [color]="'primary'"
+                        [disabled]="signInForm.disabled" (click)="signIn()">
+                        @if (!signInForm.disabled) {
+                        <span> Sign in </span>
+                        }
+                        @if (signInForm.disabled) {
+                        <mat-progress-spinner [diameter]="24" [mode]="'indeterminate'"></mat-progress-spinner>
+                        }
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

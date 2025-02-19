@@ -1,0 +1,99 @@
+<div class="w-full">
+
+    <nav class="flex shadow px-5 py-3 text-gray-700 borde bg-white dark:bg-slate-800 " aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+            <li class="inline-flex items-center">
+                <a [routerLink]="['role-management']"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    User Profile
+                </a>
+            </li>
+        </ol>
+    </nav>
+
+    <section class="p-3">
+        <div class="bg-card flex flex-col overflow-hidden rounded-2xl h-fit w-full p-4 shadow-lg sm:col-span-6">
+            <div
+                class="truncate text-lg font-medium leading-6 tracking-tight px-4 flex items-center w-full justify-between">
+                User Profile
+
+                <a [routerLink]="['add-role']" mat-flat-button [color]="'primary'">
+                    <mat-icon class="icon-size-5" [svgIcon]="'person_add_alt_1'"></mat-icon>
+                    <span class="ml-2">Tambah Profile</span>
+                </a>
+            </div>
+
+            <!-- Card Content -->
+            <div class="py-4 sm:px-4">
+                <div class="relative overflow-x-auto sm:rounded-lg max-h-[67svh]">
+                    <table class="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                            <tr>
+                                <!-- <th scope="col" class="p-4">
+                                  <div class="flex items-center">
+                                      <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                      <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                  </div>
+                              </th> -->
+                                <th scope="col" class="px-6 py-3 text-xs sm:text-sm">
+                                    Name
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-xs sm:text-sm">
+                                    Shared Users
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-xs sm:text-sm">
+                                    Upload / Download
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-xs sm:text-sm">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="" *ngFor="let roleData of roleDatas">
+                                <!-- <td class="w-4 p-4">
+                                  <div class="flex items-center">
+                                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
+                                  </div>
+                              </td> -->
+                                <th scope="row"
+                                    class="flex items-center px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="max-sm:pr-4">
+                                        <div class="text-base font-semibold">{{roleData.profile_name}}</div>
+                                        <div class="font-normal text-gray-500">{{roleData.profile_name}}</div>
+                                    </div>
+                                </th>
+                                <td class="px-6 py-4 text-sm sm:text-sm">
+                                    {{roleData.shared_users}}
+                                </td>
+
+                                <td class="px-6 py-4 text-sm sm:text-sm">
+                                    {{roleData.rate_limit}}
+                                </td>
+
+                                <td class="px-6 translate-y-[10px] flex items-center ">
+                                    <a (click)="deteleProfiles(roleData.profile_name)"
+                                        class="font-medium mx-1 text-white dark:text-white bg-red-500 rounded hover:underline">
+                                        <mat-icon svgIcon="heroicons_solid:trash" class="text-white"
+                                            style="transform: scale(0.7);"></mat-icon>
+                                    </a>
+                                    <a [routerLink]="['edit-role', roleData.profile_name]"
+                                        class="font-medium mx-1 text-white dark:text-white bg-blue-500 rounded hover:underline">
+                                        <mat-icon svgIcon="heroicons_solid:pencil-square" class="text-white"
+                                            style="transform: scale(0.7);"></mat-icon>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Paginator -->
+                <mat-paginator [length]="page_totals * pageSize" [pageSize]="pageSize"
+                    [pageSizeOptions]="[1, 5, 10, 25]" (page)="onPageChange($event)" showFirstLastButtons>
+                </mat-paginator>
+            </div>
+        </div>
+    </section>
+</div>

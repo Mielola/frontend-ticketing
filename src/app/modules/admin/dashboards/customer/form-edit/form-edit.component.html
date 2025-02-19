@@ -1,0 +1,51 @@
+<div class="h-full w-full">
+    <!-- Breadcrumb -->
+    <nav class="flex shadow px-5 py-3 text-gray-700 borde bg-white dark:bg-slate-800 " aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+            <li class="inline-flex items-center">
+                <a [routerLink]="['/dashboards/customer']"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    Hotspot Users
+                </a>
+            </li>
+            <li>
+                <div class="flex items-center">
+                    <svg class="rtl:rotate-180 block w-3 h-3 mx-1 text-gray-400 " aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 9 4-4-4-4" />
+                    </svg>
+                    <a href="#"
+                        class="ms-1 text-sm font-medium text-gray-700 hover:text-blue-600 md:ms-2 dark:text-gray-400 dark:hover:text-white">Edit
+                        Akun</a>
+                </div>
+            </li>
+        </ol>
+    </nav>
+
+    <div class="p-3">
+        <form [formGroup]="userFormEdit" class="bg-card mt-8 flex flex-col overflow-hidden rounded-2xl p-8 pb-4 shadow">
+            <mat-form-field class="w-full" floatLabel="always">
+                <mat-label>NIK / Nomer Hp</mat-label>
+                <input matInput formControlName="name" type="text" [placeholder]="'NIK / Nomer HP'" />
+            </mat-form-field>
+            <mat-form-field class="w-full" floatLabel="always">
+                <mat-label>Nama Pengguna</mat-label>
+                <input matInput formControlName="comment" [placeholder]="'Nama Pengguna'" />
+            </mat-form-field>
+            <mat-form-field class="gt-xs:pr-3 flex-auto">
+                <mat-label>Profile Akun</mat-label>
+                <select matNativeControl formControlName="profile">
+                    <option *ngFor="let roleData of roleDatas">
+                        {{ roleData.profile_name }}
+                    </option>
+                </select>
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:map-pin'"></mat-icon>
+            </mat-form-field>
+            <button class="bg-blue-600 text-white p-2 rounded" (click)="onSubmit()">
+                Edit Akun
+            </button>
+        </form>
+
+    </div>
+</div>

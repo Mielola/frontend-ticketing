@@ -1,0 +1,44 @@
+// generate voucher service
+import { HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import axios from 'axios';
+import { environment } from 'environments/environments.dev';
+
+
+@Injectable({
+    providedIn: 'root'
+})
+export class ApiService {
+    private apiUrl = environment.apiUrl;
+    private headers = {
+        headers: {
+            'Authorization': `${localStorage.getItem('accessToken') || ''}`,
+            'Content-Type': 'application/json'
+        }
+    };
+
+
+    async get(endPoint: string, headers: any) {
+        return await axios.get(this.apiUrl + endPoint, {
+            headers,
+        }).then(
+            async response => {
+                return await response.data;
+            }
+        ).catch(async error => {
+            console.error(error);
+        });
+    }
+
+
+    async post(endPoint: string, data: any) {
+        try {
+            const response = await axios.post(this.apiUrl + endPoint, data);
+            return { data: response.data, status: response.status };
+        } catch (error) {
+            return { data: null, status: error.response.status};
+        }
+    }
+
+}
+

@@ -1,0 +1,123 @@
+<div class="w-full">
+
+    <nav class="flex shadow px-5 py-3 text-gray-700 borde bg-white dark:bg-slate-800 " aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+            <li class="inline-flex items-center">
+                <a [routerLink]="['..']"
+                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 dark:text-gray-400 dark:hover:text-white">
+                    Hotspot Users
+                </a>
+            </li>
+        </ol>
+    </nav>
+
+    <section class="p-3">
+        <div class="bg-card shadow-lg flex flex-col overflow-hidden rounded-2xl h-fit w-full p-4 sm:col-span-6">
+            <div
+                class="truncate text-lg font-medium leading-6 tracking-tight px-4 flex items-center w-full justify-between">
+                Akun Mikrotik
+
+                <a [routerLink]="['add-user']" mat-flat-button [color]="'primary'">
+                    <mat-icon class="icon-size-5" [svgIcon]="'person_add_alt_1'"></mat-icon>
+                    <span class="ml-2">Tambah Akun</span>
+                </a>
+            </div>
+
+            <!-- Card Content -->
+            <div class="p-4">
+                <div class="relative overflow-x-auto sm:rounded-lg max-h-[58svh]">
+                    <table
+                        class="w-full h-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 overflow-y-auto">
+                        <thead class="text-xs text-gray-700 uppercase dark:text-gray-400">
+                            <tr>
+                                <!-- <th scope="col" class="p-4">
+                                  <div class="flex items-center">
+                                      <input id="checkbox-all-search" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                      <label for="checkbox-all-search" class="sr-only">checkbox</label>
+                                  </div>
+                              </th> -->
+                                <th scope="col" class="px-2 sm:px-6 py-3 text-xs sm:text-sm">
+                                    Name
+                                </th>
+                                <!-- <th scope="col" class="px-2 sm:px-6 py-3 text-xs sm:text-sm">
+                                    Profile
+                                </th> -->
+                                <th scope="col" class="px-2 sm:px-6 py-3 text-xs sm:text-sm">
+                                    Downloads
+                                </th>
+                                <th scope="col" class="px-2 sm:px-6 py-3 text-xs sm:text-sm">
+                                    Upload
+                                </th>
+                                <th scope="col" class="px-2 sm:px-6 py-3 text-xs sm:text-sm">
+                                    Status
+                                </th>
+                                <th scope="col" class="px-2 sm:px-6 py-3 text-xs sm:text-sm">
+                                    Action
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="max-w-full" *ngFor="let user of customerData">
+                                <!-- <td class="w-4 p-4">
+                                  <div class="flex items-center">
+                                      <input id="checkbox-table-search-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                      <label for="checkbox-table-search-3" class="sr-only">checkbox</label>
+                                  </div>
+                              </td> -->
+                                <th scope="row"
+                                    class="flex items-center px-2 sm:px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                    <div class="max-sm:pr-4">
+                                        <div class="text-base font-semibold">{{user.comment}}</div>
+                                        <div class="font-normal text-gray-500">{{user.name}}</div>
+                                    </div>
+                                </th>
+                                <!-- <td class="px-2 sm:px-6 py-4 text-sm sm:text-sm">
+                                    {{user.profile}}
+                                </td> -->
+                                <td class="px-2 sm:px-6 py-4 text-sm sm:text-sm">
+                                    {{ convertBytesToMB(user['bytes-in']).toFixed(2) }} MB/s
+                                </td>
+                                <td class="px-2 sm:px-6 py-4 text-sm sm:text-sm">
+                                    {{ convertBytesToMB(user['bytes-out']).toFixed(2) }} MB/s
+                                </td>
+                                <td class="px-2 sm:px-6 py-4 text-sm sm:text-sm order">
+                                    <div class="flex items-center">
+                                        <ng-container *ngIf="user.disabled === 'false'; else offlineStatus">
+                                            <div class="h-2.5 w-2.5 rounded-full bg-green-500 me-2"></div> Online
+                                        </ng-container>
+                                        <ng-template #offlineStatus>
+                                            <div class="h-2.5 w-2.5 rounded-full bg-red-500 me-2"></div> Offline
+                                        </ng-template>
+                                    </div>
+                                </td>
+
+
+                                <td class="px-2 sm:px-6 translate-y-[10px] flex items-center ">
+                                    <a (click)="deleteUser(user.name)"
+                                        class="font-medium mx-1 text-white dark:text-white bg-red-500 hover:cursor-pointer hover:bg-red-600 rounded hover:underline">
+                                        <mat-icon svgIcon="heroicons_solid:trash" class="text-white"
+                                            style="transform: scale(0.7);"></mat-icon>
+                                    </a>
+                                    <a [routerLink]="['edit-user', user.name]"
+                                        class="font-medium mx-1 text-white dark:text-white bg-blue-500 hover:bg-blue-600 rounded hover:underline">
+                                        <mat-icon svgIcon="heroicons_solid:pencil-square" class="text-white"
+                                            style="transform: scale(0.7);"></mat-icon>
+                                    </a>
+                                    <a [routerLink]="['view-detail', user.name]"
+                                        class="font-medium mx-1 text-white dark:text-white bg-slate-500 hover:bg-slate-600 rounded hover:underline">
+                                        <mat-icon svgIcon="heroicons_solid:eye" class="text-white"
+                                            style="transform: scale(0.7);"></mat-icon>
+                                    </a>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <mat-paginator [length]="total_pages" [pageSize]="1" [pageSizeOptions]="[1, 5, 10, 25]"
+                (page)="handlePageChange($event)" showFirstLastButtons></mat-paginator>
+        </div>
+    </section>
+
+</div>

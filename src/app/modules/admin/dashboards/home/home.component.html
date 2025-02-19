@@ -1,0 +1,149 @@
+<div class="w-full mb-5">
+
+    <!-- Header -->
+    <div class="dark relative flex-0 overflow-hidden bg-gray-800 px-4 py-8 sm:p-16 h-56">
+        <!-- Background
+        Rings
+        prettier-ignore -->
+        <svg class="absolute inset-0 pointer-events-none" viewBox="0 0 960 540" width="100%" height="100%"
+            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- <div class="relative z-10 flex flex-col items-center">
+            <h2 class="text-xl font-semibold">NETPRO COOPERATION</h2>
+            <div class="mt-1 text-center text-4xl font-extrabold leading-tight tracking-tight sm:text-7xl">
+                Selamat Datang Admin di Dashboard Owner
+            </div>
+            <div class="text-secondary mt-6 max-w-2xl text-center tracking-tight sm:text-2xl">
+                Our courses will step you through the process of a building
+                small applications, or adding new features to existing
+                applications.
+            </div>
+        </div> -->
+    </div>
+
+    <div class="grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid p-5 gap-6">
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Device Status</div>
+            <div class="mt-2">
+                <p class="text-green-400 font-medium">Device is Running</p>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">System Date</div>
+            <div class="mt-2">
+                <p class="text-orange-400 font-medium">9/23/2024, 10:20:98 AM</p>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Uptime</div>
+            <div class="mt-2">
+                <p class="text-green-400 font-medium">5 Hari, 4 Jam, 10 Menit</p>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Software Identity</div>
+            <div class="mt-2">
+                <p class=" font-medium">6706223151</p>
+            </div>
+        </fuse-card>
+    </div>
+
+    <!-- LINE 2 -->
+    <div class="grid-cols-1 md:grid-cols-2 grid px-5 pb-4 gap-6">
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Total User</div>
+            <div class="mt-2">
+                <p class=" font-medium">{{totalUser}} User</p>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Total User Profile</div>
+            <div class="mt-2">
+                <p class=" font-medium">{{totalUserProfile}} User Profile</p>
+            </div>
+        </fuse-card>
+    </div>
+
+    <!-- LINE 3 -->
+    <div class="px-5 gap-6 pb-4">
+        <!-- Ovpn To Grow -->
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Bandwith Mikrotik Usage</div>
+            <div class="mt-2">
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
+                    <span
+                        class="text-xs font-medium text-blue-700 dark:text-white">{{convertBytesToMB(totalBytesInMB).toFixed(2)}}MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class=" h-2.5 rounded-full" [style.width.%]="downloadPecentage"
+                        [style.background-color]="getBarColor(downloadPecentage)"></div>
+                </div>
+                <br>
+                <!-- Download Bar -->
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
+                    <span
+                        class="text-xs font-medium text-blue-700 dark:text-white">{{convertBytesToMB(totalBytesOutMB).toFixed(2)
+                        }}MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="h-2.5 rounded-full max-w-full" [style.width.%]="uploadPecentage"
+                        [style.background-color]="getBarColor(uploadPecentage)"></div>
+                </div>
+            </div>
+        </fuse-card>
+
+        <!-- <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">LACP (local)</div>
+            <div class="mt-2">
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                </div>
+                <br>
+                Download Bar
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                </div>
+            </div>
+        </fuse-card> -->
+
+        <!-- LACP (local)
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">OVPN To Grow</div>
+            <div class="mt-2">
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                </div>
+                <br>
+                Download Bar
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
+                </div>
+            </div>
+        </fuse-card> -->
+    </div>
+
+
+
+</div>

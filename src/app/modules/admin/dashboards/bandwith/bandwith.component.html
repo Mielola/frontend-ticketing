@@ -1,0 +1,74 @@
+<div class="w-full h-full mb-auto">
+    <!-- Header -->
+    <div class="dark relative flex-0 overflow-hidden bg-gray-800 px-4 py-8 h-[300px] sm:p-16">
+        <!-- Background -->
+        <!-- Rings -->
+        <!-- prettier-ignore -->
+        <svg class="absolute inset-0 pointer-events-none" viewBox="0 0 960 540" width="100%" height="100%"
+            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- <div class="relative z-10 flex flex-col items-center">
+            <h2 class="text-xl font-semibold">Monitoring Mikrotik</h2>
+            <div class="mt-1 text-center text-4xl font-extrabold leading-tight tracking-tight sm:text-7xl">
+                Selamat Datang Admin di Dashboard Owner
+            </div>
+            <div class="text-secondary mt-6 max-w-2xl text-center tracking-tight sm:text-2xl">
+                Our courses will step you through the process of a building
+                small applications, or adding new features to existing
+                applications.
+            </div>
+        </div> -->
+    </div>
+
+    <div class="grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid px-5 gap-6 relative -translate-y-15">
+        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
+            <div class="text-xl font-bold">Download</div>
+            <div class="mt-2">
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
+                    <span
+                        class="text-xs font-medium text-blue-700 dark:text-white">{{convertBytesToMB(bytesIn).toFixed(2)}}MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class=" h-2.5 rounded-full max-w-full" [style.width.%]="downloadPecentage"
+                        [style.background-color]="getBarColor(downloadPecentage)"></div>
+                </div>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4 shadow-md" #fuseCard>
+            <div class="text-xl font-bold">Upload</div>
+            <div class="mt-2">
+                <div class="flex justify-between mb-1">
+                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
+                    <span
+                        class="text-xs font-medium text-blue-700 dark:text-white">{{convertBytesToMB(bytesOut).toFixed(2)}}MB/s</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+                    <div class=" h-2.5 rounded-full max-w-full" [style.width.%]="uploadPecentage"
+                        [style.background-color]="getBarColor(uploadPecentage)"></div>
+                </div>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4 shadow-md" #fuseCard>
+            <div class="text-xl font-bold">Total User</div>
+            <div class="mt-2">
+                <p class="font-medium">{{totalUser}} User</p>
+            </div>
+        </fuse-card>
+        <fuse-card class="flex flex-col px-8 py-6 pb-4 shadow-md" #fuseCard>
+            <div class="text-xl font-bold">Total User Profile</div>
+            <div class="mt-2">
+                <p class="font-medium">{{totalUserProfile}} User Profile</p>
+            </div>
+        </fuse-card>
+    </div>
+
+    <!-- <div class="px-4 -translate-y-6">
+        <app-area-chart></app-area-chart>
+
+    </div> -->
+</div>
