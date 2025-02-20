@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { FinanceComponent } from 'app/modules/admin/dashboards/finance/finance.component';
 import { FinanceService } from 'app/modules/admin/dashboards/finance/finance.service';
 import { CustomerComponent } from './customer.component';
-import { ProjectService } from '../project/project.service';
+import { ProjectService } from '../home/home.service';
 import { ViewDetailComponent } from './view-detail/view-detail.component';
 
 export default [

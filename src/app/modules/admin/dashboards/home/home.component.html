@@ -1,149 +1,379 @@
-<div class="w-full mb-5">
-
+<div class="flex min-w-0 flex-auto flex-col">
     <!-- Header -->
-    <div class="dark relative flex-0 overflow-hidden bg-gray-800 px-4 py-8 sm:p-16 h-56">
-        <!-- Background
-        Rings
-        prettier-ignore -->
-        <svg class="absolute inset-0 pointer-events-none" viewBox="0 0 960 540" width="100%" height="100%"
-            preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
-            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
-                <circle r="234" cx="196" cy="23"></circle>
-                <circle r="234" cx="790" cy="491"></circle>
-            </g>
-        </svg>
-        <!-- <div class="relative z-10 flex flex-col items-center">
-            <h2 class="text-xl font-semibold">NETPRO COOPERATION</h2>
-            <div class="mt-1 text-center text-4xl font-extrabold leading-tight tracking-tight sm:text-7xl">
-                Selamat Datang Admin di Dashboard Owner
+    <div class="bg-gradient-to-r from-blue-500 to-[#86C127]">
+        <div class="mx-auto flex w-full max-w-screen-xl flex-col px-6 sm:px-8 text-white">
+            <div class="my-8 flex min-w-0 flex-auto flex-col sm:my-12 sm:flex-row sm:items-center">
+                <!-- Avatar and name -->
+                <div class="flex min-w-0 flex-auto items-center">
+                    <div class="h-16 w-16 flex-0 overflow-hidden rounded-full">
+                        <img class="h-full w-full object-cover" [src]="user.avatar" />
+                    </div>
+                    <div class="ml-4 flex min-w-0 flex-col">
+                        <ng-container *transloco="let t">
+                            <div
+                                class="truncate text-2xl font-semibold leading-7 tracking-tight md:text-5xl md:leading-snug">
+                                {{ t('welcome-back') }}, {{user['name']}}!
+                            </div>
+                        </ng-container>
+                        <div class="flex items-center">
+                            <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:bell'"></mat-icon>
+                            <div class="text-white opacity-70 ml-1.5 truncate leading-6">
+                                You have {{summary?.open_tickets}} new tickets and {{summary?.pending_tickets}} on
+                                progress tickets
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="mt-6 flex items-center space-x-3 sm:ml-2 sm:mt-0">
+                    <button class="bg-accent" mat-flat-button [color]="'accent'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:envelope'"></mat-icon>
+                        <span class="ml-2">Messages</span>
+                    </button>
+                    <button mat-flat-button [color]="'primary'">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
+                        <span class="ml-2">Profile</span>
+                    </button>
+                </div>
             </div>
-            <div class="text-secondary mt-6 max-w-2xl text-center tracking-tight sm:text-2xl">
-                Our courses will step you through the process of a building
-                small applications, or adding new features to existing
-                applications.
-            </div>
-        </div> -->
+        </div>
     </div>
 
-    <div class="grid-cols-1 md:grid-cols-2 lg:grid-cols-4 grid p-5 gap-6">
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">Device Status</div>
-            <div class="mt-2">
-                <p class="text-green-400 font-medium">Device is Running</p>
-            </div>
-        </fuse-card>
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">System Date</div>
-            <div class="mt-2">
-                <p class="text-orange-400 font-medium">9/23/2024, 10:20:98 AM</p>
-            </div>
-        </fuse-card>
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">Uptime</div>
-            <div class="mt-2">
-                <p class="text-green-400 font-medium">5 Hari, 4 Jam, 10 Menit</p>
-            </div>
-        </fuse-card>
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">Software Identity</div>
-            <div class="mt-2">
-                <p class=" font-medium">6706223151</p>
-            </div>
-        </fuse-card>
+    <!-- Main -->
+    <div class="-mt-px flex-auto border-t pt-4 sm:pt-6">
+        <div class="mx-auto w-full max-w-screen-xl">
+            <!-- Tabs -->
+            <mat-tab-group class="sm:px-2" mat-stretch-tabs="false" [animationDuration]="'0'">
+                <!-- Home -->
+                <mat-tab label="Home">
+                    <ng-template matTabContent>
+                        <div class="overflow-hidden h-fit">
+                            <!-- Status Tickets -->
+                            <section class="bg-blue-900 p-10 flex flex-col gap-7 rounded-md shadow-xl">
+                                <h1 class="text-2xl text-white font-semibold">All Tickets </h1>
+                                <div
+                                    class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 rounded-md">
+                                    <!-- New Tickets -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                New Tickets
+                                            </div>
+                                            <div class="-mr-3 -mt-2 ml-2">
+                                                <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="
+                                                    'heroicons_mini:ellipsis-vertical'
+                                                "></mat-icon>
+                                                </button>
+                                                <mat-menu #summaryMenu="matMenu">
+                                                    <button mat-menu-item>
+                                                        Yesterday
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        2 days ago
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        3 days ago
+                                                    </button>
+                                                </mat-menu>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-blue-500 sm:text-8xl">
+                                                {{summary?.open_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-blue-600 dark:text-blue-500">
+                                                New Tickets
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    On Progress:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.pending_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- On Progress -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                On Progress
+                                            </div>
+                                            <div class="-mr-3 -mt-2 ml-2">
+                                                <button mat-icon-button [matMenuTriggerFor]="overdueMenu">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="
+                                                    'heroicons_mini:ellipsis-vertical'
+                                                "></mat-icon>
+                                                </button>
+                                                <mat-menu #overdueMenu="matMenu">
+                                                    <button mat-menu-item>
+                                                        Yesterday
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        2 days ago
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        3 days ago
+                                                    </button>
+                                                </mat-menu>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-red-500 sm:text-8xl">
+                                                {{summary?.pending_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-red-600 dark:text-red-500">
+                                                On Progress
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    Resolved Tickets:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.resolved_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Resolved Tickets -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                Resolved Tickets
+                                            </div>
+                                            <div class="-mr-3 -mt-2 ml-2">
+                                                <button mat-icon-button [matMenuTriggerFor]="issuesMenu">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="
+                                                    'heroicons_mini:ellipsis-vertical'
+                                                "></mat-icon>
+                                                </button>
+                                                <mat-menu #issuesMenu="matMenu">
+                                                    <button mat-menu-item>
+                                                        Yesterday
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        2 days ago
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        3 days ago
+                                                    </button>
+                                                </mat-menu>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-amber-500 sm:text-8xl">
+                                                {{summary?.resolved_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-amber-600 dark:text-amber-500">
+                                                Resolved Tickets
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    Total Tickets:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.total_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Features -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                Total Tickets
+                                            </div>
+                                            <div class="-mr-3 -mt-2 ml-2">
+                                                <button mat-icon-button [matMenuTriggerFor]="featuresMenu">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="
+                                                    'heroicons_mini:ellipsis-vertical'
+                                                "></mat-icon>
+                                                </button>
+                                                <mat-menu #featuresMenu="matMenu">
+                                                    <button mat-menu-item>
+                                                        Yesterday
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        2 days ago
+                                                    </button>
+                                                    <button mat-menu-item>
+                                                        3 days ago
+                                                    </button>
+                                                </mat-menu>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
+                                                {{summary?.total_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-green-600 dark:text-green-500">
+                                                Total Tickets
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    New Tickets:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.open_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Log Tickets -->
+                            <section class="h-fit bg-white border-[1px] shadow-xl rounded-lg mt-7 p-5">
+                                <div class="w-full flex items-center justify-between">
+                                    <h1 class="text-2xl font-semibold">Ticket History</h1>
+                                    <div class="mt-3 sm:ml-2 sm:mt-0">
+                                        <mat-button-toggle-group value="this-week" class="hidden"
+                                            #githubIssuesWeekSelector="matButtonToggleGroup">
+                                            <mat-button-toggle value="last-week">Last Week</mat-button-toggle>
+                                            <mat-button-toggle value="this-week">This Week</mat-button-toggle>
+                                        </mat-button-toggle-group>
+                                    </div>
+                                </div>
+                                <section class="grid grid-cols-1 lg:grid-cols-2 gap-5 mt-4">
+                                    <!-- New vs. Closed -->
+                                    <div class="flex flex-auto flex-col">
+                                        <div class="text-secondary font-medium">
+                                            New vs. Closed
+                                        </div>
+                                        <div class="flex flex-auto flex-col">
+                                            <apx-chart class="h-80 w-full flex-auto" [chart]="
+                                                                                        chartGithubIssues.chart
+                                                                                    " [colors]="
+                                                                                        chartGithubIssues.colors
+                                                                                    " [dataLabels]="
+                                                                                        chartGithubIssues.dataLabels
+                                                                                    " [grid]="chartGithubIssues.grid"
+                                                [labels]="
+                                                                                        chartGithubIssues.labels
+                                                                                    " [legend]="
+                                                                                        chartGithubIssues.legend
+                                                                                    " [plotOptions]="
+                                                                                        chartGithubIssues.plotOptions
+                                                                                    " [series]="
+                                                                                        chartGithubIssues.series[
+                                                                                            githubIssuesWeekSelector
+                                                                                                .value
+                                                                                        ]
+                                                                                    " [states]="
+                                                                                        chartGithubIssues.states
+                                                                                    " [stroke]="
+                                                                                        chartGithubIssues.stroke
+                                                                                    " [tooltip]="
+                                                                                        chartGithubIssues.tooltip
+                                                                                    " [xaxis]="
+                                                                                        chartGithubIssues.xaxis
+                                                                                    " [yaxis]="
+                                                                                        chartGithubIssues.yaxis
+                                                                                    "></apx-chart>
+                                        </div>
+                                    </div>
+
+                                    <div class="h-[50vh] bg-blue-900 rounded-md overflow-y-scroll">
+                                        <div class="sticky top-0 bg-blue-900 p-5 w-full z-10">
+                                            <h1 class="text-white text-lg font-medium">Last Tickets</h1>
+                                        </div>
+                                        <div class="flex flex-col gap-4 px-5 py-2">
+                                            <div class="h-fit border-b-[1.6px] border-opacity-20 border-white pb-3 flex items-center justify-between"
+                                                *ngFor="let tickets of recent_tickets">
+                                                <!-- Detail Tickets -->
+                                                <div>
+                                                    <h1 class="text-white">{{tickets.subject == '' ? 'Tidak Ada Subject'
+                                                        :
+                                                        tickets.subject}}</h1>
+                                                    <div class="flex items-center mt-2 gap-5 text-white opacity-60">
+                                                        <p> 20-02-2025</p>
+                                                        <p>{{tickets.user_email}}</p>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Icon -->
+                                                <h1 class="text-4xl text-white opacity-60 font-light">></h1>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </section>
+
+                            <!-- Log Users -->
+                            <section class="h-fit border-[1px] shadow-xl my-10 bg-white rounded-md p-5">
+                                <h1 class="text-2xl font-semibold">User Logs</h1>
+
+                                <!-- Table -->
+                                <div class="w-full overflow-auto whitespace-nowrap mt-10">
+                                    <mat-table #table [dataSource]="dataSource" matSort
+                                        *ngIf="!isLoading && !isNotDataFound" class="min-w-160 max-sm:min-w-128">
+
+                                        <div>
+                                            <!-- Profile Name Column -->
+                                            <ng-container matColumnDef="name">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header="name">
+                                                    Name
+                                                </mat-header-cell>
+                                                <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+                                                    <div
+                                                        class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
+                                                    </div>
+                                                </div>
+                                                <mat-cell *matCellDef="let element" class="py-4 font-medium">
+                                                    {{element.name}}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <!-- Role Column -->
+                                            <ng-container matColumnDef="role">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Role
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.role}}
+                                                </mat-cell>
+                                            </ng-container>
+
+                                            <!-- Rate Limit Column -->
+                                            <ng-container matColumnDef="shift">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> User Shift
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.shift_name === null ?
+                                                    'Anomati Not Have Shift' : element.shift_name}} </mat-cell>
+                                            </ng-container>
+
+                                            <!-- Link Limit Column -->
+                                            <ng-container matColumnDef="login_date">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Login Date
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.login_date}} </mat-cell>
+                                            </ng-container>
+
+                                            <!-- Link Limit Column -->
+                                            <ng-container matColumnDef="login_time">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Login Time
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let element"> {{element.login_time}} </mat-cell>
+                                            </ng-container>
+
+                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                        </div>
+                                    </mat-table>
+                                </div>
+
+                                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
+                                    [showFirstLastButtons]="true">
+                                </mat-paginator>
+                            </section>
+                        </div>
+                    </ng-template>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
     </div>
-
-    <!-- LINE 2 -->
-    <div class="grid-cols-1 md:grid-cols-2 grid px-5 pb-4 gap-6">
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">Total User</div>
-            <div class="mt-2">
-                <p class=" font-medium">{{totalUser}} User</p>
-            </div>
-        </fuse-card>
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">Total User Profile</div>
-            <div class="mt-2">
-                <p class=" font-medium">{{totalUserProfile}} User Profile</p>
-            </div>
-        </fuse-card>
-    </div>
-
-    <!-- LINE 3 -->
-    <div class="px-5 gap-6 pb-4">
-        <!-- Ovpn To Grow -->
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">Bandwith Mikrotik Usage</div>
-            <div class="mt-2">
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
-                    <span
-                        class="text-xs font-medium text-blue-700 dark:text-white">{{convertBytesToMB(totalBytesInMB).toFixed(2)}}MB/s</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class=" h-2.5 rounded-full" [style.width.%]="downloadPecentage"
-                        [style.background-color]="getBarColor(downloadPecentage)"></div>
-                </div>
-                <br>
-                <!-- Download Bar -->
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
-                    <span
-                        class="text-xs font-medium text-blue-700 dark:text-white">{{convertBytesToMB(totalBytesOutMB).toFixed(2)
-                        }}MB/s</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="h-2.5 rounded-full max-w-full" [style.width.%]="uploadPecentage"
-                        [style.background-color]="getBarColor(uploadPecentage)"></div>
-                </div>
-            </div>
-        </fuse-card>
-
-        <!-- <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">LACP (local)</div>
-            <div class="mt-2">
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-                </div>
-                <br>
-                Download Bar
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-                </div>
-            </div>
-        </fuse-card> -->
-
-        <!-- LACP (local)
-        <fuse-card class="flex flex-col px-8 py-6 pb-4" #fuseCard>
-            <div class="text-xl font-bold">OVPN To Grow</div>
-            <div class="mt-2">
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">Download</span>
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-                </div>
-                <br>
-                Download Bar
-                <div class="flex justify-between mb-1">
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">Upload</span>
-                    <span class="text-xs font-medium text-blue-700 dark:text-white">103MB/s</span>
-                </div>
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 45%"></div>
-                </div>
-            </div>
-        </fuse-card> -->
-    </div>
-
-
-
 </div>

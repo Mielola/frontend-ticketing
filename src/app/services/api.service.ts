@@ -10,7 +10,7 @@ import { environment } from 'environments/environments.dev';
 })
 export class ApiService {
     private apiUrl = environment.apiUrl;
-    private headers = {
+    private options = {
         headers: {
             'Authorization': `${localStorage.getItem('accessToken') || ''}`,
             'Content-Type': 'application/json'
@@ -18,10 +18,8 @@ export class ApiService {
     };
 
 
-    async get(endPoint: string, headers: any) {
-        return await axios.get(this.apiUrl + endPoint, {
-            headers,
-        }).then(
+    async get(endPoint: string) {
+        return await axios.get(this.apiUrl + endPoint, this.options).then(
             async response => {
                 return await response.data;
             }

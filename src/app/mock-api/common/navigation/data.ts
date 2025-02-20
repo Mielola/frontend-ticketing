@@ -11,11 +11,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
         roles: ['admin', 'pegawai'],
         children: [
             {
-                id: 'dashboards.project',
-                title: 'Project',
+                id: 'dashboards.home',
+                title: 'Home',
                 type: 'basic',
                 icon: 'heroicons_outline:clipboard-document-check',
-                link: '/dashboards/project',
+                link: '/dashboards/home',
                 roles: ['admin', 'pegawai'],
             },
             {

@@ -22,7 +22,7 @@ export const appRoutes: Route[] = [
     {
         path: 'signed-in-redirect',
         pathMatch: 'full',
-        redirectTo: 'dashboards/project'
+        redirectTo: 'dashboards/home'
     },
 
 
@@ -98,7 +98,7 @@ export const appRoutes: Route[] = [
                 canActivate: [RoleGuard],
                 data: { roles: ['admin', 'pegawai'] },
                 children: [
-                    { path: 'project', loadChildren: () => import('app/modules/admin/dashboards/project/project.routes') },
+                    { path: 'home', loadChildren: () => import('app/modules/admin/dashboards/home/home.routes') },
                     { path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.routes') },
                     { path: 'finance', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.routes') },
                     {

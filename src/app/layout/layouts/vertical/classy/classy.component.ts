@@ -111,11 +111,16 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
             this.isLoading = true
             // Subscribe to the user service
             const token = localStorage.getItem('accessToken')
-            const findUser = await this._apiService.get(`api/V1/get-profile`, {
-                'Authorization' : token
-            })
+            const findUser = await this._apiService.get(`api/V1/get-profile`)
             console.log(findUser)
             this.user = findUser.data
+
+            if(this.user.avatar === null) {
+                this.user.avatar = 'images/avatars/default.jpg'
+            }
+            
+            console.log(this.user)
+
             this._userService.Update(this.user)
             
 
