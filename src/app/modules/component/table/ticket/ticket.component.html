@@ -1,0 +1,182 @@
+<!-- Log Users -->
+<section class="h-fit border-[1px] shadow-xl mt-4 bg-white rounded-lg p-5">
+    <div class="flex flex-col items-start sm:flex-row sm:items-center justify-between">
+        <!-- Search Tickets -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-1/3 max-sm:w-full">
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="relative my-2 w-full">
+                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                </div>
+                <input type="text" matInput (keyup)="applyFilter($event.target.value)"
+                    class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Search Tickets">
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+
+            <div class="flex items-center gap-3">
+                <!-- Button New Tickets -->
+                <button mat-raised-button
+                    class="flex items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 bg-primary text-white">
+                    <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
+                    <span class="max-sm:hidden font-semibold">New Ticket</span>
+                </button>
+
+                <!-- Button Filter Date-->
+                <button mat-raised-button [matMenuTriggerFor]="menu"
+                    class="flex items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 border-[1px] text-white">
+                    <mat-icon svgIcon="date_range"></mat-icon>
+                    <span class="max-sm:hidden font-semibold text-black">Date</span>
+                </button>
+
+                <!-- Button Filter -->
+                <button mat-raised-button [matMenuTriggerFor]="menu"
+                    class="flex items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 border-[1px] text-white">
+                    <mat-icon svgIcon="filter_alt"></mat-icon>
+                    <span class="max-sm:hidden font-semibold text-black">Filter</span>
+                    <mat-icon svgIcon="keyboard_arrow_down"></mat-icon>
+                </button>
+
+                <mat-menu #menu="matMenu">
+                    <button mat-menu-item [matMenuTriggerFor]="category">Item 1</button>
+                    <mat-menu #category="matMenu">
+                        <button mat-menu-item>Child 1</button>
+                        <button mat-menu-item>Child 2</button>
+                    </mat-menu>
+                    <button mat-menu-item>Item 2</button>
+                </mat-menu>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="w-full overflow-auto whitespace-nowrap mt-5">
+        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading" class="min-w-280">
+
+            <div>
+                <!-- Tracking ID Column -->
+                <ng-container matColumnDef="tracking_id">
+                    <mat-header-cell *matHeaderCellDef> Tracking ID
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"
+                        class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
+                        <a href="">{{element.tracking_id}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="create_date">
+                    <mat-header-cell *matHeaderCellDef> Created Date
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.created_date}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="create_time">
+                    <mat-header-cell *matHeaderCellDef> Created Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <mat-icon svgIcon="mat_outline:access_time"></mat-icon>
+                        {{element.created_time}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Category Column -->
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef> Category
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3 font-medium">
+                        {{element.category}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>
+                        Name
+                    </mat-header-cell>
+                    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+                        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
+                        </div>
+                    </div>
+                    <mat-cell *matCellDef="let element" class="py-3.5 flex items-center gap-3 w-fit">
+                        <div class="w-full flex items-center gap-3">
+                            <img [src]="element.user.avatar" alt="" class="w-7 h-7 object-cover">
+                            <p class="font-medium">{{element.user.name}}</p>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- subject Column -->
+                <ng-container matColumnDef="subject">
+                    <mat-header-cell *matHeaderCellDef> Subject
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.subject}} </mat-cell>
+                </ng-container>
+
+                <!-- Status Time Column -->
+                <ng-container matColumnDef="status">
+                    <mat-header-cell *matHeaderCellDef> Status
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
+                            'bg-blue-500': element.status === 'New',
+                            'bg-yellow-500': element.status === 'On Progress',
+                            'bg-green-500': element.status === 'Resolved',
+                            }">
+                            <h1 class="font-medium">{{element.status}}</h1>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Last Replier Column -->
+                <ng-container matColumnDef="last_replier">
+                    <mat-header-cell *matHeaderCellDef>
+                        Last Replier
+                    </mat-header-cell>
+                    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+                        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
+                        </div>
+                    </div>
+                    <mat-cell *matCellDef="let element" class="py-2 flex items-center gap-3 w-fit">
+                        <div class="w-full flex items-center gap-3">
+                            <img [src]="element.last_replier === null ? element.user.avatar : element.last_replier.avatar"
+                                alt="" class="w-7 h-7 rounded-full">
+                            <p class="font-medium">{{element.last_replier === null ? element.user.name :
+                                element.last_replier.name}}</p>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Priority Column -->
+                <ng-container matColumnDef="priority">
+                    <mat-header-cell *matHeaderCellDef> Priority
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
+                            'text-green-600': element.priority === 'low',
+                            'text-blue-600': element.priority === 'medium',
+                            'text-yellow-600': element.priority === 'high',
+                            'text-red-600': element.priority === 'critical',
+                        }"></mat-icon>
+                        <h1 class="font-medium uppercase">{{element.priority}}</h1>
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+    </div>
+
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+    </mat-paginator>
+</section>

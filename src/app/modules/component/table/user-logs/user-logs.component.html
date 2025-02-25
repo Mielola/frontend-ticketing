@@ -1,0 +1,67 @@
+<!-- Log Users -->
+<section class="h-fit border-[1px] shadow-xl my-10 bg-white rounded-lg p-5">
+    <h1 class="text-2xl font-semibold">User Logs</h1>
+
+    <!-- Table -->
+    <div class="w-full overflow-auto whitespace-nowrap mt-10">
+        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading"
+            class="min-w-160 max-sm:min-w-128">
+
+            <div>
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef>
+                        Name
+                    </mat-header-cell>
+                    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+                        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
+                        </div>
+                    </div>
+                    <mat-cell *matCellDef="let element" class="py-4 flex items-center gap-3 w-fit">
+                        <img class="h-7 w-7 rounded-full" [src]="element?.avatar" />
+                        <div class="w-full">
+                            <p class="font-medium">{{element.name}}</p>
+                            <p>{{element.email}}</p>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Role Column -->
+                <ng-container matColumnDef="role">
+                    <mat-header-cell *matHeaderCellDef> Role
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.role}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Shift Column -->
+                <ng-container matColumnDef="shift">
+                    <mat-header-cell *matHeaderCellDef> User Shift
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.shift_name === null ?
+                        'Anomati Not Have Shift' : element.shift_name}} </mat-cell>
+                </ng-container>
+
+                <!-- Login Date Column -->
+                <ng-container matColumnDef="login_date">
+                    <mat-header-cell *matHeaderCellDef sortActionDescription="Sort by login_date"> Login Date
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.login_date}} </mat-cell>
+                </ng-container>
+
+                <!-- Login Time Column -->
+                <ng-container matColumnDef="login_time">
+                    <mat-header-cell *matHeaderCellDef> Login Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.login_time}} </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+    </div>
+
+    <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+    </mat-paginator>
+</section>

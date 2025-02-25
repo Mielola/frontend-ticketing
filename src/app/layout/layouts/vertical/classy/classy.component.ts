@@ -109,19 +109,16 @@ export class ClassyLayoutComponent implements OnInit, OnDestroy {
     async fetchData() {
         try {
             this.isLoading = true
-            // Subscribe to the user service
-            const token = localStorage.getItem('accessToken')
             const findUser = await this._apiService.get(`api/V1/get-profile`)
-            console.log(findUser)
-            this.user = findUser.data
 
-            if(this.user.avatar === null) {
-                this.user.avatar = 'images/avatars/default.jpg'
-            }
-            
-            console.log(this.user)
+            // if(this.user.avatar === null) {
+            //     this.user.avatar = 'images/avatars/default.jpg'
+            // }
 
-            this._userService.Update(this.user)
+            this._userService.Update(findUser.data)
+            this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((users : User) => {
+                this.user = users
+            })
             
 
             this._cookies.deleteAll("/")

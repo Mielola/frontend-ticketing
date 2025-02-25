@@ -31,7 +31,7 @@ export class ApiService {
 
     async post(endPoint: string, data: any) {
         try {
-            const response = await axios.post(this.apiUrl + endPoint, data);
+            const response = await axios.post(this.apiUrl + endPoint, data, this.options);
             return { data: response.data, status: response.status };
         } catch (error) {
             return { data: null, status: error.response.status};

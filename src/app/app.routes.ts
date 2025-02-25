@@ -5,6 +5,7 @@ import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { RoleGuard } from './core/auth/guards/role.guard';
 import { OTPGuard } from './core/auth/guards/otp.guard';
+import { CanDeactivateGuard } from './core/auth/guards/can-deactive.guard';
 
 // prettier-ignore
 /* eslint-disable max-len */
@@ -29,8 +30,8 @@ export const appRoutes: Route[] = [
     // Auth 
     {
         path: 'auth',
-        canActivate : [OTPGuard],
-        canActivateChild : [OTPGuard],
+        canActivate: [OTPGuard],
+        canActivateChild: [OTPGuard],
         children: [
             { path: 'otp', loadChildren: () => import('app/modules/auth/otp/otp.routes') },
         ]
@@ -99,8 +100,10 @@ export const appRoutes: Route[] = [
                 data: { roles: ['admin', 'pegawai'] },
                 children: [
                     { path: 'home', loadChildren: () => import('app/modules/admin/dashboards/home/home.routes') },
+                    { path: 'tickets', loadChildren: () => import('app/modules/admin/dashboards/tickets/tickets.routes') },
                     { path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.routes') },
                     { path: 'finance', loadChildren: () => import('app/modules/admin/dashboards/finance/finance.routes') },
+                    { path: 'profile', loadChildren: () => import('app/modules/admin/dashboards/profile/profile.routes')},
                     {
                         path: 'crypto', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.routes'),
                         canActivate: [RoleGuard],

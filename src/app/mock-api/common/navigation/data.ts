@@ -14,8 +14,16 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 id: 'dashboards.home',
                 title: 'Home',
                 type: 'basic',
-                icon: 'heroicons_outline:clipboard-document-check',
+                icon: 'heroicons_outline:home',
                 link: '/dashboards/home',
+                roles: ['admin', 'pegawai'],
+            },
+            {
+                id: 'dashboards.tickets',
+                title: 'Tickets',
+                type: 'basic',
+                icon: 'heroicons_outline:ticket',
+                link: '/dashboards/tickets',
                 roles: ['admin', 'pegawai'],
             },
             {

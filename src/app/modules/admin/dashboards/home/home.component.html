@@ -30,10 +30,10 @@
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:envelope'"></mat-icon>
                         <span class="ml-2">Messages</span>
                     </button>
-                    <button mat-flat-button [color]="'primary'">
+                    <a [routerLink]="['/dashboards/profile']" mat-flat-button [color]="'primary'">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_outline:user-circle'"></mat-icon>
                         <span class="ml-2">Profile</span>
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
@@ -292,13 +292,17 @@
                                                         :
                                                         tickets.subject}}</h1>
                                                     <div class="flex items-center mt-2 gap-5 text-white opacity-60">
-                                                        <p> 20-02-2025</p>
+                                                        <p> {{tickets.hari_masuk}}</p>
                                                         <p>{{tickets.user_email}}</p>
+                                                        <p class="max-sm:hidden">{{tickets.waktu_masuk}}</p>
                                                     </div>
                                                 </div>
 
                                                 <!-- Icon -->
-                                                <h1 class="text-4xl text-white opacity-60 font-light">></h1>
+                                                <h1 class="text-4xl text-red font-light"><mat-icon
+                                                        [svgIcon]="
+                                                                                                        'heroicons_mini:chevron-right'
+                                                                                                    "></mat-icon></h1>
                                             </div>
                                         </div>
                                     </div>
@@ -306,70 +310,7 @@
                             </section>
 
                             <!-- Log Users -->
-                            <section class="h-fit border-[1px] shadow-xl my-10 bg-white rounded-md p-5">
-                                <h1 class="text-2xl font-semibold">User Logs</h1>
-
-                                <!-- Table -->
-                                <div class="w-full overflow-auto whitespace-nowrap mt-10">
-                                    <mat-table #table [dataSource]="dataSource" matSort
-                                        *ngIf="!isLoading && !isNotDataFound" class="min-w-160 max-sm:min-w-128">
-
-                                        <div>
-                                            <!-- Profile Name Column -->
-                                            <ng-container matColumnDef="name">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header="name">
-                                                    Name
-                                                </mat-header-cell>
-                                                <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
-                                                    <div
-                                                        class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
-                                                    </div>
-                                                </div>
-                                                <mat-cell *matCellDef="let element" class="py-4 font-medium">
-                                                    {{element.name}}
-                                                </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Role Column -->
-                                            <ng-container matColumnDef="role">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Role
-                                                </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.role}}
-                                                </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Rate Limit Column -->
-                                            <ng-container matColumnDef="shift">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> User Shift
-                                                </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.shift_name === null ?
-                                                    'Anomati Not Have Shift' : element.shift_name}} </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Link Limit Column -->
-                                            <ng-container matColumnDef="login_date">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Login Date
-                                                </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.login_date}} </mat-cell>
-                                            </ng-container>
-
-                                            <!-- Link Limit Column -->
-                                            <ng-container matColumnDef="login_time">
-                                                <mat-header-cell *matHeaderCellDef mat-sort-header> Login Time
-                                                </mat-header-cell>
-                                                <mat-cell *matCellDef="let element"> {{element.login_time}} </mat-cell>
-                                            </ng-container>
-
-                                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                                        </div>
-                                    </mat-table>
-                                </div>
-
-                                <mat-paginator #paginator [pageSize]="5" [pageSizeOptions]="[5, 10, 20]"
-                                    [showFirstLastButtons]="true">
-                                </mat-paginator>
-                            </section>
+                            <app-user-logs></app-user-logs>
                         </div>
                     </ng-template>
                 </mat-tab>

@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { User } from 'app/core/user/user.types';
 import { ApiService } from 'app/services/api.service';
 import { UserService } from 'app/services/userService/user.service';
@@ -32,6 +32,7 @@ import { Subject, takeUntil } from 'rxjs';
         MatIconModule,
         NgClass,
         MatDividerModule,
+        RouterLink
     ],
 })
 export class UserComponent implements OnInit, OnDestroy {
@@ -85,15 +86,28 @@ export class UserComponent implements OnInit, OnDestroy {
     /**
      * Update the user status
      *
-     * @param status
+     * @param statusUser
      */
-    updateUserStatus(status: string): void {
+    async updateUserStatus(statusUser: string) {
         // Return if user is not available
         if (!this.user) {
             return;
         }
 
         // Update the user
+        try {
+            const {data, status} = await this._apiService.post('api/V1/edit-status-user', {
+                status: statusUser
+            })
+
+            if(status === 200) {
+                this._userService.Update(data.data.user)
+            }
+        } catch (error) {
+            throw error
+        } finally {
+            
+        }
     }
 
     /**

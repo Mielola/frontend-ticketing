@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { FinanceComponent } from 'app/modules/admin/dashboards/finance/finance.component';
 import { FinanceService } from 'app/modules/admin/dashboards/finance/finance.service';
 import { CustomerComponent } from './customer.component';
-import { ProjectService } from '../home/home.service';
+import { HomeService } from '../home/home.service';
 import { ViewDetailComponent } from './view-detail/view-detail.component';
 
 export default [
@@ -11,7 +11,7 @@ export default [
         path: '',
         component: CustomerComponent,
         resolve: {
-            data: () => inject(ProjectService).getData(),
+            data: () => inject(HomeService).getData(),
         },
     },
     {
