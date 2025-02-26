@@ -44,12 +44,19 @@
                 </button>
 
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item [matMenuTriggerFor]="category">Item 1</button>
-                    <mat-menu #category="matMenu">
-                        <button mat-menu-item>Child 1</button>
-                        <button mat-menu-item>Child 2</button>
+                    <button mat-menu-item [matMenuTriggerFor]="categorys">Choose Category</button>
+
+                    <mat-menu #categorys="matMenu">
+                        <div class="px-5 py-3">
+                            <h1 class="font-semibold mb-2">Choose Category</h1>
+                        </div>
+                        <mat-checkbox class="h-full" *ngFor="let item of category" [(ngModel)]="item.checked"
+                            (change)="applyCategoryFilter()">{{item.name}}</mat-checkbox>
                     </mat-menu>
-                    <button mat-menu-item>Item 2</button>
+
+                    <div class="w-full bg-green-500">
+                        <button mat-raised-button class="px-5 py-3 font-medium text-white">Assign By Me</button>
+                    </div>
                 </mat-menu>
 
             </div>
@@ -58,7 +65,7 @@
 
     <!-- Table -->
     <div class="w-full overflow-auto whitespace-nowrap mt-5">
-        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading" class="min-w-280">
+        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading" class="min-w-360">
 
             <div>
                 <!-- Tracking ID Column -->
@@ -135,6 +142,13 @@
                             <h1 class="font-medium">{{element.status}}</h1>
                         </div>
                     </mat-cell>
+                </ng-container>
+
+                <!-- Solved Time Column -->
+                <ng-container matColumnDef="solved_time">
+                    <mat-header-cell *matHeaderCellDef> Solved Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.solved_time === "" || element.solved_time === null ? "Unprogress" : element.solved_time}}</mat-cell>
                 </ng-container>
 
                 <!-- Last Replier Column -->
