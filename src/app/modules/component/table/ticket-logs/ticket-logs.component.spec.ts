@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BlockLinkComponent } from './block-link.component';
+import { TicketLogsComponent } from './ticket-logs.component';
 
-describe('BlockLinkComponent', () => {
-  let component: BlockLinkComponent;
-  let fixture: ComponentFixture<BlockLinkComponent>;
+describe('TicketLogsComponent', () => {
+  let component: TicketLogsComponent;
+  let fixture: ComponentFixture<TicketLogsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BlockLinkComponent]
+      imports: [TicketLogsComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(BlockLinkComponent);
+    fixture = TestBed.createComponent(TicketLogsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

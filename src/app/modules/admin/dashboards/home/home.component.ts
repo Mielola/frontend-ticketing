@@ -33,6 +33,7 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { UserLogsComponent } from 'app/modules/component/table/user-logs/user-logs.component';
 import { Sumarry } from 'app/types/summary';
 import { Ticket } from 'app/types/tickets';
+import { TicketLogsComponent } from 'app/modules/component/table/ticket-logs/ticket-logs.component';
 @Component({
     selector: 'project',
     templateUrl: './home.component.html',
@@ -59,6 +60,7 @@ import { Ticket } from 'app/types/tickets';
         MatSortModule,
         RouterModule,
         UserLogsComponent,
+        TicketLogsComponent,
     ],
 })
 export class HomeComponent implements OnInit, OnDestroy {

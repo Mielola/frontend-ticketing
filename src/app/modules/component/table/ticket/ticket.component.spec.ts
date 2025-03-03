@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { TicketComponent } from './ticket.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('TicketComponent', () => {
   let component: TicketComponent;

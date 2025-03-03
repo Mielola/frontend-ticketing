@@ -1,0 +1,122 @@
+<!-- Log Users -->
+<section class="h-fit border-[1px] shadow-xl mt-4 bg-white rounded-lg p-5">
+    <div class="flex flex-col items-start sm:flex-row sm:items-center justify-between">
+        <h1 class="text-2xl font-semibold">Ticket Logs</h1>
+        <!-- Search Tickets -->
+        <!-- <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-1/3 max-sm:w-full">
+            <label for="table-search" class="sr-only">Search</label>
+            <div class="relative my-2 w-full">
+                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                    </svg>
+                </div>
+                <input type="text" matInput (keyup)="applySearchFilter($event.target.value)"
+                    class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Search Tickets">
+            </div>
+        </div> -->
+    </div>
+
+    <!-- Skeleton Loader -->
+    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full"></div>
+    </div>
+
+    <div *ngIf="isNotDataFound && !isLoading">
+        <div class="flex flex-col items-center">
+            <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
+            <h1 class="mt-2 font-semibold text-xl -tracking-tighter">Data Not Found</h1>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="w-full overflow-auto whitespace-nowrap mt-5">
+        <mat-table #table [dataSource]="dataSource" matSort
+            *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-192">
+
+            <div>
+                <!-- Tracking ID Column -->
+                <ng-container matColumnDef="tracking_id">
+                    <mat-header-cell *matHeaderCellDef> Tracking ID
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"
+                        class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
+                        <a href="">{{element.tickets_id}}</a>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- User Column -->
+                <ng-container matColumnDef="user">
+                    <mat-header-cell *matHeaderCellDef>
+                        User
+                    </mat-header-cell>
+                    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+                        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
+                        </div>
+                    </div>
+                    <mat-cell *matCellDef="let element" class="py-3.5 flex items-center gap-3 w-fit">
+                        <div class="w-full flex items-center gap-3">
+                            <img [src]="element.user.avatar" alt="" class="w-7 h-7 object-cover rounded-full">
+                            <p class="font-medium">{{element.user.name}}</p>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Current Status Column -->
+                <ng-container matColumnDef="current_status">
+                    <mat-header-cell *matHeaderCellDef> Current Status
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
+                                                        'bg-blue-500': element.current_status === 'New',
+                                                        'bg-yellow-500': element.current_status === 'On Progress',
+                                                        'bg-green-500': element.current_status === 'Resolved',
+                                                        }">
+                            <h1 class="font-medium">{{element.current_status}}</h1>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- New Status Column -->
+                <ng-container matColumnDef="new_status">
+                    <mat-header-cell *matHeaderCellDef> New Status
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
+                                                        'bg-blue-500': element.new_status === 'New',
+                                                        'bg-yellow-500': element.new_status === 'On Progress',
+                                                        'bg-green-500': element.new_status === 'Resolved',
+                                                        }">
+                            <h1 class="font-medium">{{element.new_status}}</h1>
+                        </div>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Update At Column -->
+                <ng-container matColumnDef="update_at">
+                    <mat-header-cell *matHeaderCellDef> Update at
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <!-- <mat-icon svgIcon="mat_outline:access_time"></mat-icon> -->
+                        {{element.update_at}}
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+    </div>
+
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+    </mat-paginator>
+</section>
