@@ -33,7 +33,7 @@
             </button>
 
             <!-- Button Filter Date-->
-            <mat-form-field class="min-w-[300px] max-w-full pt-4 self-end hidden sm:block">
+            <mat-form-field class="min-w-[300px] max-w-full self-end hidden sm:block">
                 <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full">
                     <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
                     <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
@@ -237,15 +237,12 @@
                 <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
-                        <mat-form-field hideRequiredMarker>
+                        <mat-form-field hideRequiredMarker class="w-full">
                             <mat-select [(value)]="element.status" placeholder="Select">
-                                <mat-option *ngFor="let status of statusItems" [value]="status.name"
-                                    class="px-3 py-1 m-2 font-medium text-white whitespace-nowrap rounded-full" [ngClass]="{
-                            'bg-blue-500': status.name === 'New',
-                            'bg-yellow-500': status.name === 'On Progress',
-                            'bg-green-500': status.name === 'Resolved',
-                            }">
-                                    {{ status.name }}
+                                <mat-option *ngFor="let status of statusList" [value]="status"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full"
+                                    (click)="changeStatus(element.tracking_id, status)">
+                                    {{ status }}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>

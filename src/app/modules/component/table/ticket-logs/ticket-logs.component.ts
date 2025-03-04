@@ -11,6 +11,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'app/services/api.service';
+import { Subject, takeUntil } from 'rxjs';
+import { TicketLogsService } from './ticket-logs.service';
 
 @Component({
   selector: 'app-ticket-logs',
@@ -30,7 +32,6 @@ import { ApiService } from 'app/services/api.service';
     FormsModule,
   ],
   templateUrl: './ticket-logs.component.html',
-  styleUrl: './ticket-logs.component.scss'
 })
 export class TicketLogsComponent {
   isLoading: boolean = false
@@ -42,8 +43,9 @@ export class TicketLogsComponent {
     priority: []
   };
 
+  private _unsubscribeAll: Subject<any> = new Subject<any>();
 
-
+  // Filter
   category: { name: string, checked: boolean }[] = []
   statusItems: { name: string, checked: boolean }[] = []
   priorityItems: { name: string, checked: boolean }[] = []
@@ -57,11 +59,16 @@ export class TicketLogsComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
-    private _apiService: ApiService
+    private _apiService: ApiService,
+    private _ticketLogsService: TicketLogsService
   ) { }
 
   ngOnInit(): void {
-    this.fetchData()
+    // this._ticketLogsService.fetchData()
+
+    this._ticketLogsService.data$.pipe(takeUntil(this._unsubscribeAll)).subscribe((datas) => {
+      this.dataSource.data = datas.data;
+    });
   }
 
   /**

@@ -15,6 +15,8 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'app/services/api.service';
+import { TicketLogsService } from '../ticket-logs/ticket-logs.service';
+import { get } from 'lodash';
 
 const today = new Date();
 const month = today.getMonth();
@@ -57,6 +59,8 @@ export class TicketComponent implements OnInit {
     priority: []
   };
 
+  statusList : string[] = ['New', 'On Progress', 'Resolved']
+
   productsItems: { name: string, checked: boolean }[] = []
   category: { name: string, checked: boolean }[] = []
   statusItems: { name: string, checked: boolean }[] = []
@@ -79,6 +83,7 @@ export class TicketComponent implements OnInit {
   constructor(
     private _apiService: ApiService,
     private cdr: ChangeDetectorRef,
+    private _ticketLogsService : TicketLogsService
   ) {
 
   }
@@ -177,7 +182,7 @@ export class TicketComponent implements OnInit {
       this.statusItems = [...statusSet].map(stats => ({ name: stats, checked: false }));
       this.category = [...categorySet].map(category => ({ name: category, checked: false }));
       this.priorityItems = [...prioritySet].map(priority => ({ name: priority, checked: false }));
-      this.productsItems = [...productsSet].map(product => ({ name: product, checked : false }));
+      this.productsItems = [...productsSet].map(product => ({ name: product, checked: false }));
 
 
       this.dataSource.data = get.data;
@@ -257,5 +262,21 @@ export class TicketComponent implements OnInit {
       .filter(item => item.checked)
       .map(item => item.name.toLowerCase());
     this.applyFilter();
+  }
+
+  async changeStatus(ticketId: string, newStatus: string) {
+    try {
+      const { status, data } = await this._apiService.post(`api/V1/tickets/${ticketId}`, {
+        status: newStatus
+      });
+
+      console.log(status === 200)
+      if (status === 200) {
+        const getLogs = await this._apiService.get(`api/V1/tickets-logs`)
+        this._ticketLogsService.Update(getLogs)
+      }
+    } catch (error) {
+      throw error
+    }
   }
 }
