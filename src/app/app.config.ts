@@ -18,12 +18,16 @@ import { mockApiServices } from 'app/mock-api';
 import { firstValueFrom } from 'rxjs';
 import { TranslocoHttpLoader } from './core/transloco/transloco.http-loader';
 import { provideToastr } from 'ngx-toastr';
+import { AxiosInterceptorService } from './services/axios-interceptor.service';
+import { provideIonicAngular } from '@ionic/angular/standalone';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideToastr(),
         provideAnimations(),
         provideHttpClient(),
+        provideIonicAngular(),
+        AxiosInterceptorService,
         provideRouter(
             appRoutes,
             withPreloading(PreloadAllModules),

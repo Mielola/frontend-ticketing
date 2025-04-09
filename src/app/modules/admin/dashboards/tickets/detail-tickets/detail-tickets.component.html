@@ -1,0 +1,155 @@
+<div class="h-full w-full flex flex-col sm:flex-row items-center justify-center gap-3 p-5 sm:px-10 lg:px-20">
+
+    <!-- Ticket Information -->
+    <div
+        class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
+        <div class="flex flex-col">
+            <h1 class="text-3xl font-semibold">{{data?.tracking_id}}</h1>
+            <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
+        </div>
+
+        <form [formGroup]="TicketForm" class="mt-5 w-full">
+            <div action="" class="mt-2.5 flex flex-col gap-5">
+
+                <!-- Product Input -->
+                <mat-form-field hideRequiredMarker class="w-full">
+                    <mat-label>Products</mat-label>
+                    <mat-select formControlName="products_name" placeholder="Select Products">
+                        <mat-option *ngFor="let item of products" [value]="item"
+                            class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- Category Input -->
+                <mat-form-field class="w-full">
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="category_name">
+                        <mat-option *ngFor="let item of category" [value]="item"
+                            class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                            {{item}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <!-- No Whatsapp Input -->
+                <mat-form-field class="w-full">
+                    <mat-label>No Whatsapp</mat-label>
+                    <input formControlName="no_whatsapp" matInput [placeholder]="'No Whatsapp'" />
+                </mat-form-field>
+
+                <!-- No Whatsapp Input -->
+                <mat-form-field class="w-full">
+                    <mat-label>PIC</mat-label>
+                    <input formControlName="PIC" matInput [placeholder]="'PIC'" />
+                </mat-form-field>
+
+                <!-- Detail Input -->
+                <mat-form-field class="w-full mb-2" floatLabel="always">
+                    <mat-label>Problem Detail</mat-label>
+                    <textarea formControlName="detail_kendala" matInput rows="4" cols="50"
+                        placeholder="Problem Detail"></textarea>
+                </mat-form-field>
+
+                <div class="grid grid-cols-2 h-fit gap-2">
+                    <!-- Priority Input -->
+                    <mat-form-field hideRequiredMarker class="w-full">
+                        <mat-label>Priority</mat-label>
+                        <mat-select formControlName="priority" placeholder="Select Priority">
+                            <mat-option *ngFor="let item of priority" [value]="item"
+                                class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
+                                                                'text-green-600': item.toLowerCase() === 'low',
+                                                                'text-blue-600': item.toLowerCase() === 'medium',
+                                                                'text-yellow-600': item.toLowerCase() === 'high',
+                                                                'text-red-600': item.toLowerCase() === 'critical',
+                                                            }"></mat-icon>
+                                {{item}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- Status Input -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="status">
+                            <mat-option *ngFor="let item of status" [value]="item"
+                                class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                {{item}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <!-- Hari Masuk Input -->
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Entry day</mat-label>
+                        <input formControlName="hari_masuk" matInput [matDatepicker]="picker"
+                            placeholder="Choose a date">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker touchUi #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- Waktu Masuk Input -->
+                    <mat-form-field class="example-full-width">
+                        <mat-label>Entry Time</mat-label>
+                        <input formControlName="waktu_masuk" matInput type="time">
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Admin Information -->
+    <div
+        class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
+        <div class="flex flex-col mb-4">
+            <h1 class="text-3xl font-semibold">Admin Information</h1>
+            <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
+        </div>
+        <div class="flex flex-col xl:flex-row gap-2">
+            <div class="h-fit bg-sky-500 p-5 xl:w-1/2 w-full rounded-lg">
+                <h1 class="font-semibold text-white text-lg mb-3">Created Ticket :</h1>
+                <div class="flex items-center justify-around rounded">
+                    <img src={{data?.user.avatar}} alt="avatar.png"
+                        class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
+                    <div class="text-white font-medium">
+                        <h1>Email : {{data?.user.email}}</h1>
+                        <h1>Nama : {{data?.user.name}}</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-fit bg-green-500 p-5 xl:w-1/2 w-full rounded-lg">
+                <h1 class="font-semibold text-white text-lg mb-3">Last Replier :</h1>
+                <div class="flex items-center justify-around rounded">
+                    <img src={{data?.last_replier.avatar}} alt="avatar.png"
+                        class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
+                    <div class="text-white font-medium">
+                        <h1>Email : {{data?.last_replier.email}}</h1>
+                        <h1>Nama : {{data?.last_replier.name}}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detail Input -->
+        <form [formGroup]="TicketForm" class="my-4 w-full">
+            <mat-form-field class="w-full" floatLabel="always">
+                <mat-label>Response Admin</mat-label>
+                <textarea formControlName="respon_diberikan" matInput rows="4" cols="50"
+                    placeholder="Response Admin"></textarea>
+            </mat-form-field>
+        </form>
+
+        <div
+            class="bg-[#F1F5F9] h-[30vh] w-full shadow-xl border-[0.4px] border-opacity-20 border-black rounded-lg my-4 p-4">
+            <h1 class="text-lg font-semibold">History Tickets</h1>
+        </div>
+
+        <button class="bg-blue-500 w-full rounded-full p-3 text-white font-semibold hover:bg-blue-600"
+        (click)="onSubmit()">
+            Save Ticket
+        </button>
+    </div>
+</div>

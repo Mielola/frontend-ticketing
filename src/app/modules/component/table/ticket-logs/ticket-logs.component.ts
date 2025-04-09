@@ -13,6 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApiService } from 'app/services/api.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TicketLogsService } from './ticket-logs.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-logs',
@@ -30,6 +31,7 @@ import { TicketLogsService } from './ticket-logs.service';
     MatCheckboxModule,
     NgClass,
     FormsModule,
+    RouterLink,
   ],
   templateUrl: './ticket-logs.component.html',
 })
@@ -51,7 +53,7 @@ export class TicketLogsComponent {
   priorityItems: { name: string, checked: boolean }[] = []
 
   // Table
-  public displayedColumns = ['tracking_id', 'user', 'current_status', 'new_status', 'update_at',];
+  public displayedColumns = ['tracking_id', 'user', 'current_status', 'new_status', 'priority', 'update_at',];
   public dataSource = new MatTableDataSource<any>();
 
   // Paginator
@@ -76,10 +78,8 @@ export class TicketLogsComponent {
  */
 
   ngAfterViewInit() {
-    setTimeout(() => {
       this.dataSource.sort = this.sort;
       this.dataSource.paginator = this.paginator;
-    });
   }
 
   public async fetchData() {

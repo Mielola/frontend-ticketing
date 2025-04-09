@@ -1,0 +1,81 @@
+<div class="h-full w-full flex flex-col">
+    <div class="flex justify-end">
+        <a class="w-auto">
+            <mat-icon mat-flat-button svgIcon="mat_solid:close" class="self-end"></mat-icon>
+        </a>
+    </div>
+
+    <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
+    <div class="">
+        <form [formGroup]="generateForm" class="bg-card mt-2 flex flex-col overflow-hidden rounded-2xl p-8 pb-4 gap-5">
+
+            <!-- Product Input -->
+            <mat-form-field hideRequiredMarker class="w-full">
+                <mat-label>Products</mat-label>
+                <mat-select formControlName="products_name" placeholder="Select Products">
+                    <mat-option *ngFor="let item of products" [value]="item"
+                        class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        {{item}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Start Day Input -->
+            <mat-form-field class="example-full-width">
+                <mat-label>Start day</mat-label>
+                <input formControlName="start_date" matInput [matDatepicker]="pickers" placeholder="Choose a date">
+                <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #pickers></mat-datepicker>
+            </mat-form-field>
+
+            <!-- End Day Input -->
+            <mat-form-field class="example-full-width">
+                <mat-label>End day</mat-label>
+                <input formControlName="end_date" matInput [matDatepicker]="pickers2" placeholder="Choose a date">
+                <mat-datepicker-toggle matSuffix [for]="pickers2"></mat-datepicker-toggle>
+                <mat-datepicker touchUi #pickers2></mat-datepicker>
+            </mat-form-field>
+
+            <!-- Start Time Input -->
+            <mat-form-field class="example-full-width">
+                <mat-label>Start Time</mat-label>
+                <input formControlName="start_time" matInput type="time">
+            </mat-form-field>
+
+            <!-- End Time Input -->
+            <mat-form-field class="example-full-width">
+                <mat-label>End Time</mat-label>
+                <input formControlName="end_time" matInput type="time">
+            </mat-form-field>
+
+            <!-- Status Input -->
+            <mat-form-field hideRequiredMarker class="w-full">
+                <mat-label>Status</mat-label>
+                <mat-select [(value)]="selectedStatus" formControlName="status" placeholder="Select">
+                    <mat-option *ngFor="let status of statusList" [value]="status"
+                        class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        {{ status }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+
+            <button class="bg-green-600 text-white p-2 rounded" type="submit" (click)="generateReport()">
+                Generate Report
+            </button>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="chartOptions" #chartContainer [style.position]="'absolute'" [style.left]="'-9999px'" class="w-full h-full">
+    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
+        [title]="chartOptions.title" [dataLabels]="chartOptions.dataLabels">
+    </apx-chart>
+</div>
+
+<div *ngIf="chartOptions2" #chartContainer2 [style.position]="'absolute'" [style.left]="'-8999px'"
+    class="w-full h-full">
+    <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart" [xaxis]="chartOptions2.xaxis"
+        [title]="chartOptions2.title" [dataLabels]="chartOptions2.dataLabels"></apx-chart>
+</div>

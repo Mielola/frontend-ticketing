@@ -1,1 +1,123 @@
-<p>form-add-tickets works!</p>
+<main class="flex justify-center bg-[url('/assets/images/cards/moon.jpg')] bg-center bg-cover w-full py-0 sm:py-20">
+    <div class="bg-white shadow-xl w-full mx-5 md:mx-40 h-fit p-5 sm:rounded">
+        <h1 class="self-start text-lg font-semibold uppercase">Form Add Ticketing</h1>
+        <h3 class="text-sm opacity-60 font-medium">Add Tickets</h3>
+
+        <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
+
+        <mat-horizontal-stepper [linear]="true" #stepper="matHorizontalStepper">
+            <mat-step [stepControl]="firstTicketForm">
+                <form [formGroup]="firstTicketForm" class="mt-8 w-full">
+                    <ng-template matStepLabel>Ticket Information</ng-template>
+                    <div action="" class="mt-2.5 flex flex-col">
+
+                        <!-- Product Input -->
+                        <mat-form-field hideRequiredMarker class="w-full">
+                            <mat-label>Products</mat-label>
+                            <mat-select formControlName="products_name" placeholder="Select Products">
+                                <mat-option *ngFor="let item of products" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Subject Input -->
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label>Subject Judul</mat-label>
+                            <input formControlName="subject" matInput [placeholder]="'Subject Judul'" />
+                        </mat-form-field>
+
+                        <!-- Category Input -->
+                        <mat-form-field class="w-full">
+                            <mat-label>Category</mat-label>
+                            <mat-select formControlName="category_name">
+                                <mat-option *ngFor="let item of category" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+
+                        <!-- Detail Input -->
+                        <mat-form-field class="w-full mb-2" floatLabel="always">
+                            <mat-label>Problem Detail</mat-label>
+                            <textarea formControlName="detail_kendala" matInput rows="4" cols="50"
+                                placeholder="Problem Detail"></textarea>
+                        </mat-form-field>
+
+                        <!-- Priority Input -->
+                        <mat-form-field hideRequiredMarker class="w-full">
+                            <mat-label>Priority</mat-label>
+                            <mat-select formControlName="priority" placeholder="Select Priority">
+                                <mat-option *ngFor="let item of priority" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
+                                            'text-green-600': item.toLowerCase() === 'low',
+                                            'text-blue-600': item.toLowerCase() === 'medium',
+                                            'text-yellow-600': item.toLowerCase() === 'high',
+                                            'text-red-600': item.toLowerCase() === 'critical',
+                                        }"></mat-icon>
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Entry day</mat-label>
+                            <input formControlName="hari_masuk" matInput [matDatepicker]="picker"
+                                placeholder="Choose a date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Entry Time</mat-label>
+                            <input formControlName="waktu_masuk" matInput type="time">
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Respon day</mat-label>
+                            <input formControlName="hari_respon" matInput [matDatepicker]="pickers"
+                                placeholder="Choose a date">
+                            <mat-datepicker-toggle matSuffix [for]="pickers"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #pickers></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Respon Time</mat-label>
+                            <input formControlName="waktu_respon" matInput type="time">
+                        </mat-form-field>
+
+                        <button mat-raised-button class="bg-blue-500 w-full rounded-full p-3 text-white font-semibold"
+                            (click)="stepper.next()">
+                            Next
+                        </button>
+                    </div>
+                </form>
+            </mat-step>
+            <mat-step [stepControl]="null">
+                <form [formGroup]="secondTicketForm" class="mt-8 w-full">
+                    <ng-template matStepLabel>Response Information</ng-template>
+                    <div action="" class="mt-2.5 flex flex-col">
+
+                        <!-- Detail Input -->
+                        <mat-form-field class="w-full mb-2" floatLabel="always">
+                            <mat-label>Response Admin</mat-label>
+                            <textarea formControlName="respon_diberikan" matInput rows="4" cols="50"
+                                placeholder="Response Admin"></textarea>
+                        </mat-form-field>
+
+                        <button mat-raised-button class="bg-blue-500 w-full rounded-full p-3 text-white font-semibold"
+                            (click)="onSubmit()">
+                            Submit
+                        </button>
+
+                    </div>
+                </form>
+            </mat-step>
+        </mat-horizontal-stepper>
+    </div>
+</main>

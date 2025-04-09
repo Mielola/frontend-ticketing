@@ -7,8 +7,14 @@ export interface Ticket {
     hari_masuk: string;
     hari_respon: string;
     id: number;
+    last_replier: {
+        email: string,
+        name: string,
+        avatar: string
+    },
     owner: string;
     priority: "low" | "medium" | "high";
+    products_name: string
     respon_diberikan: string;
     status: "New" | "In Progress" | "Resolved" | "Closed";
     subject: string;
@@ -17,6 +23,11 @@ export interface Ticket {
     updated_at: string;
     user_email: string;
     user_name: string;
+    user: {
+        email: string,
+        name: string,
+        avatar: string
+    },
     waktu_masuk: string;
     waktu_respon: string;
 }

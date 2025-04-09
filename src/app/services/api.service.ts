@@ -1,42 +1,46 @@
-// generate voucher service
-import { HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import axios from 'axios';
 import { environment } from 'environments/environments.dev';
-
+import { FuseLoadingService } from '@fuse/services/loading';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
     private apiUrl = environment.apiUrl;
-    private options = {
-        headers: {
-            'Authorization': `${localStorage.getItem('accessToken') || ''}`,
-            'Content-Type': 'application/json'
-        }
-    };
+    private _loadingService = inject(FuseLoadingService);
 
+    private getHeaders() {
+        return {
+            headers: {
+                'Authorization': `${localStorage.getItem('accessToken') || ''}`,
+                'Content-Type': 'application/json'
+            }
+        };
+    }
 
     async get(endPoint: string) {
-        return await axios.get(this.apiUrl + endPoint, this.options).then(
-            async response => {
-                return await response.data;
-            }
-        ).catch(async error => {
-            console.error(error);
-        });
-    }
-
-
-    async post(endPoint: string, data: any) {
+        this._loadingService.show(); // Tampilkan loading bar
         try {
-            const response = await axios.post(this.apiUrl + endPoint, data, this.options);
-            return { data: response.data, status: response.status };
+            const response = await axios.get(this.apiUrl + endPoint, this.getHeaders());
+            return response.data;
         } catch (error) {
-            return { data: null, status: error.response.status};
+            console.error(error);
+            return null;
+        } finally {
+            this._loadingService.hide()
         }
     }
 
+    async post(endPoint: string, data: any) {
+        this._loadingService.show(); // Tampilkan loading bar
+        try {
+            const response = await axios.post(this.apiUrl + endPoint, data, this.getHeaders());
+            return { data: response.data, status: response.status };
+        } catch (error) {
+            return { data: error, status: error.response?.status };
+        } finally {
+            this._loadingService.hide()
+        }
+    }
 }
-

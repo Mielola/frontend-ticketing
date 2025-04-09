@@ -103,7 +103,6 @@ export class AuthSignInComponent implements OnInit {
                 // to the correct page after a successful sign in. This way, that url can be set via
                 // routing file and we don't have to touch here.
                 const redirectURL = '/auth/otp';
-                console.log("IM heree")
                 document.cookie = `otp-email=${this.signInForm.value.email}; path=/; max-age=3600`;
 
                 // Navigate to the redirect url

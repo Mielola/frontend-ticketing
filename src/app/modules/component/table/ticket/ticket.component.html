@@ -26,10 +26,17 @@
 
         <div class="flex items-center gap-3">
             <!-- Button New Tickets -->
-            <button mat-raised-button
+            <button mat-raised-button [routerLink]="['/dashboards/tickets/add-tickets']"
                 class="flex w-fit text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 bg-primary text-white">
                 <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
                 <span class="max-sm:hidden font-semibold">New Ticket</span>
+            </button>
+
+            <!-- Button PDF -->
+            <button mat-raised-button (click)="generateReport()"
+                class="flex w-fit text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 bg-red-500 text-white">
+                <mat-icon svgIcon="mat_solid:picture_as_pdf" class="text-white"></mat-icon>
+                <span class="max-sm:hidden font-semibold">Generate Report</span>
             </button>
 
             <!-- Button Filter Date-->
@@ -39,11 +46,11 @@
                     <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
                 </mat-date-range-input>
                 <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker #picker></mat-date-range-picker>
+                <mat-date-range-picker touchUi #picker></mat-date-range-picker>
             </mat-form-field>
 
             <!-- Button Filter -->
-            <button mat-raised-button [matMenuTriggerFor]="menu"
+            <button [matMenuTriggerFor]="menu"
                 class="flex items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 border-[1px] text-white">
                 <mat-icon svgIcon="filter_alt"></mat-icon>
                 <span class="max-sm:hidden font-semibold text-black">Filter</span>
@@ -107,10 +114,10 @@
                         <div class="flex items-center gap-3">
                             <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90"
                                 [ngClass]="{
-                                                                                                                                    'text-green-600': item.name === 'low',
-                                                                                                                                    'text-blue-600': item.name === 'medium',
-                                                                                                                                    'text-yellow-600': item.name === 'high',
-                                                                                                                                    'text-red-600': item.name === 'critical',
+                                                                                                                                    'text-green-600': item.name === 'Low',
+                                                                                                                                    'text-blue-600': item.name === 'Hedium',
+                                                                                                                                    'text-yellow-600': item.name === 'High',
+                                                                                                                                    'text-red-600': item.name === 'Critical',
                                                                                                                                 }"></mat-icon>
                             <h1 class="font-medium uppercase">{{item.name}}</h1>
                         </div>
@@ -160,7 +167,7 @@
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element"
                         class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
-                        <a href="">{{element.tracking_id}}</a>
+                        <a [routerLink]="['/dashboards/tickets', element.tracking_id]">{{element.tracking_id}}</a>
                     </mat-cell>
                 </ng-container>
 
@@ -220,7 +227,7 @@
                 <ng-container matColumnDef="subject">
                     <mat-header-cell *matHeaderCellDef> Subject
                     </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.subject}} </mat-cell>
+                    <mat-cell *matCellDef="let element" class="font-bold text-lg"> {{element.subject}} </mat-cell>
                 </ng-container>
 
                 <!-- No Whatsapp Column -->
@@ -233,7 +240,7 @@
                         </a></mat-cell>
                 </ng-container>
 
-                <!-- Status Time Column -->
+                <!-- Status Column -->
                 <ng-container matColumnDef="status">
                     <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
@@ -283,10 +290,10 @@
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="flex items-center gap-3">
                         <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
-                            'text-green-600': element.priority === 'low',
-                            'text-blue-600': element.priority === 'medium',
-                            'text-yellow-600': element.priority === 'high',
-                            'text-red-600': element.priority === 'critical',
+                            'text-green-600': element.priority === 'Low',
+                            'text-blue-600': element.priority === 'Medium',
+                            'text-yellow-600': element.priority === 'High',
+                            'text-red-600': element.priority === 'Critical',
                         }"></mat-icon>
                         <h1 class="font-medium uppercase">{{element.priority}}</h1>
                     </mat-cell>
