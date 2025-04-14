@@ -23,7 +23,7 @@ export class ApiService {
         this._loadingService.show(); // Tampilkan loading bar
         try {
             const response = await axios.get(this.apiUrl + endPoint, this.getHeaders());
-            return response.data;
+            return await response.data;
         } catch (error) {
             console.error(error);
             return null;

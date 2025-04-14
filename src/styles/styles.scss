@@ -3,6 +3,7 @@
 /*  @ Styles from this file will override 'vendors.scss' and Fuse's base styles.
 /* ----------------------------------------------------------------------------------------------------- */
 @import 'ngx-toastr/toastr';
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 html {
     overscroll-behavior: none;
 }

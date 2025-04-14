@@ -3,8 +3,8 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id: 'dashboards',
-        title: 'Dashboards',
+        id: 'tickets',
+        title: 'Tickets',
         subtitle: 'Unique dashboard designs',
         type: 'group',
         icon: 'heroicons_outline:home',
@@ -27,14 +27,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 roles: ['admin', 'pegawai'],
             },
             {
-                id: 'dashboards.analytics',
-                title: 'Analytics',
-                type: 'basic',
-                icon: 'heroicons_outline:chart-pie',
-                link: '/dashboards/analytics',
-                roles: ['admin', 'pegawai']
-            },
-            {
                 id: 'dashboards.finance',
                 title: 'Finance',
                 type: 'basic',
@@ -53,128 +45,20 @@ export const defaultNavigation: FuseNavigationItem[] = [
         ],
     },
     {
-        id: 'apps',
-        title: 'Applications',
+        id: 'report',
+        title: 'Reports',
         subtitle: 'Custom made application designs',
         type: 'group',
         roles: ['admin'],
         icon: 'heroicons_outline:home',
         children: [
             {
-                id: 'apps.academy',
-                title: 'Academy',
+                id: 'dashboards.export',
+                title: 'Export',
                 type: 'basic',
-                icon: 'heroicons_outline:academic-cap',
-                link: '/apps/academy',
-                roles: ['pegawai'],
-            },
-            {
-                id: 'apps.chat',
-                title: 'Chat',
-                type: 'basic',
-                icon: 'heroicons_outline:chat-bubble-bottom-center-text',
-                link: '/apps/chat',
-                roles: ['pegawai'],
-            },
-            {
-                id: 'apps.contacts',
-                title: 'Contacts',
-                type: 'basic',
-                icon: 'heroicons_outline:user-group',
-                link: '/apps/contacts',
-                roles: ['pegawai'],
-            },
-            {
-                id: 'apps.ecommerce',
-                title: 'ECommerce',
-                type: 'collapsable',
-                icon: 'heroicons_outline:shopping-cart',
-                roles: ['pegawai'],
-                children: [
-                    {
-                        id: 'apps.ecommerce.inventory',
-                        title: 'Inventory',
-                        type: 'basic',
-                        link: '/apps/ecommerce/inventory',
-                        roles: ['pegawai'],
-                    },
-                ],
-            },
-            {
-                id: 'apps.file-manager',
-                title: 'File Manager',
-                type: 'basic',
-                icon: 'heroicons_outline:cloud',
-                roles: ['pegawai'],
-                link: '/apps/file-manager',
-            },
-            {
-                id: 'apps.help-center',
-                title: 'Help Center',
-                type: 'collapsable',
-                icon: 'heroicons_outline:information-circle',
-                link: '/apps/help-center',
-                roles: ['pegawai'],
-                children: [
-                    {
-                        id: 'apps.help-center.home',
-                        title: 'Home',
-                        type: 'basic',
-                        link: '/apps/help-center',
-                        exactMatch: true,
-                    },
-                    {
-                        id: 'apps.help-center.faqs',
-                        title: 'FAQs',
-                        type: 'basic',
-                        link: '/apps/help-center/faqs',
-                    },
-                    {
-                        id: 'apps.help-center.guides',
-                        title: 'Guides',
-                        type: 'basic',
-                        link: '/apps/help-center/guides',
-                    },
-                    {
-                        id: 'apps.help-center.support',
-                        title: 'Support',
-                        type: 'basic',
-                        link: '/apps/help-center/support',
-                    },
-                ],
-            },
-            {
-                id: 'apps.mailbox',
-                title: 'Mailbox',
-                type: 'basic',
-                icon: 'heroicons_outline:envelope',
-                link: '/apps/mailbox',
-                roles: ['pegawai'],
-                badge: {
-                    title: '27',
-                    classes: 'px-2 bg-pink-600 text-white rounded-full',
-                },
-            },
-            {
-                id: 'apps.notes',
-                title: 'Notes',
-                type: 'basic',
-                icon: 'heroicons_outline:pencil-square',
-                link: '/apps/notes',
-            },
-            {
-                id: 'apps.scrumboard',
-                title: 'Scrumboard',
-                type: 'basic',
-                icon: 'heroicons_outline:view-columns',
-                link: '/apps/scrumboard',
-            },
-            {
-                id: 'apps.tasks',
-                title: 'Tasks',
-                type: 'basic',
-                icon: 'heroicons_outline:check-circle',
-                link: '/apps/tasks',
+                icon: 'heroicons_outline:document-arrow-down',
+                link: '/dashboards/export',
+                roles: ['admin', 'pegawai']
             },
         ],
     },
@@ -1193,27 +1077,19 @@ export const defaultNavigation: FuseNavigationItem[] = [
 ];
 export const compactNavigation: FuseNavigationItem[] = [
     {
-        id: 'dashboards',
-        title: 'Dashboards',
-        tooltip: 'Dashboards',
+        id: 'tickets',
+        title: 'Tickets',
+        tooltip: 'Tickets',
         type: 'aside',
-        icon: 'heroicons_outline:home',
+        icon: 'heroicons_outline:ticket',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
-        id: 'apps',
-        title: 'Apps',
-        tooltip: 'Apps',
+        id: 'report',
+        title: 'Reports',
+        tooltip: 'Reports',
         type: 'aside',
-        icon: 'heroicons_outline:squares-2x2',
-        children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
-    },
-    {
-        id: 'pages',
-        title: 'Pages',
-        tooltip: 'Pages',
-        type: 'aside',
-        icon: 'heroicons_outline:document-duplicate',
+        icon: 'heroicons_outline:chart-pie',
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {

@@ -174,7 +174,7 @@ export class LayoutComponent implements OnInit, OnDestroy {
         }
 
         // 1. Set the layout from the config
-        this.layout = this.config.layout;
+        this.layout = "thin";
 
         // 2. Get the query parameter from the current route and
         // set the layout and save the layout to the config

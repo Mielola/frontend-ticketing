@@ -19,6 +19,7 @@ export class NavigationMockApi {
         futuristicNavigation;
     private readonly _horizontalNavigation: FuseNavigationItem[] =
         horizontalNavigation;
+    userRole = localStorage.getItem('userRole') || 'pegawai'; // sementara
 
     /**
      * Constructor
@@ -36,53 +37,65 @@ export class NavigationMockApi {
      * Register Mock API handlers
      */
     registerHandlers(): void {
+
+        function filterNavigationByRole(navigation: FuseNavigationItem[], role: string): FuseNavigationItem[] {
+            return navigation
+                .filter(item => !item.roles || item.roles.includes(role))
+                .map(item => ({
+                    ...item,
+                    children: item.children
+                        ? item.children.filter(child => !child.roles || child.roles.includes(role))
+                        : undefined,
+                }));
+        }
+
         // -----------------------------------------------------------------------------------------------------
         // @ Navigation - GET
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService.onGet('api/common/navigation').reply(() => {
-            // Fill compact navigation children using the default navigation
+            const userRole = localStorage.getItem('role') || 'pegawai';
+
+            // Isi children seperti biasa
             this._compactNavigation.forEach((compactNavItem) => {
                 this._defaultNavigation.forEach((defaultNavItem) => {
                     if (defaultNavItem.id === compactNavItem.id) {
-                        compactNavItem.children = cloneDeep(
-                            defaultNavItem.children
-                        );
+                        compactNavItem.children = cloneDeep(defaultNavItem.children);
                     }
                 });
             });
 
-            // Fill futuristic navigation children using the default navigation
             this._futuristicNavigation.forEach((futuristicNavItem) => {
                 this._defaultNavigation.forEach((defaultNavItem) => {
                     if (defaultNavItem.id === futuristicNavItem.id) {
-                        futuristicNavItem.children = cloneDeep(
-                            defaultNavItem.children
-                        );
+                        futuristicNavItem.children = cloneDeep(defaultNavItem.children);
                     }
                 });
             });
 
-            // Fill horizontal navigation children using the default navigation
             this._horizontalNavigation.forEach((horizontalNavItem) => {
                 this._defaultNavigation.forEach((defaultNavItem) => {
                     if (defaultNavItem.id === horizontalNavItem.id) {
-                        horizontalNavItem.children = cloneDeep(
-                            defaultNavItem.children
-                        );
+                        horizontalNavItem.children = cloneDeep(defaultNavItem.children);
                     }
                 });
             });
 
-            // Return the response
+            // ✅ Filter berdasarkan role
+            const compactFiltered = filterNavigationByRole(this._compactNavigation, userRole);
+            const defaultFiltered = filterNavigationByRole(this._defaultNavigation, userRole);
+            const futuristicFiltered = filterNavigationByRole(this._futuristicNavigation, userRole);
+            const horizontalFiltered = filterNavigationByRole(this._horizontalNavigation, userRole);
+
             return [
                 200,
                 {
-                    compact: cloneDeep(this._compactNavigation),
-                    default: cloneDeep(this._defaultNavigation),
-                    futuristic: cloneDeep(this._futuristicNavigation),
-                    horizontal: cloneDeep(this._horizontalNavigation),
+                    compact: cloneDeep(compactFiltered),
+                    default: cloneDeep(defaultFiltered),
+                    futuristic: cloneDeep(futuristicFiltered),
+                    horizontal: cloneDeep(horizontalFiltered),
                 },
             ];
         });
+
     }
 }

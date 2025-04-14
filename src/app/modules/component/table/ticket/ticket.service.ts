@@ -10,7 +10,7 @@ export class TicketTableService {
 
     constructor(
         private _apiService: ApiService,
-        private _httpClient : HttpClient
+        private _httpClient: HttpClient
     ) {
         this.fetchData()
     }
@@ -40,6 +40,14 @@ export class TicketTableService {
     /**
      * Get data
      */
+
+    public checkTickets(): Observable<any> {
+        return from(this._apiService.get("api/V1/check-tickets-deadline")).pipe(
+            tap((response: any) => {
+                
+            })
+        );
+    }
 
     public fetchData(): Observable<any> {
         return from(this._apiService.get("api/V1/tickets")).pipe(

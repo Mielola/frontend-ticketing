@@ -298,7 +298,7 @@ export class TicketComponent implements OnInit, OnDestroy {
 
   async changeStatus(ticketId: string, newStatus: string) {
     try {
-      const { status, data } = await this._apiService.post(`api/V1/tickets/${ticketId}`, {
+      const { status, data } = await this._apiService.post(`api/V1/ticket-status/${ticketId}`, {
         status: newStatus
       });
 

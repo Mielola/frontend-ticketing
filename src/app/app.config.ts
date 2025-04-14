@@ -20,11 +20,20 @@ import { TranslocoHttpLoader } from './core/transloco/transloco.http-loader';
 import { provideToastr } from 'ngx-toastr';
 import { AxiosInterceptorService } from './services/axios-interceptor.service';
 import { provideIonicAngular } from '@ionic/angular/standalone';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeng/themes/aura';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideToastr(),
         provideAnimations(),
+        provideAnimationsAsync(),
+        providePrimeNG({
+            theme: {
+                preset: Aura
+            }
+        }),
         provideHttpClient(),
         provideIonicAngular(),
         AxiosInterceptorService,

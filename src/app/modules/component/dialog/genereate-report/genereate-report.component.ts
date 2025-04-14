@@ -353,7 +353,7 @@ export class GenereateReportComponent implements OnInit {
     doc.setTextColor(110, 170, 30); // RGB hijau
     doc.setFontSize(24);
     doc.setFont("helvetica", "bold");
-    doc.text(' LAPORAN HARIAN GUGUS PANGAN', pageWidth / 2, y, { align: 'center' });
+    doc.text(` LAPORAN HARIAN ${this.generateForm.value.products_name}`, pageWidth / 2, y, { align: 'center' });
     y += 8;
 
     doc.setFont("helvetica", "normal");
@@ -500,7 +500,7 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
         const chartElement = this.chartContainer.nativeElement;
         const chartElement2 = this.chartContainer2.nativeElement;
 
-        let y2 = 25;
+        let y2 = 30;
 
         // Make sure element is visible and has dimensions
         if (chartElement.offsetWidth > 0 && chartElement.offsetHeight > 0) {

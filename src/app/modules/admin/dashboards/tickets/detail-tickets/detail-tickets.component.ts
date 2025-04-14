@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
 import { ApiService } from 'app/services/api.service';
 import { Ticket } from 'app/types/tickets';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -14,6 +14,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
 import { IonLoading } from '@ionic/angular/standalone';
 import { DateTime } from 'luxon';
+import { TicketLogsComponent } from 'app/modules/component/table/ticket-logs/ticket-logs.component';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { TicketLogsService } from 'app/modules/component/table/ticket-logs/ticket-logs.service';
+import { takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-detail-tickets',
@@ -30,26 +36,39 @@ import { DateTime } from 'luxon';
     CommonModule,
     MatIconModule,
     MatNativeDateModule,
+    MatTableModule,
+    MatPaginatorModule,
+    FormsModule,
     IonLoading,
   ],
   templateUrl: './detail-tickets.component.html',
   styleUrl: './detail-tickets.component.scss'
 })
-export class DetailTicketsComponent implements OnInit {
+export class DetailTicketsComponent implements OnInit, AfterViewInit {
 
   TicketForm!: FormGroup;
   products: string[] = [];
   category: string[] = [];
   disableInput: boolean = true;
-  priority: string[] = ['Low', 'Medium', 'High'];
-  status: string[] = ['New', 'In Progress', 'Resolved', 'Critical'];
+  priority: string[] = ['Low', 'Medium', 'High', 'Critical'];
+  status: string[] = ['New', 'On Progress', 'Resolved'];
   tracking_id: string;
+  isLoading: boolean = false
+  isNotDataFound: boolean
 
+  public displayedColumns = ['tracking_id', 'user', 'new_status', 'priority', 'details', 'update_at',];
+  public dataSource = new MatTableDataSource<any>();
+
+  // Paginator
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     private route: ActivatedRoute,
     private _apiService: ApiService,
     private fb: FormBuilder,
+    private _ticketLogsService: TicketLogsService,
+
   ) { }
 
   data: Ticket
@@ -66,7 +85,7 @@ export class DetailTicketsComponent implements OnInit {
       hari_masuk: [{ value: null, disabled: this.disableInput }, Validators.required],
       waktu_masuk: [{ value: '', disabled: this.disableInput }, Validators.required],
       respon_diberikan: [{ value: '', disabled: this.disableInput }, Validators.required],
-      PIC : [{ value: '', disabled: this.disableInput }, Validators.required],
+      PIC: [{ value: '', disabled: this.disableInput }, Validators.required],
     })
 
     this.fetchDataProducts();
@@ -92,6 +111,10 @@ export class DetailTicketsComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+  }
 
   enableFields() {
     Object.keys(this.TicketForm.controls).forEach((field) => {
@@ -110,10 +133,15 @@ export class DetailTicketsComponent implements OnInit {
   }
 
   async onSubmit() {
-    alert(this.TicketForm.value)
-    console.log(this.TicketForm.value)
-    const post = await this._apiService.post(`api/V1/tickets/${this.tracking_id}`, this.TicketForm.value)
-    console.log(post)
+    try {
+      const post = await this._apiService.post(`api/V1/tickets/${this.tracking_id}`, this.TicketForm.value)
+
+      if (post.status === 200) {
+        this.fetchData(this.tracking_id)
+      }
+    } catch (error) {
+      throw error
+    }
   }
 
 
@@ -128,6 +156,7 @@ export class DetailTicketsComponent implements OnInit {
 
   async fetchData(trackingId: string) {
     const data = await this._apiService.get(`api/V1/tickets/${trackingId}`)
+    this.dataSource.data = data.data.history;
     this.data = data.data
 
     const formatDate = (date: any) => {
@@ -145,7 +174,7 @@ export class DetailTicketsComponent implements OnInit {
       hari_masuk: new Date(data.data.hari_masuk),
       waktu_masuk: data.data.waktu_masuk,
       respon_diberikan: data.data.respon_admin,
-      PIC : data.data.pic,
+      PIC: data.data.pic,
     })
   }
 }

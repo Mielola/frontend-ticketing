@@ -9,6 +9,7 @@ export default [
         path: '',
         component: TicketsComponent,
         resolve: {
+            check: () => inject(TicketTableService).checkTickets(),
             data: () => inject(TicketLogsService).fetchData(),
             ticket: () => inject(TicketTableService).fetchData()
         },
@@ -18,7 +19,7 @@ export default [
         loadChildren: () => import('app/modules/admin/dashboards/tickets/form-add-tickets/form-add-tickets.routes')
     },
     {
-        path : ':trackingId',
-        loadChildren: () => import('app/modules/admin/dashboards/tickets/detail-tickets/detail-tickets.routes') 
+        path: ':trackingId',
+        loadChildren: () => import('app/modules/admin/dashboards/tickets/detail-tickets/detail-tickets.routes')
     }
 ] as Routes;
