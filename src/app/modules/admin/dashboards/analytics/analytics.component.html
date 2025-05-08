@@ -1,0 +1,53 @@
+<main class="w-full h-full p-5 sm:p-10">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
+        <div class="mb-5 sm:mb-0">
+            <h1 class="text-4xl font-bold">Analytics</h1>
+            <p>Data Statistic Report</p>
+        </div>
+
+        <form [formGroup]="analyticsForm" class="flex items-center w-full sm:w-1/3 gap-4">
+
+            <mat-form-field hideRequiredMarker class="w-full">
+                <mat-label>Products</mat-label>
+                <mat-select formControlName="products_name" placeholder="Select Products">
+                    <mat-option *ngFor="let item of products" [value]="item"
+                        class="px-3 py-1 font-medium text-base rounded-full">
+                        {{item}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="w-full">
+                <mat-label class="text-sm opacity-50 font-medium">Start Date - End Date</mat-label>
+                <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full" [max]="today">
+                    <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
+                    <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+            </mat-form-field>
+        </form>
+    </div>
+
+    <div class="mt-5 sm:mt-10 h-fit w-full flex flex-col gap-4">
+        <div class="w-full grid grid-cols-1 sm:grid-cols-5 gap-2">
+            <app-column-chart *ngIf="chartPriorityLabels?.length && chartPriorityData?.length"
+                [seriesData]="chartPriorityData" [labels]="chartPriorityLabels" [header]="'Tickets By Priority'"
+                class="col-span-2"></app-column-chart>
+            <app-bar-chart *ngIf="chartCategoryLabels?.length && chartCategoryData?.length"
+                [seriesData]="chartCategoryData" [chartColors]="['#279ffd', '#26e7a6']" [labels]="chartCategoryLabels"
+                [header]="'Tickets By Category'" class="col-span-2"></app-bar-chart>
+            <app-pie-chart *ngIf="pieSeriesData.length && pieLabels.length" [header]="'User By Roles'"
+                [seriesData]="pieSeriesData" [labels]="pieLabels" class="col-span-1">
+            </app-pie-chart>
+
+        </div>
+        <div class="w-full grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <app-bar-chart *ngIf="chartPeriodeLabels?.length && chartPeriodeData?.length"
+                [seriesData]="chartPeriodeData" [labels]="chartPeriodeLabels" [header]="'Tickets By Periode'"
+                class="col-span-2"></app-bar-chart>
+            <app-column-chart class="col-span-2" [header]="'User Tickets'" [seriesData]="chartUserTicketsData"
+                [labels]="chartUserTicketsLabels"></app-column-chart>
+        </div>
+    </div>
+</main>

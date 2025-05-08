@@ -33,6 +33,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     colors: string[];
     legend: ApexLegend;
+    stroke: ApexStroke;
 };
 
 @Component({
@@ -45,7 +46,7 @@ export type ChartOptions = {
 export class ColumnChartComponent implements OnChanges {
     @ViewChild("chart") chart: ChartComponent;
     public chartOptions: Partial<ChartOptions>;
-    @Input() seriesData: ApexNonAxisChartSeries = [];
+    @Input() seriesData: ApexAxisChartSeries = [];
     @Input() header: string = '';
     @Input() labels: string[] = [];
 
@@ -55,12 +56,7 @@ export class ColumnChartComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         this.chartOptions = {
-            series: [
-                {
-                    name: "distibuted",
-                    data: [21, 22, 10, 28, 16, 21, 13, 30]
-                }
-            ],
+            series: this.seriesData,
             chart: {
                 height: 350,
                 type: "bar",
@@ -89,7 +85,11 @@ export class ColumnChartComponent implements OnChanges {
                 show: false
             },
             grid: {
-                show: false
+                show: true
+            },
+            stroke: {
+                curve: "straight",
+                width: [0, 4]
             },
             xaxis: {
                 categories: this.labels,
