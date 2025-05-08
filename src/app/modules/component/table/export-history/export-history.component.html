@@ -1,0 +1,66 @@
+<style>
+    .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+</style>
+
+
+<section class="h-fit border-[1px] shadow-xl mt-4 bg-white rounded-lg p-5">
+    <!-- Skeleton Loader -->
+    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full"></div>
+    </div>
+
+    <div *ngIf="isNotDataFound && !isLoading">
+        <div class="flex flex-col items-center">
+            <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
+            <h1 class="mt-2 font-semibold text-xl -tracking-tighter">Data Not Found</h1>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="w-full overflow-auto whitespace-nowrap my-5">
+        <mat-table #table [dataSource]="dataSource" matSort
+            *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-120">
+
+            <div>
+                
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="file_name">
+                    <mat-header-cell *matHeaderCellDef> File Name
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.file_name}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="user_email">
+                    <mat-header-cell *matHeaderCellDef> Exporter
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.user_email}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="created_at">
+                    <mat-header-cell *matHeaderCellDef> Export Date & Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element"> {{element.created_at}}
+                    </mat-cell>
+                </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+    </div>
+
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+    </mat-paginator>
+</section>

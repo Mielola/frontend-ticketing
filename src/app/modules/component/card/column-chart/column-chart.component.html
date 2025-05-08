@@ -1,0 +1,9 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div id="chart" class="bg-white shadow-md p-2 rounded-xl h-full">
+    <div class="text-xl font-semibold px-4 border-b-[1px] border-solid py-4">
+        <h1>{{header}}</h1>
+    </div>
+    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [dataLabels]="chartOptions.dataLabels"
+        [plotOptions]="chartOptions.plotOptions" [yaxis]="chartOptions.yaxis" [xaxis]="chartOptions.xaxis"
+        [legend]="chartOptions.legend" [colors]="chartOptions.colors" [grid]="chartOptions.grid"></apx-chart>
+</div>

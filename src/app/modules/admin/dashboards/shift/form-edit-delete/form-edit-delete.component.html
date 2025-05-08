@@ -1,0 +1,65 @@
+<div class="h-full w-full">
+    <div class="flex justify-between p-2">
+        <div
+            class="truncate text-lg font-medium leading-6 tracking-tight px-5 py-3 flex flex-col sm:flex-row items-start sm:items-center w-full justify-between">
+            <h2 class=" text-xl font-semibold sm:mb-0">Detail User Shift</h2>
+        </div>
+        <a (click)="onNoClick()">
+            <mat-icon svgIcon="mat_solid:close" class="cursor-pointer"></mat-icon>
+        </a>
+    </div>
+    <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
+    <div class="">
+        <form [formGroup]="editShiftForm" class="bg-card flex flex-col overflow-hidden rounded-2xl px-8 py-4 pb-4">
+
+            <mat-form-field class="gt-xs:pr-3 mb-2 flex-auto">
+                <mat-label>Agent</mat-label>
+                <select matNativeControl formControlName="user_email">
+                    <option disabled>
+                        -----Select Agent-----
+                    </option>
+                    <option *ngFor="let user of emailData" [value]="user.email">
+                        {{ user.name }}
+                    </option>
+                </select>
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user'"></mat-icon>
+            </mat-form-field>
+
+            <mat-form-field class="gt-xs:pr-3 mb-2 flex-auto">
+                <mat-label>Choose a date</mat-label>
+                <input matInput [matDatepicker]="picker" placeholder="Pick a date" formControlName="shift_date" />
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+
+            <mat-form-field class="gt-xs:pr-3 mb-2 flex-auto">
+                <mat-label>Shifts</mat-label>
+                <select matNativeControl formControlName="shift_id">
+                    <option disabled>
+                        -----Select Shift-----
+                    </option>
+                    <option value="1">
+                        1
+                    </option>
+                    <option value="2">
+                        2
+                    </option>
+                    <option value="3">
+                        3
+                    </option>
+                </select>
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'mat_solid:access_time_filled'"></mat-icon>
+            </mat-form-field>
+
+            <button mat-flat-button class="bg-blue-600 font-medium text-white p-2 rounded" (click)="onSubmit()">
+                Edit User Shift
+            </button>
+            <button mat-flat-button class="bg-red-600 mt-4 font-medium text-white p-2 rounded" (click)="handleDelete()">
+                Delete User Shift
+            </button>
+        </form>
+
+    </div>
+</div>

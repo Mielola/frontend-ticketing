@@ -52,7 +52,6 @@ export class TicketTableService {
     public fetchData(): Observable<any> {
         return from(this._apiService.get("api/V1/tickets")).pipe(
             tap((response: any) => {
-                console.log(response)
                 this._data.next(response);
             })
         );

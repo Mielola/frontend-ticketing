@@ -52,30 +52,12 @@
                             <section class="bg-blue-900 p-10 flex flex-col gap-7 rounded-md shadow-xl">
                                 <h1 class="text-2xl text-white font-semibold">All Tickets </h1>
                                 <div
-                                    class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4 rounded-md">
+                                    class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-5 rounded-md">
                                     <!-- New Tickets -->
                                     <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
                                         <div class="flex items-start justify-between">
                                             <div class="truncate text-lg font-medium leading-6 tracking-tight">
                                                 New Tickets
-                                            </div>
-                                            <div class="-mr-3 -mt-2 ml-2">
-                                                <button mat-icon-button [matMenuTriggerFor]="summaryMenu">
-                                                    <mat-icon class="icon-size-5" [svgIcon]="
-                                                    'heroicons_mini:ellipsis-vertical'
-                                                "></mat-icon>
-                                                </button>
-                                                <mat-menu #summaryMenu="matMenu">
-                                                    <button mat-menu-item>
-                                                        Yesterday
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        2 days ago
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        3 days ago
-                                                    </button>
-                                                </mat-menu>
                                             </div>
                                         </div>
                                         <div class="mt-2 flex flex-col items-center">
@@ -102,31 +84,13 @@
                                             <div class="truncate text-lg font-medium leading-6 tracking-tight">
                                                 On Progress
                                             </div>
-                                            <div class="-mr-3 -mt-2 ml-2">
-                                                <button mat-icon-button [matMenuTriggerFor]="overdueMenu">
-                                                    <mat-icon class="icon-size-5" [svgIcon]="
-                                                    'heroicons_mini:ellipsis-vertical'
-                                                "></mat-icon>
-                                                </button>
-                                                <mat-menu #overdueMenu="matMenu">
-                                                    <button mat-menu-item>
-                                                        Yesterday
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        2 days ago
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        3 days ago
-                                                    </button>
-                                                </mat-menu>
-                                            </div>
                                         </div>
                                         <div class="mt-2 flex flex-col items-center">
                                             <div
-                                                class="text-7xl font-bold leading-none tracking-tight text-red-500 sm:text-8xl">
+                                                class="text-7xl font-bold leading-none tracking-tight text-amber-500 sm:text-8xl">
                                                 {{summary?.pending_tickets}}
                                             </div>
-                                            <div class="text-lg font-medium text-red-600 dark:text-red-500">
+                                            <div class="text-lg font-medium text-amber-600 dark:text-amber-500">
                                                 On Progress
                                             </div>
                                             <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
@@ -145,32 +109,39 @@
                                             <div class="truncate text-lg font-medium leading-6 tracking-tight">
                                                 Resolved Tickets
                                             </div>
-                                            <div class="-mr-3 -mt-2 ml-2">
-                                                <button mat-icon-button [matMenuTriggerFor]="issuesMenu">
-                                                    <mat-icon class="icon-size-5" [svgIcon]="
-                                                    'heroicons_mini:ellipsis-vertical'
-                                                "></mat-icon>
-                                                </button>
-                                                <mat-menu #issuesMenu="matMenu">
-                                                    <button mat-menu-item>
-                                                        Yesterday
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        2 days ago
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        3 days ago
-                                                    </button>
-                                                </mat-menu>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
+                                                {{summary?.resolved_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-green-600 dark:text-green-500">
+                                                Resolved Tickets
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    Critical Tickets:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.critical_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Critical Tickets -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                Critical Tickets
                                             </div>
                                         </div>
                                         <div class="mt-2 flex flex-col items-center">
                                             <div
-                                                class="text-7xl font-bold leading-none tracking-tight text-amber-500 sm:text-8xl">
-                                                {{summary?.resolved_tickets}}
+                                                class="text-7xl font-bold leading-none tracking-tight text-red-500 sm:text-8xl">
+                                                {{summary?.critical_tickets}}
                                             </div>
-                                            <div class="text-lg font-medium text-amber-600 dark:text-amber-500">
-                                                Resolved Tickets
+                                            <div class="text-lg font-medium text-red-600 dark:text-red-500">
+                                                Critical Tickets
                                             </div>
                                             <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
                                                 <div class="truncate text-md font-medium">
@@ -182,37 +153,19 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Features -->
+                                    <!-- Total Tickets -->
                                     <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
                                         <div class="flex items-start justify-between">
                                             <div class="truncate text-lg font-medium leading-6 tracking-tight">
                                                 Total Tickets
                                             </div>
-                                            <div class="-mr-3 -mt-2 ml-2">
-                                                <button mat-icon-button [matMenuTriggerFor]="featuresMenu">
-                                                    <mat-icon class="icon-size-5" [svgIcon]="
-                                                    'heroicons_mini:ellipsis-vertical'
-                                                "></mat-icon>
-                                                </button>
-                                                <mat-menu #featuresMenu="matMenu">
-                                                    <button mat-menu-item>
-                                                        Yesterday
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        2 days ago
-                                                    </button>
-                                                    <button mat-menu-item>
-                                                        3 days ago
-                                                    </button>
-                                                </mat-menu>
-                                            </div>
                                         </div>
                                         <div class="mt-2 flex flex-col items-center">
                                             <div
-                                                class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
+                                                class="text-7xl font-bold leading-none tracking-tight text-black sm:text-8xl">
                                                 {{summary?.total_tickets}}
                                             </div>
-                                            <div class="text-lg font-medium text-green-600 dark:text-green-500">
+                                            <div class="text-lg font-medium text-black dark:text-black">
                                                 Total Tickets
                                             </div>
                                             <div class="text-secondary mt-5 flex w-full items-baseline justify-center">

@@ -1,0 +1,54 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+
+    <!-- Header -->
+    <div
+        class="bg-white flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-24 sm:pt-12">
+        <div class="min-w-0 flex-1">
+            <!-- Breadcrumbs -->
+            <div>
+                <div class="hidden flex-wrap items-center font-medium sm:flex">
+                    <div>
+                        <a class="whitespace-nowrap text-primary-500">Reports</a>
+                    </div>
+                    <div class="ml-1 flex items-center whitespace-nowrap">
+                        <mat-icon class="text-secondary icon-size-5"
+                            [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
+                        <span class="text-secondary ml-1">Export</span>
+                    </div>
+                    <div class="ml-1 flex items-center whitespace-nowrap">
+                        <mat-icon class="text-secondary icon-size-5"
+                            [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
+                        <span class="text-secondary ml-1">History Export {{name}}</span>
+                    </div>
+                </div>
+                <div class="flex sm:hidden">
+                    <a class="text-secondary -ml-1.5 inline-flex items-center font-medium" [routerLink]="'./..'">
+                        <mat-icon class="text-secondary icon-size-5"
+                            [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
+                        <span class="ml-1">Back</span>
+                    </a>
+                </div>
+            </div>
+            <!-- Title -->
+            <div class="mt-4">
+                <h2 class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl">
+                    Export {{name}}
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="bg-default -mt-16 flex-auto overflow-y-auto rounded-t-2xl p-6 shadow sm:p-10" cdkScrollable>
+
+        <div>
+            <h1 class="text-3xl font-semibold">Export History</h1>
+            <p class="text-base opacity-50">Once exported, each exporter can download the file</p>
+        </div>
+
+        <!-- CONTENT GOES HERE -->
+        <div class="h-fit max-h-400 rounded-2xl">
+            <app-export-history></app-export-history>
+        </div>
+    </div>
+</div>

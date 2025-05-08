@@ -1,11 +1,13 @@
 <div class="absolute inset-0 flex min-w-0 flex-col overflow-hidden">
+    <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
     <mat-drawer-container class="h-full flex-auto">
         <!-- Drawer -->
         <mat-drawer class="w-96 dark:bg-gray-900" [autoFocus]="false" [mode]="'over'" [position]="'end'" #matDrawer>
 
             @if(content === "tickets"){
 
-            <div class="py-10">
+            <div class="py-10 h-full">
                 <!-- Add any extra content that might be supplied with the component -->
                 <div class="extra-content">
                     <ng-content></ng-content>
@@ -13,49 +15,141 @@
 
                 <!-- Fixed demo sidebar -->
                 <div class="mx-6 text-3xl font-bold tracking-tighter">
-                    Export User
+                    Export Tickets
                 </div>
 
-                <form class="grid grid-cols-1 gap-4 mx-6 mt-4" [formGroup]="ticketForm">
-                    <!-- Periode Input (Date & Time Picker) -->
-                    <mat-form-field class="w-full">
-                        <mat-label class="text-sm opacity-50 font-medium">Start Date - End Date </mat-label>
-                        <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full">
-                            <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
-                            <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
-                        </mat-date-range-input>
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-date-range-picker touchUi #picker></mat-date-range-picker>
-                    </mat-form-field>
+                <div class="flex flex-col justify-between mx-6 h-full pt-6">
+                    <form class="grid grid-cols-1 gap-0" [formGroup]="ticketForm">
+                        <!-- Periode Input (Date & Time Picker) -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Start Date - End Date </mat-label>
+                            <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full">
+                                <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
+                                <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+                        </mat-form-field>
 
-                    <!-- Time Input (Hidden Time Picker) -->
-                    <mat-form-field class="w-full" *ngIf="timePickerVisible">
-                        <mat-label class="text-sm opacity-50 font-medium">Time </mat-label>
-                        <input matTimepicker formControlName="time" placeholder="Select Time">
-                    </mat-form-field>
+                        <!-- Entry Input -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Entry Time</mat-label>
+                            <input matTimepicker formControlName="entry_time" placeholder="Select Time">
+                        </mat-form-field>
 
-                    <!-- Products Input -->
-                    <mat-form-field class="w-full" floatLabel="always">
-                        <mat-label class="text-sm opacity-50 font-medium">Products</mat-label>
-                        <input matInput formControlName="products_name" placeholder="Products" />
-                    </mat-form-field>
+                        <!-- Entry Input -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">End Time</mat-label>
+                            <input matTimepicker formControlName="end_time" placeholder="Select Time">
+                        </mat-form-field>
 
-                    <!-- Email Input -->
-                    <mat-form-field class="w-full" floatLabel="always">
-                        <mat-label class="text-sm opacity-50 font-medium">Email</mat-label>
-                        <input matInput formControlName="email" placeholder="Email" />
-                    </mat-form-field>
-                </form>
+                        <!-- Products Input -->
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label class="text-sm opacity-50 font-medium">Select Products</mat-label>
+                            <mat-select formControlName="products_name" placeholder="Select Products">
+                                <mat-option *ngFor="let item of products" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    {{ item }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="ticketForm.get('products_name')?.hasError('required')">
+                                Product is required
+                            </mat-error>
+                        </mat-form-field>
 
 
+                        <!-- Email Input -->
+                        <div class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Email</mat-label>
+                            <ng-multiselect-dropdown class="h-[10vh]" [placeholder]="'Select Email'"
+                                [settings]="dropdownSettings" [data]="dropdownList" formControlName="email">
+                            </ng-multiselect-dropdown>
+                            <mat-error class="mt-2" *ngIf="ticketForm.get('email')?.hasError('required')">
+                                *Email is required
+                            </mat-error>
+                        </div>
+                    </form>
+
+                    <button (click)="onSubmitTickets()" type="submit"
+                        class="bg-blue-500 p-2.5 w-full text-white font-semibold mb-5" mat-button>
+                        Export
+                    </button>
+                </div>
             </div>
 
-
-
-
-
             } @else if (content === "user") {
-            <demo-sidebar></demo-sidebar>
+
+
+            <div class="py-10 h-full">
+                <!-- Add any extra content that might be supplied with the component -->
+                <div class="extra-content">
+                    <ng-content></ng-content>
+                </div>
+
+                <!-- Fixed demo sidebar -->
+                <div class="mx-6 text-3xl font-bold tracking-tighter">
+                    Export Users
+                </div>
+
+                <div class="flex flex-col justify-between mx-6 h-full pt-6">
+                    <form class="grid grid-cols-1 gap-0" [formGroup]="ticketForm">
+                        <!-- Periode Input (Date & Time Picker) -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Start Date - End Date </mat-label>
+                            <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full">
+                                <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
+                                <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+                        </mat-form-field>
+
+                        <!-- Entry Input -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Entry Time</mat-label>
+                            <input matTimepicker formControlName="entry_time" placeholder="Select Time">
+                        </mat-form-field>
+
+                        <!-- Entry Input -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">End Time</mat-label>
+                            <input matTimepicker formControlName="end_time" placeholder="Select Time">
+                        </mat-form-field>
+
+                        <!-- Products Input -->
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label class="text-sm opacity-50 font-medium">Select Products</mat-label>
+                            <mat-select formControlName="products_name" placeholder="Select Products">
+                                <mat-option *ngFor="let item of products" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    {{ item }}
+                                </mat-option>
+                            </mat-select>
+                            <mat-error *ngIf="ticketForm.get('products_name')?.hasError('required')">
+                                Product is required
+                            </mat-error>
+                        </mat-form-field>
+
+
+                        <!-- Email Input -->
+                        <div class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Email</mat-label>
+                            <ng-multiselect-dropdown class="h-[10vh]" [placeholder]="'Select Email'"
+                                [settings]="dropdownSettings" [data]="dropdownList" formControlName="email">
+                            </ng-multiselect-dropdown>
+                            <mat-error class="mt-2" *ngIf="ticketForm.get('email')?.hasError('required')">
+                                *Email is required
+                            </mat-error>
+                        </div>
+                    </form>
+
+                    <button (click)="onSubmitUsers()" type="submit"
+                        class="bg-blue-500 p-2.5 w-full text-white font-semibold mb-5" mat-button>
+                        Export
+                    </button>
+                </div>
+            </div>
+
             }
         </mat-drawer>
 
@@ -63,7 +157,7 @@
         <mat-drawer-content class="flex flex-col">
             <!-- Header -->
             <div
-                class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12">
+                class="bg-white flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12">
                 <div class="min-w-0 flex-1">
                     <!-- Breadcrumbs -->
                     <div>
@@ -96,11 +190,11 @@
             </div>
 
             <!-- Main -->
-            <div class="bg-neutral-50 -mt-16 flex-auto overflow-y-auto rounded-t-2xl p-6 shadow sm:p-10" cdkScrollable>
+            <div class="bg-default -mt-16 flex-auto overflow-y-auto rounded-t-2xl p-6 shadow sm:p-10" cdkScrollable>
                 <!-- CONTENT GOES HERE -->
                 <div class="h-fit max-h-400 rounded-2xl">
 
-                    <div class=" grid grid-cols-3 gap-5 h-fit">
+                    <div class=" grid grid-cols-1 lg:grid-cols-3  gap-5 h-fit">
 
                         <!-- Card Tickets -->
                         <div
@@ -120,7 +214,7 @@
                                     Export
                                 </button>
 
-                                <a href="" class="underline text-primary">View Export History</a>
+                                <a [routerLink]="['user']" class="underline text-primary">View Export History</a>
                             </div>
                         </div>
 
@@ -138,7 +232,7 @@
                                     Export
                                 </button>
 
-                                <a href="" class="underline text-primary">View Export History</a>
+                                <a [routerLink]="['ticket']" class="underline text-primary">View Export History</a>
                             </div>
                         </div>
                     </div>

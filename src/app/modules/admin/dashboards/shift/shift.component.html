@@ -1,0 +1,100 @@
+<div class="absolute inset-0 flex min-w-0 flex-col overflow-y-hidden" cdkScrollable>
+    <mat-drawer-container class="flex-auto">
+        <!-- Drawer -->
+        <mat-drawer class="w-96 dark:bg-gray-900" [autoFocus]="false" [mode]="'over'" [position]="'end'" #matDrawer>
+            <div class="py-10 h-full">
+                <!-- Add any extra content that might be supplied with the component -->
+                <div class="extra-content">
+                    <ng-content></ng-content>
+                </div>
+
+                <!-- Fixed demo sidebar -->
+                <div class="mx-6 text-3xl font-bold tracking-tighter">
+                    Export User Shifts
+                </div>
+
+                <div class="flex flex-col justify-between mx-6 h-full pt-6">
+                    <form class="grid grid-cols-1 gap-0" [formGroup]="exportShiftForm">
+                        <!-- Periode Input (Date & Time Picker) -->
+                        <mat-form-field class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Start Date - End Date</mat-label>
+                            <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full"
+                                [max]="today">
+                                <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
+                                <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
+                            </mat-date-range-input>
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-date-range-picker touchUi #picker></mat-date-range-picker>
+                        </mat-form-field>
+
+
+
+                        <!-- Email Input -->
+                        <div class="w-full">
+                            <mat-label class="text-sm opacity-50 font-medium">Agent</mat-label>
+                            <ng-multiselect-dropdown class="h-[10vh]" [placeholder]="'Select Agent'"
+                                [settings]="dropdownSettings" [data]="dropdownList" formControlName="email">
+                            </ng-multiselect-dropdown>
+                            <mat-error class="mt-2" *ngIf="exportShiftForm.get('email')?.hasError('required')">
+                                *Agent is required
+                            </mat-error>
+                        </div>
+                    </form>
+
+                    <button type="submit" (click)="onSubmit()"
+                        class="bg-blue-500 p-2.5 w-full text-white font-medium mb-5" mat-button>
+                        Export
+                    </button>
+                </div>
+            </div>
+
+        </mat-drawer>
+
+        <!-- Drawer content -->
+        <mat-drawer-content class="flex flex-col">
+            <!-- Header -->
+            <div
+                class="bg-default flex flex-0 flex-col p-6 pb-22 dark:bg-transparent sm:flex-row sm:items-center sm:justify-between sm:px-10 sm:pb-28 sm:pt-12">
+                <div class="min-w-0 flex-1">
+                    <!-- Breadcrumbs -->
+                    <div>
+                        <div class="flex sm:hidden">
+                            <a class="text-secondary -ml-1.5 inline-flex items-center font-medium"
+                                [routerLink]="'./..'">
+                                <mat-icon class="text-secondary icon-size-5"
+                                    [svgIcon]="'heroicons_solid:chevron-left'"></mat-icon>
+                                <span class="ml-1">Back</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Title -->
+                    <div class="mt-2">
+                        <h2 class="truncate text-3xl font-extrabold leading-7 tracking-tight sm:leading-10 md:text-4xl">
+                            User Shifting
+                        </h2>
+                        <p>Choose and customize shifts for each agent</p>
+                    </div>
+                </div>
+                <!-- Actions -->
+                <div class="mt-6 flex shrink-0 items-center sm:ml-4 sm:mt-0">
+                    <button (click)="matDrawer.toggle()" mat-flat-button
+                        class="bg-green-500 font-semibold text-white flex items-center gap-2">
+                        <mat-icon class="text-secondary icon-size-5"
+                            [svgIcon]="'heroicons_mini:document-plus'"></mat-icon>
+                        Download CSV
+                    </button>
+                </div>
+            </div>
+
+            <!-- Main -->
+            <div class="bg-card -mt-16 flex-auto rounded-t-2xl p-6 shadow sm:p-10">
+                <!-- CONTENT GOES HERE -->
+                <div class="w-full h-screen p-6 bg-gray-100 flex items-center justify-center">
+                    <div class="w-full max-w-7xl h-full bg-white shadow-lg rounded-xl p-4">
+                        <full-calendar class="w-full h-full" [options]="calendarOptions"></full-calendar>
+                    </div>
+                </div>
+            </div>
+        </mat-drawer-content>
+    </mat-drawer-container>
+</div>

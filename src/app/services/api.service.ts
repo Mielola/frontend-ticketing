@@ -33,9 +33,21 @@ export class ApiService {
     }
 
     async post(endPoint: string, data: any) {
-        this._loadingService.show(); // Tampilkan loading bar
+        this._loadingService.show();
         try {
             const response = await axios.post(this.apiUrl + endPoint, data, this.getHeaders());
+            return { data: response.data, status: response.status };
+        } catch (error) {
+            return { data: error, status: error.response?.status };
+        } finally {
+            this._loadingService.hide()
+        }
+    }
+
+    async delete(endPoint: string) {
+        this._loadingService.show();
+        try {
+            const response = await axios.delete(this.apiUrl + endPoint, this.getHeaders());
             return { data: response.data, status: response.status };
         } catch (error) {
             return { data: error, status: error.response?.status };

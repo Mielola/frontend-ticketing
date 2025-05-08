@@ -20,7 +20,7 @@ import { of, switchMap } from 'rxjs';
 })
 export class OtpComponent implements OnInit {
 
-  @HostBinding('class') className = 'w-full max-sm:p-22';
+  @HostBinding('class') className = 'w-full';
   data = '';
   email: String
 

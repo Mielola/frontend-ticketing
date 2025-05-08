@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FuseCardComponent } from '@fuse/components/card';
 import {
     ChartComponent,
@@ -32,23 +32,27 @@ export type ChartOptions = {
     templateUrl: './pie-chart.component.html',
     styleUrls: ['./pie-chart.component.scss'],
 })
-export class PieChartComponent {
+export class PieChartComponent implements OnChanges {
     @ViewChild("chart") chart!: ChartComponent;
-    public chartOptions: Partial<ChartOptions>;
+    @Input() seriesData: ApexNonAxisChartSeries = [];
+    @Input() header: string = '';
+    @Input() labels: string[] = [];
 
-    constructor() {
+    public chartOptions: Partial<ChartOptions> = {};
+
+    ngOnChanges(changes: SimpleChanges): void {
         this.chartOptions = this.getChartOptions();
     }
 
     getChartOptions(): Partial<ChartOptions> {
         return {
-            series: [52.8, 26.8, 20.4],
+            series: this.seriesData || [],
             chart: {
                 height: 350,
                 width: "100%",
                 type: "pie"
             },
-            labels: ["Direct", "Organic search", "Referrals"],
+            labels: this.labels || [],
             dataLabels: {
                 enabled: true,
                 style: {

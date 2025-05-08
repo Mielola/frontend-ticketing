@@ -1,6 +1,8 @@
-<fuse-card class="flex flex-col px-8 py-6 pb-4 w-fit" #fuseCard>
-    <div class="text-xl font-bold">Device Status</div>
-    <div class="mt-2">
+<fuse-card class="flex flex-col w-fit h-full" #fuseCard>
+    <div class="text-xl font-semibold px-8 border-b-[1px] border-solid py-4">
+        <h1>{{header}}</h1>
+    </div>
+    <div class="mt-2 px-8 ">
         <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [labels]="chartOptions.labels"
             [dataLabels]="chartOptions.dataLabels" [legend]="chartOptions.legend" [stroke]="chartOptions.stroke"
             [responsive]="chartOptions.responsive"></apx-chart>

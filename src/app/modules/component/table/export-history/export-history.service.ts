@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { ApiService } from 'app/services/api.service';
+import { BehaviorSubject, from, Observable, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
-export class AnalyticsService {
+export class ExportHistoryService {
     private _data: BehaviorSubject<any> = new BehaviorSubject(null);
 
-    /**
-     * Constructor
-     */
-    constructor(private _httpClient: HttpClient) {}
+    constructor(
+        private _apiService: ApiService,
+    ) {
+    }
 
     // -----------------------------------------------------------------------------------------------------
     // @ Accessors
@@ -22,6 +23,13 @@ export class AnalyticsService {
         return this._data.asObservable();
     }
 
+    /**
+     * Setter for data
+     */
+    Update(data: any) {
+        this._data.next(data)
+    }
+
     // -----------------------------------------------------------------------------------------------------
     // @ Public methods
     // -----------------------------------------------------------------------------------------------------
@@ -29,9 +37,21 @@ export class AnalyticsService {
     /**
      * Get data
      */
-    getData(): Observable<any> {
-        return this._httpClient.get('api/dashboards/analytics').pipe(
+
+    public checkTickets(): Observable<any> {
+        return from(this._apiService.get("api/V1/check-tickets-deadline")).pipe(
             tap((response: any) => {
+
+            })
+        );
+    }
+
+    public fetchData(historyType: string): Observable<any> {
+        return from(this._apiService.post("api/V1/export-logs", {
+            history_type: historyType
+        })).pipe(
+            tap((response: any) => {
+                console.log(response)
                 this._data.next(response);
             })
         );

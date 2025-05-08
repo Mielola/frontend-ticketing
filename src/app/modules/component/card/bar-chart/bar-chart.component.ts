@@ -21,13 +21,13 @@ export type ChartOptions = {
 };
 
 @Component({
-    selector: 'app-area-chart',
-    templateUrl: './area-chart.component.html',
+    selector: 'app-bar-chart',
+    templateUrl: './bar-chart.component.html',
     standalone: true,
     imports: [NgApexchartsModule],
-    styleUrls: ['./area-chart.component.scss'],
+    styleUrls: ['./bar-chart.component.scss'],
 })
-export class AreaChartComponent implements OnChanges {
+export class BarChartComponent implements OnChanges {
     @ViewChild("chart") chart: ChartComponent;
     public chartOptions: Partial<ChartOptions>;
     data: any = {}
@@ -35,25 +35,30 @@ export class AreaChartComponent implements OnChanges {
     @Input() header: string = '';
     @Input() labels: string[] = [];
 
-    constructor() {
-
-    }
-
     ngOnChanges(changes: SimpleChanges): void {
         this.chartOptions = {
-            series: this.seriesData,
+            series: this.seriesData || [],
             chart: {
                 height: 350,
-                type: "area"
+                type: 'bar',
+                zoom: {
+                    enabled: false
+                }
             },
             dataLabels: {
-                enabled: false
+                enabled: true,
+                enabledOnSeries: [1],
+                style: {
+                    fontSize: '18px',
+                    fontFamily: 'Helvetica, Arial, sans-serif',
+                }
             },
             stroke: {
-                curve: "smooth"
+                curve: "straight",
+                width: [0, 4]
             },
             xaxis: {
-                categories: this.labels
+                categories: this.labels || []
             },
         };
     }

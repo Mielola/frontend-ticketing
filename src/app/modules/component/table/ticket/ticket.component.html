@@ -68,23 +68,48 @@
                     [matMenuTriggerData]="{disableClose: true}">Priority</button>
 
                 <!-- Products Category -->
-                <mat-menu #products="matMenu">
-                    <div class="px-5 py-3">
+                <mat-menu #products="matMenu" class="min-w-[300px]">
+                    <div class="px-5 py-3 w-full">
                         <h1 class="font-semibold mb-2">Choose Products</h1>
                     </div>
-                    <mat-checkbox class="h-full" *ngFor="let item of productsItems" [(ngModel)]="item.checked"
-                        (click)="$event.stopPropagation();"
-                        (change)="applyProductsFilter()">{{item.name}}</mat-checkbox>
+
+                    <div class="px-5 flex flex-col gap-2 w-full">
+                        <mat-checkbox class="h-full" *ngFor="let item of productsItems" [(ngModel)]="item.checked"
+                            (click)="$event.stopPropagation();" (change)="applyProductsFilter()">
+                            {{ item.name }}
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="px-5 py-3 w-full">
+                        <button mat-flat-button color="primary" class="w-full text-white bg-blue-600">
+                            Add Products
+                        </button>
+                    </div>
                 </mat-menu>
 
+
                 <!-- Menu Category -->
-                <mat-menu #categorys="matMenu">
-                    <div class="px-5 py-3">
+                <mat-menu #categorys="matMenu" class="min-w-[300px]">
+                    <div class="px-5 py-3 w-full">
                         <h1 class="font-semibold mb-2">Choose Category</h1>
                     </div>
-                    <mat-checkbox class="h-full" *ngFor="let item of category" [(ngModel)]="item.checked"
-                        (click)="$event.stopPropagation();"
-                        (change)="applyCategoryFilter()">{{item.name}}</mat-checkbox>
+
+                    <div class="px-5 flex flex-col gap-2 w-full">
+                        <mat-checkbox class="h-full w-full" *ngFor="let item of category" [(ngModel)]="item.checked"
+                            (click)="$event.stopPropagation();"
+                            (change)="applyCategoryFilter()">{{item.name}}</mat-checkbox>
+                    </div>
+
+                    <div class="px-5 py-3 w-full">
+                        <button mat-raised-button
+                            class="flex w-full text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 bg-primary text-white">
+                            <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
+                            <span class="max-sm:hidden font-semibold">Add Category</span>
+                        </button>
+                        <button mat-raised-button color="primary" class="w-full font-semibold text-white bg-red-600 mt-2">
+                            Delete Category Selected
+                        </button>
+                    </div>
                 </mat-menu>
 
                 <!-- Menu Status -->

@@ -27,20 +27,12 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 roles: ['admin', 'pegawai'],
             },
             {
-                id: 'dashboards.finance',
-                title: 'Finance',
+                id: 'dashboards.shift',
+                title: 'Shifts',
                 type: 'basic',
-                icon: 'heroicons_outline:banknotes',
-                link: '/dashboards/finance',
-                roles: ['admin', 'pegawai']
-            },
-            {
-                id: 'dashboards.crypto',
-                title: 'Crypto',
-                type: 'basic',
-                icon: 'heroicons_outline:currency-dollar',
-                link: '/dashboards/crypto',
-                roles: ['admin']
+                icon: 'heroicons_outline:user-group',
+                link: '/dashboards/shift',
+                roles: ['admin', 'pegawai'],
             },
         ],
     },
@@ -52,6 +44,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         roles: ['admin'],
         icon: 'heroicons_outline:home',
         children: [
+            {
+                id: 'dashboards.analytics',
+                title: 'Analytics',
+                type: 'basic',
+                icon: 'bar_chart',
+                link: '/dashboards/analytics',
+                roles: ['admin', 'pegawai']
+            },
             {
                 id: 'dashboards.export',
                 title: 'Export',
