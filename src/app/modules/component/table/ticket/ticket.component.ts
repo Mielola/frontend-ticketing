@@ -20,6 +20,10 @@ import { TicketTableService } from './ticket.service';
 import { MatButton, MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { GenereateReportComponent } from '../../dialog/genereate-report/genereate-report.component';
+import { UserService } from 'app/services/userService/user.service';
+import { User } from 'app/core/user/user.types';
+import { data } from '../../card/area-chart/data';
+import { FormAddProductsComponent } from 'app/modules/admin/dashboards/products/form-add-products/form-add-products.component';
 
 const today = new Date();
 const month = today.getMonth();
@@ -64,6 +68,9 @@ export class TicketComponent implements OnInit, OnDestroy {
     priority: []
   };
 
+  shiftStatus: boolean = true
+  ticketStatus: boolean = false
+
   statusList: string[] = ['New', 'On Progress', 'Resolved']
   productsItems: { name: string, checked: boolean }[] = []
   category: { name: string, checked: boolean }[] = []
@@ -98,6 +105,7 @@ export class TicketComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.fetchUsers()
     this.fetchData()
 
     this.range.valueChanges.subscribe(({ start, end }) => {
@@ -132,6 +140,13 @@ export class TicketComponent implements OnInit, OnDestroy {
   /**
   * Public Functions
   */
+
+  addProducts() {
+    this._matDialog.open(FormAddProductsComponent, {
+      width: window.innerWidth < 600 ? '90%' : '50%',
+      maxWidth: '100vw',
+    })
+  }
 
   generateReport() {
     this._matDialog.open(GenereateReportComponent, {
@@ -216,10 +231,25 @@ export class TicketComponent implements OnInit, OnDestroy {
 
 
         this.dataSource.data = get.data;
+        console.log(this.dataSource.data)
       })
 
     } catch (error) {
       this.isLoading = false
+      throw error
+    } finally {
+      this.isLoading = false
+    }
+  }
+
+  async fetchUsers() {
+    try {
+      this.isLoading = true
+      const findUser = await this._apiService.get(`api/V1/get-profile`)
+
+      this.shiftStatus = findUser.data.shift_status !== 'Active Shift'
+      this.cdr.detectChanges();
+    } catch (error) {
       throw error
     } finally {
       this.isLoading = false

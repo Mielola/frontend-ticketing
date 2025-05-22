@@ -40,14 +40,8 @@
                     <option disabled>
                         -----Select Shift-----
                     </option>
-                    <option value="1">
-                        1
-                    </option>
-                    <option value="2">
-                        2
-                    </option>
-                    <option value="3">
-                        3
+                    <option *ngFor="let shift of shiftTime" [value]="shift.id">
+                        {{shift.id}} - {{shift.shift_name}}
                     </option>
                 </select>
                 <mat-icon class="icon-size-5" matPrefix [svgIcon]="'mat_solid:access_time_filled'"></mat-icon>

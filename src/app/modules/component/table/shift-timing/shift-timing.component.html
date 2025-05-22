@@ -1,0 +1,111 @@
+<style>
+    .mat-mdc-form-field-subscript-wrapper {
+        display: none;
+    }
+</style>
+
+
+<section class="h-fit border-[1px] shadow-xl mt-4 bg-white rounded-lg p-5">
+    <div class="flex items-start flex-row sm:items-center justify-between">
+        <!-- Search Tickets -->
+        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-1/3 max-lg:w-full">
+            <h1 class="text-xl font-semibold">Shift Timing</h1>
+        </div>
+
+        <div class="flex items-center gap-3">
+            <!-- Button New Tickets -->
+            <button mat-raised-button (click)="addShiftTime()" class="bg-blue-500 hover:bg-blue-600 text-white">
+                <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
+                <span class="font-semibold">Add Shift Time</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Skeleton Loader -->
+    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
+        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full"></div>
+    </div>
+
+    <div *ngIf="isNotDataFound && !isLoading">
+        <div class="flex flex-col items-center">
+            <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
+            <h1 class="mt-2 font-semibold text-xl -tracking-tighter">Data Not Found</h1>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="w-full overflow-auto whitespace-nowrap mt-5">
+        <mat-table #table [dataSource]="dataSource" matSort
+            *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-160">
+
+            <div>
+                <!-- Tracking ID Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef> ID
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="text-lg font-medium underline whitespace-nowrap">
+                        {{element.id}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="shift_name">
+                    <mat-header-cell *matHeaderCellDef> Shift Name
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        {{ element.shift_name}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Start Time Column -->
+                <ng-container matColumnDef="start_time">
+                    <mat-header-cell *matHeaderCellDef> Start Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <p class="bg-blue-600 p-1.5 px-2.5 rounded-full text-white">{{ element.start_time}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- End Time Column -->
+                <ng-container matColumnDef="end_time">
+                    <mat-header-cell *matHeaderCellDef> End Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <p class="bg-green-600 p-1.5 px-2.5 rounded-full text-white">{{ element.end_time}}</p>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action" n>
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div class="flex items-center" *ngIf="element.name != 'default-trial'">
+                            <!-- Action Buttons -->
+                            <a (click)="handleDeleteShifTime(element.id)"
+                                class="font-medium mx-1 text-white dark:text-white bg-red-500 hover:cursor-pointer hover:bg-red-600 rounded hover:underline">
+                                <mat-icon svgIcon="heroicons_solid:trash" class="text-white"
+                                    style="transform: scale(0.7);"></mat-icon>
+                            </a>
+                            <a (click)="editShiftTime(element.id)"
+                                class="font-medium mx-1 text-white dark:text-white bg-blue-500 hover:bg-blue-600 rounded hover:underline">
+                                <mat-icon svgIcon="heroicons_solid:pencil-square" class="text-white"
+                                    style="transform: scale(0.7);"></mat-icon>
+                            </a>
+                        </div>
+                    </mat-cell> </ng-container>
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </div>
+        </mat-table>
+    </div>
+
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">
+    </mat-paginator>
+</section>

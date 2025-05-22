@@ -241,8 +241,9 @@
 
         </div>
 
-        <button class="bg-blue-500 w-full rounded-full p-3 text-white font-semibold hover:bg-blue-600"
-            (click)="onSubmit()">
+        <button [disabled]="shiftStatus || data.status === 'Resolved'"
+            [ngClass]="shiftStatus || data.status === 'Resolved' ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
+            class=" w-full rounded-full p-3 text-white font-semibold " (click)=" onSubmit()">
             Save Ticket
         </button>
     </div>

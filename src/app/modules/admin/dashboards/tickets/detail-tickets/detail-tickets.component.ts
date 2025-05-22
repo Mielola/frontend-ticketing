@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Route } from '@angular/router';
 import { ApiService } from 'app/services/api.service';
 import { Ticket } from 'app/types/tickets';
@@ -55,6 +55,8 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   tracking_id: string;
   isLoading: boolean = false
   isNotDataFound: boolean
+  shiftStatus: boolean = false
+
 
   public displayedColumns = ['tracking_id', 'user', 'new_status', 'priority', 'details', 'update_at',];
   public dataSource = new MatTableDataSource<any>();
@@ -68,13 +70,14 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     private _apiService: ApiService,
     private fb: FormBuilder,
     private _ticketLogsService: TicketLogsService,
+    private cdr: ChangeDetectorRef,
 
   ) { }
 
   data: Ticket
 
   ngOnInit() {
-
+    this.fetchUsers()
     this.TicketForm = this.fb.group({
       products_name: ['', Validators.required],
       category_name: [{ value: '', disabled: this.disableInput }, Validators.required],
@@ -147,7 +150,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
 
   async fetchDataProducts() {
     try {
-      const get = await this._apiService.get("api/V1/products");
+      const get = await this._apiService.get("api/V1/list-products");
       this.products = get.data;
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -176,5 +179,19 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       respon_diberikan: data.data.respon_admin,
       PIC: data.data.pic,
     })
+  }
+
+  async fetchUsers() {
+    try {
+      this.isLoading = true
+      const findUser = await this._apiService.get(`api/V1/get-profile`)
+
+      this.shiftStatus = findUser.data.shift_status !== 'Active Shift'
+      this.cdr.detectChanges();
+    } catch (error) {
+      throw error
+    } finally {
+      this.isLoading = false
+    }
   }
 }

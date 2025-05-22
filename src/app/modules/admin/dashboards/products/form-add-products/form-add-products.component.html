@@ -1,0 +1,28 @@
+<div class="h-full w-full flex flex-col">
+    <div class="flex justify-between p-2">
+        <div
+            class="truncate text-lg font-medium leading-6 tracking-tight px-5 py-3 flex flex-col sm:flex-row items-start sm:items-center w-full justify-between">
+            <h2 class="mb-2 text-xl font-semibold sm:mb-0">Add Products</h2>
+        </div>
+        <a (click)="dialogRef.close()">
+            <mat-icon svgIcon="mat_solid:close" class="cursor-pointer"></mat-icon>
+        </a>
+    </div>
+
+    <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
+    <div class="">
+        <form [formGroup]="productsForm" class="bg-card flex flex-col overflow-hidden rounded-2xl px-8 py-4 pb-4 gap-5">
+
+            <!-- Shift Name Input -->
+            <mat-form-field class="w-full">
+                <mat-label>Products Name</mat-label>
+                <input formControlName="name" matInput [placeholder]="'Products Name'" />
+            </mat-form-field>
+
+            <button class="bg-green-600 text-white p-2 rounded" type="submit" (click)="onSubmit()">
+                Add Products
+            </button>
+        </form>
+    </div>
+</div>

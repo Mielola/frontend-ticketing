@@ -210,18 +210,15 @@ export class ShiftComponent implements OnInit {
       // Map the sorted data into events format
       const events = sortedData.map((item: any) => {
         const baseDate = new Date(item.shift_date);
-        let shiftTime = "07:00:00";
         let color = "#07f236"
 
         if (item.shift_id === 2) {
-          shiftTime = "14:00:00";
           color = "#f2a807"
         } else if (item.shift_id === 3) {
-          shiftTime = "23:00:00";
           color = "#0756f2"
         }
 
-        const fullDateTime = `${item.shift_date}T${shiftTime}`;
+        const fullDateTime = `${item.shift_date}T${item.StartTime}`;
 
 
 

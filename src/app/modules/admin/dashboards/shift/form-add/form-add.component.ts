@@ -38,6 +38,7 @@ export class FormAddComponent implements OnInit {
   shiftForm!: FormGroup
   isLoading: boolean = false
   emailData: { id: number, email: string }[] = []
+  shiftTime: { id: string, shift_name: string, }[]
 
   constructor(
     private fb: FormBuilder,
@@ -55,7 +56,7 @@ export class FormAddComponent implements OnInit {
     })
 
     this.fetchEmail()
-    console.log(this._shiftService.dateCallendar())
+    this.getShiftTime()
   }
 
   async fetchEmail() {
@@ -65,6 +66,17 @@ export class FormAddComponent implements OnInit {
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  async getShiftTime() {
+    try {
+      const response = await this._apiService.get("api/V1/shifts-time")
+      this.shiftTime = response.data
+      console.log(this.shiftTime)
+    } catch (error) {
+      this._toast.error("Failed Get Shift Time", "Error")
+      throw error
+    }
   }
 
   async onSubmit() {

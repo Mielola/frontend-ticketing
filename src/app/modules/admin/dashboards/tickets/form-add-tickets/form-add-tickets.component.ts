@@ -99,7 +99,7 @@ export class FormAddTicketsComponent implements OnInit {
 
   async fetchDataProducts() {
     try {
-      const get = await this._apiService.get("api/V1/products");
+      const get = await this._apiService.get("api/V1/list-products");
       this.products = get.data;
     } catch (error) {
       console.error("Error fetching data:", error);

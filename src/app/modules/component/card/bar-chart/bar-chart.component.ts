@@ -40,7 +40,7 @@ export class BarChartComponent implements OnChanges {
             series: this.seriesData || [],
             chart: {
                 height: 350,
-                type: 'bar',
+                type: 'line',
                 zoom: {
                     enabled: false
                 }
@@ -59,7 +59,7 @@ export class BarChartComponent implements OnChanges {
             },
             xaxis: {
                 categories: this.labels || []
-            },
+            }
         };
     }
 }

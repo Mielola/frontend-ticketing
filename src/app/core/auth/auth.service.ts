@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
+import { environment } from 'environments/environments.dev';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -67,7 +68,7 @@ export class AuthService {
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post('http://localhost:8080/api/V1/login', credentials).pipe(
+        return this._httpClient.post(`${environment.apiUrl}api/V1/login`, credentials).pipe(
             switchMap((response: any) => {
                 // Store cookies for OTP
                 document.cookie = "otp=true; path=/; max-age=3600";
@@ -92,13 +93,13 @@ export class AuthService {
      */
     signInUsingToken(): Observable<any> {
         // Sign in using the token
+        console.log("Masuk Sini")
         return this._httpClient
             .post('api/auth/sign-in-with-token', {
                 accessToken: this.accessToken,
             })
             .pipe(
                 catchError(() =>
-                    // Return false
                     of(false)
                 ),
                 switchMap((response: any) => {
@@ -109,7 +110,7 @@ export class AuthService {
                     // in using the token, you should generate a new one on the server
                     // side and attach it to the response object. Then the following
                     // piece of code can replace the token with the refreshed one.
-               
+
 
                     // Set the authenticated flag to true
                     this._authenticated = true;
@@ -171,14 +172,11 @@ export class AuthService {
         if (this._authenticated) {
             return of(true);
         }
-
-        console.log(this.accessToken)
         // Check the access token availability
         if (!this.accessToken) {
             return of(false);
         }
 
-        // If the access token exists, and it didn't expire, sign in using it
-        return this.signInUsingToken();
+        return of(true);
     }
 }

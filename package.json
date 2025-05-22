@@ -49,6 +49,7 @@
     "axios": "^1.7.7",
     "crypto-js": "4.2.0",
     "exceljs": "^1.12.1",
+    "face-api.js": "^0.22.2",
     "file-saver": "^2.0.5",
     "fuse-angular": "file:",
     "highlight.js": "11.9.0",

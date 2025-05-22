@@ -5,4 +5,5 @@ export interface User {
     avatar?: string;
     status?: string;
     role?: string;
+    shift_name?: string
 }

@@ -39,6 +39,7 @@ export class FormEditDeleteComponent {
   editShiftForm!: FormGroup
   isLoading: boolean = false
   emailData: { id: number, email: string }[] = []
+  shiftTime: { id: string, shift_name: string, }[]
 
   constructor(
     private fb: FormBuilder,
@@ -67,6 +68,18 @@ export class FormEditDeleteComponent {
     })
 
     this.fetchEmail()
+    this.getShiftTime()
+  }
+
+  async getShiftTime() {
+    try {
+      const response = await this._apiService.get("api/V1/shifts-time")
+      this.shiftTime = response.data
+      console.log(this.shiftTime)
+    } catch (error) {
+      this._toast.error("Failed Get Shift Time", "Error")
+      throw error
+    }
   }
 
   async fetchEmail() {

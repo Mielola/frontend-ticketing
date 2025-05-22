@@ -104,12 +104,9 @@ export const appRoutes: Route[] = [
                     { path: 'shift', loadChildren: () => import('app/modules/admin/dashboards/shift/shift.routes') },
                     { path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.routes') },
                     { path: 'export', loadChildren: () => import('app/modules/admin/dashboards/export/export.routes') },
-                    { path: 'profile', loadChildren: () => import('app/modules/admin/dashboards/profile/profile.routes')},
-                    {
-                        path: 'crypto', loadChildren: () => import('app/modules/admin/dashboards/crypto/crypto.routes'),
-                        canActivate: [RoleGuard],
-                        data: { roles: ['admin'] },
-                    },
+                    { path: 'profile', loadChildren: () => import('app/modules/admin/dashboards/profile/profile.routes') },
+                    { path: 'shift-timing', loadChildren: () => import('app/modules/admin/dashboards/shift-timing/shift-timing.routes') },
+                    { path: 'products', loadChildren: () => import('app/modules/admin/dashboards/products/products.routes') },
                 ]
             },
 

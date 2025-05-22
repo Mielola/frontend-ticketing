@@ -14,6 +14,7 @@ import { DateTime } from 'luxon';
 import { ToastrService } from 'ngx-toastr';
 import { distinctUntilChanged, filter } from 'rxjs';
 import { ColumnChartComponent } from "../../../component/card/column-chart/column-chart.component";
+import { BarChartSideComponent } from 'app/modules/component/card/bar-chart-side/bar-chart-side.component';
 
 const today = new Date();
 const month = today.getMonth();
@@ -37,7 +38,8 @@ const year = today.getFullYear();
     MatDatepickerToggle,
     MatInputModule,
     BarChartComponent,
-    ColumnChartComponent
+    ColumnChartComponent,
+    BarChartSideComponent,
   ],
   templateUrl: './analytics.component.html',
   styleUrl: './analytics.component.scss'
@@ -69,6 +71,13 @@ export class AnalyticsComponent implements OnInit {
   chartUserTicketsData: { name: string, data: number[], type?: string }[]
   chartUserTicketsLabels: string[] = []
 
+  // Chart Tickets Resolved By Users
+  ChartUserResolvedData: { data: number[] }[]
+  ChartUserResolvedLabels: string[] = []
+
+  // Chart Total Tickets By Products
+  ChartTicketProductsData: { data: number[] }[]
+  ChartTicketProductsLabels: string[] = []
 
   range = new FormGroup({
     start: new FormControl<Date | null>(new Date(year, month)),
@@ -131,7 +140,7 @@ export class AnalyticsComponent implements OnInit {
 
   async fetchProducts() {
     try {
-      const get = await this._apiService.get("api/V1/products");
+      const get = await this._apiService.get("api/V1/list-products");
       this.products = get.data;
 
       this.analyticsForm.patchValue({
@@ -167,6 +176,11 @@ export class AnalyticsComponent implements OnInit {
           data: this.data.ChartCategory.map((e) => e.total_tickets),
           type: 'bar'
         },
+        {
+          name: 'Total Tiket',
+          data: this.data.ChartCategory.map((e) => e.total_tickets),
+          type: 'line'
+        },
       ];
       this.chartCategoryLabels = this.data.ChartCategory.map((e) => e.category_name);
 
@@ -185,7 +199,7 @@ export class AnalyticsComponent implements OnInit {
         {
           name: 'Total Tiket',
           data: this.data.ChartTicketPeriode.map((e) => e.total_tickets),
-          type: 'bar'
+          type: 'area'
         },
       ]
       this.chartPeriodeLabels = this.data.ChartTicketPeriode.map((e) => e.created_at);
@@ -193,12 +207,29 @@ export class AnalyticsComponent implements OnInit {
       // Chart User Tickets
       this.chartUserTicketsData = [
         {
-          name: 'Bar Chart',
+          name: 'Tickets Created',
           data: this.data.ChartUserTickets.map((e) => e.total_user_tickets),
           type: 'bar',
         },
       ]
       this.chartUserTicketsLabels = this.data.ChartUserTickets.map((e) => e.name);
+
+      // Chart Tickets Resolved By User
+      this.ChartUserResolvedData = [
+        {
+          data: this.data.ChartUserResolved.map((e) => e.resolved_count)
+        }
+      ]
+      this.ChartUserResolvedLabels = this.data.ChartUserResolved.map((e) => e.name)
+
+      // Chart Total Tickets By Products
+      this.ChartTicketProductsData = [
+        {
+          data: this.data.ChartTicketProducts.map((e) => e.total_tickets)
+        }
+      ]
+      this.ChartTicketProductsLabels = this.data.ChartTicketProducts.map((e) => e.name)
+
 
 
     } catch (error) {

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FormAddComponent } from './form-add.component';
+import { HandoverComponent } from './handover.component';
 
-describe('FormAddComponent', () => {
-  let component: FormAddComponent;
-  let fixture: ComponentFixture<FormAddComponent>;
+describe('HandoverComponent', () => {
+  let component: HandoverComponent;
+  let fixture: ComponentFixture<HandoverComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FormAddComponent]
+      imports: [HandoverComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(FormAddComponent);
+    fixture = TestBed.createComponent(HandoverComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

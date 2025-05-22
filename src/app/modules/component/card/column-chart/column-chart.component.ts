@@ -79,7 +79,15 @@ export class ColumnChartComponent implements OnChanges {
                 }
             },
             dataLabels: {
-                enabled: false
+                enabled: true,
+                style: {
+                    fontWeight: 600,
+                    fontSize : '24px',
+                },
+                background: {
+                    padding: 5,
+                    foreColor: '#FF4560'
+                }
             },
             legend: {
                 show: false

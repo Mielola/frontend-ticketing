@@ -1,0 +1,10 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div id="chart" class="bg-[#f1f5f9] shadow-md p-2 rounded-xl">
+    <div class="text-xl font-semibold px-4 border-b-[1px] border-solid py-4">
+        <h1>{{header}}</h1>
+    </div>
+    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [dataLabels]="chartOptions.dataLabels"
+        [stroke]="chartOptions.stroke" [colors]="chartOptions.colors" [title]="chartOptions.title"
+        [subtitle]="chartOptions.subtitle" [plotOptions]="chartOptions.plotOptions" [yaxis]="chartOptions.yaxis"
+        [xaxis]="chartOptions.xaxis" [tooltip]="chartOptions.tooltip"></apx-chart>
+</div>

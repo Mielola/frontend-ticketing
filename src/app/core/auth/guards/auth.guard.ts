@@ -1,9 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateChildFn, CanActivateFn, Router } from '@angular/router';
 import { AuthService } from 'app/core/auth/auth.service';
-import { User } from 'app/core/user/user.types';
 import { UserService } from 'app/services/userService/user.service';
-import { get } from 'lodash';
 import { of, switchMap } from 'rxjs';
 
 export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
@@ -14,7 +12,7 @@ export const AuthGuard: CanActivateFn | CanActivateChildFn = (route, state) => {
         .check()
         .pipe(
             switchMap((authenticated) => {
-                // If the user is not authenticated...
+                console.log(authenticated)
                 if (!authenticated) {
                     // Redirect to the sign-in page with a redirectUrl param
                     const redirectURL =

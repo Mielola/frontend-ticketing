@@ -26,8 +26,9 @@
 
         <div class="flex items-center gap-3">
             <!-- Button New Tickets -->
-            <button mat-raised-button [routerLink]="['/dashboards/tickets/add-tickets']"
-                class="flex w-fit text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 bg-primary text-white">
+            <button [disabled]="shiftStatus" mat-raised-button [routerLink]="['/dashboards/tickets/add-tickets']"
+                class="flex w-fit text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 text-white"
+                [ngClass]="shiftStatus ? 'bg-gray-400' : 'bg-primary'">
                 <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
                 <span class="max-sm:hidden font-semibold">New Ticket</span>
             </button>
@@ -81,7 +82,7 @@
                     </div>
 
                     <div class="px-5 py-3 w-full">
-                        <button mat-flat-button color="primary" class="w-full text-white bg-blue-600">
+                        <button (click)="addProducts()" mat-flat-button color="primary" class="w-full text-white bg-blue-600">
                             Add Products
                         </button>
                     </div>
@@ -106,7 +107,8 @@
                             <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
                             <span class="max-sm:hidden font-semibold">Add Category</span>
                         </button>
-                        <button mat-raised-button color="primary" class="w-full font-semibold text-white bg-red-600 mt-2">
+                        <button mat-raised-button color="primary"
+                            class="w-full font-semibold text-white bg-red-600 mt-2">
                             Delete Category Selected
                         </button>
                     </div>
@@ -270,7 +272,8 @@
                     <mat-header-cell *matHeaderCellDef> Status </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
                         <mat-form-field hideRequiredMarker class="w-full">
-                            <mat-select [(value)]="element.status" placeholder="Select">
+                            <mat-select [(value)]="element.status" placeholder="Select"
+                                [disabled]="element.status === 'Resolved'">
                                 <mat-option *ngFor="let status of statusList" [value]="status"
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full"
                                     (click)="changeStatus(element.tracking_id, status)">
