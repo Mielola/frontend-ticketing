@@ -27,6 +27,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 roles: ['admin', 'pegawai'],
             },
             {
+                id: 'dashboards.category',
+                title: 'Category',
+                type: 'basic',
+                icon: 'category',
+                link: '/dashboards/category',
+                roles: ['admin', 'pegawai'],
+            },
+            {
                 id: 'dashboards.products',
                 title: 'Products',
                 type: 'basic',

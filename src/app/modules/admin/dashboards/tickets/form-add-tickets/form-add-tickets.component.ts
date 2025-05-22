@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDivider } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -13,6 +14,8 @@ import { Router } from '@angular/router';
 import { IonLoading } from '@ionic/angular/standalone';
 import { ApiService } from 'app/services/api.service';
 import { DateTime } from 'luxon';
+import { FormAddProductsComponent } from '../../products/form-add-products/form-add-products.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-form-add-tickets',
@@ -30,6 +33,8 @@ import { DateTime } from 'luxon';
     MatIconModule,
     MatNativeDateModule,
     IonLoading,
+    MatDivider,
+    MatIconModule,
   ],
   templateUrl: './form-add-tickets.component.html',
 })
@@ -49,6 +54,7 @@ export class FormAddTicketsComponent implements OnInit {
     private _apiService: ApiService,
     private fb: FormBuilder,
     private router: Router,
+    private _matDialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -104,6 +110,13 @@ export class FormAddTicketsComponent implements OnInit {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
+  }
+
+  addProducts() {
+    this._matDialog.open(FormAddProductsComponent, {
+      width: window.innerWidth < 600 ? '90%' : '50%',
+      maxWidth: '100vw',
+    })
   }
 
   async onSubmit() {

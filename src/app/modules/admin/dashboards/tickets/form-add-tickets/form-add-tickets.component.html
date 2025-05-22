@@ -20,6 +20,15 @@
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full">
                                     {{item}}
                                 </mat-option>
+
+                                <!-- Divider -->
+                                <mat-divider></mat-divider>
+
+                                <!-- Tombol Tambah Produk -->
+                                <mat-option (click)="addProducts()" class="text-blue-600 text-base flex items-center font-medium">
+                                    <mat-icon svgIcon="mat_outline:add" class="font-semibold"></mat-icon>
+                                    Tambah Produk Baru
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
 

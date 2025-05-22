@@ -101,12 +101,14 @@ export const appRoutes: Route[] = [
                 children: [
                     { path: 'home', loadChildren: () => import('app/modules/admin/dashboards/home/home.routes') },
                     { path: 'tickets', loadChildren: () => import('app/modules/admin/dashboards/tickets/tickets.routes') },
+                    { path: 'handover', loadChildren: () => import('app/modules/admin/dashboards/handover/handover.routes') },
                     { path: 'shift', loadChildren: () => import('app/modules/admin/dashboards/shift/shift.routes') },
                     { path: 'analytics', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.routes') },
                     { path: 'export', loadChildren: () => import('app/modules/admin/dashboards/export/export.routes') },
                     { path: 'profile', loadChildren: () => import('app/modules/admin/dashboards/profile/profile.routes') },
                     { path: 'shift-timing', loadChildren: () => import('app/modules/admin/dashboards/shift-timing/shift-timing.routes') },
                     { path: 'products', loadChildren: () => import('app/modules/admin/dashboards/products/products.routes') },
+                    { path: 'category', loadChildren: () => import('app/modules/admin/dashboards/category/category.routes') },
                 ]
             },
 
