@@ -20,15 +20,6 @@
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full">
                                     {{item}}
                                 </mat-option>
-
-                                <!-- Divider -->
-                                <mat-divider></mat-divider>
-
-                                <!-- Tombol Tambah Produk -->
-                                <mat-option (click)="addProducts()" class="text-blue-600 text-base flex items-center font-medium">
-                                    <mat-icon svgIcon="mat_outline:add" class="font-semibold"></mat-icon>
-                                    Tambah Produk Baru
-                                </mat-option>
                             </mat-select>
                         </mat-form-field>
 
@@ -111,6 +102,17 @@
                 <form [formGroup]="secondTicketForm" class="mt-8 w-full">
                     <ng-template matStepLabel>Response Information</ng-template>
                     <div action="" class="mt-2.5 flex flex-col">
+                        <!-- PIC Input -->
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label>PIC</mat-label>
+                            <input formControlName="PIC" matInput [placeholder]="'PIC'" />
+                        </mat-form-field>
+
+                        <!-- No Whatsapp Input -->
+                        <mat-form-field class="w-full" floatLabel="always">
+                            <mat-label>No Whatsapp Client</mat-label>
+                            <input formControlName="no_whatsapp" matInput [placeholder]="'No Whatsapp'" />
+                        </mat-form-field>
 
                         <!-- Detail Input -->
                         <mat-form-field class="w-full mb-2" floatLabel="always">

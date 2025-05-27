@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
 import ApexCharts from 'apexcharts';
 import {
@@ -12,11 +13,13 @@ import {
 } from "ng-apexcharts";
 
 export type ChartOptions = {
+    colors: string[];
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
     stroke: ApexStroke;
     tooltip: ApexTooltip;
+    fill: ApexFill;
     dataLabels: ApexDataLabels;
 };
 
@@ -24,7 +27,7 @@ export type ChartOptions = {
     selector: 'app-area-chart',
     templateUrl: './area-chart.component.html',
     standalone: true,
-    imports: [NgApexchartsModule],
+    imports: [NgApexchartsModule, CommonModule,],
     styleUrls: ['./area-chart.component.scss'],
 })
 export class AreaChartComponent implements OnChanges {
@@ -41,17 +44,70 @@ export class AreaChartComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         this.chartOptions = {
+            colors: ["#8979FF"],
             series: this.seriesData,
             chart: {
+                id: "dailyHumadityChart",
                 height: 350,
-                type: "area"
+                type: "area",
+                dropShadow: {
+                    enabled: true,
+                    top: 4,
+                    left: 2,
+                    blur: 6,
+                    opacity: 0.5,
+                    color: "#8979FF",
+                },
+                animations: {
+                    enabled: true,
+                    easing: 'easeinout',
+                    speed: 800,
+                    animateGradually: {
+                        enabled: true,
+                        delay: 150
+                    },
+                    dynamicAnimation: {
+                        enabled: true,
+                        speed: 350
+                    }
+                }
             },
             dataLabels: {
-                enabled: false
+                enabled: true,
+                formatter: (val: number) => val !== null ? `${val} Ticket` : "N/A",
+                style: {
+                    fontWeight: "bold",
+                    colors: ["#8979FF"],
+                    fontSize: "12px"
+                },
+                background: {
+                    enabled: true,
+                    foreColor: "#fff",
+                    borderRadius: 4,
+                    padding: 4,
+                    opacity: 0.9,
+                    borderWidth: 1,
+                    borderColor: "#8979FF",
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 1,
+                        blur: 3,
+                        opacity: 0.3,
+                        color: "#8979FF",
+                    },
+                },
             },
-            stroke: {
-                curve: "smooth"
+            fill: {
+                type: "gradient",
+                gradient: {
+                    shadeIntensity: 1,
+                    opacityFrom: 0.7,
+                    opacityTo: 0.9,
+                    stops: [0, 90, 100]
+                }
             },
+            stroke: { curve: "smooth", width: 2, colors: ["#8979FF"] },
             xaxis: {
                 categories: this.labels
             },

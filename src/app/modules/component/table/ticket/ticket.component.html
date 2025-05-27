@@ -81,13 +81,13 @@
                         </mat-checkbox>
                     </div>
 
-                    <div class="px-5 py-3 w-full">
+                    <!-- <div class="px-5 py-3 w-full">
                         <button (click)="addProducts()" mat-flat-button color="primary"
                             class="w-full text-white bg-blue-600">
                             <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
                             Add Products
                         </button>
-                    </div>
+                    </div> -->
                 </mat-menu>
 
 
@@ -103,13 +103,13 @@
                             (change)="applyCategoryFilter()">{{item.name}}</mat-checkbox>
                     </div>
 
-                    <div class="px-5 py-3 w-full">
+                    <!-- <div class="px-5 py-3 w-full">
                         <button (click)="addProducts()" mat-flat-button color="primary"
                             class="w-full text-white bg-blue-600">
                             <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
                             Add Category
                         </button>
-                    </div>
+                    </div> -->
                 </mat-menu>
 
                 <!-- Menu Status -->
@@ -226,7 +226,7 @@
                 <!-- Name Column -->
                 <ng-container matColumnDef="name">
                     <mat-header-cell *matHeaderCellDef>
-                        Name
+                        Users
                     </mat-header-cell>
                     <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
                         <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
@@ -271,7 +271,7 @@
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
                         <mat-form-field hideRequiredMarker class="w-full">
                             <mat-select [(value)]="element.status" placeholder="Select"
-                                [disabled]="element.status === 'Resolved'">
+                                [disabled]="element.status === 'Resolved' || shiftStatus">
                                 <mat-option *ngFor="let status of statusList" [value]="status"
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full"
                                     (click)="changeStatus(element.tracking_id, status)">

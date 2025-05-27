@@ -7,7 +7,7 @@ import { FuseLoadingService } from '@fuse/services/loading';
     providedIn: 'root'
 })
 export class ApiService {
-    private apiUrl = environment.apiUrl;
+    private apiUrl = 'http://localhost:8089/';
     private _loadingService = inject(FuseLoadingService);
 
     private getHeaders() {

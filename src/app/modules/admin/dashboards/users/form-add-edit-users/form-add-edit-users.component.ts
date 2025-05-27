@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -13,12 +13,10 @@ import { ApiService } from 'app/services/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { ProductsTableService } from 'app/modules/component/table/products/products.service';
-import { CategoryTableService } from 'app/modules/component/table/category/category.service';
-import { throwError } from 'rxjs';
+import { UsersTableService } from 'app/modules/component/table/users/users.service';
 
 @Component({
-  selector: 'app-form-edit-category',
+  selector: 'app-form-add-edit-users',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -33,14 +31,12 @@ import { throwError } from 'rxjs';
     MatSelectModule,
     CommonModule,
   ],
-  templateUrl: './form-edit-category.component.html',
-  styleUrl: './form-edit-category.component.scss'
+  templateUrl: './form-add-edit-users.component.html',
 })
-export class FormEditCategoryComponent {
-  productsForm!: FormGroup
+export class FormAddEditUsersComponent {
+  usersForm!: FormGroup
   isLoading: boolean = false
-  products: { id: string, name: string }[]
-  id: number
+  role: { id: number, name: string }[]
 
 
   constructor(
@@ -48,64 +44,76 @@ export class FormEditCategoryComponent {
     private fb: FormBuilder,
     private toast: ToastrService,
     private fuseConfirmationService: FuseConfirmationService,
-    private _categoryTableService: CategoryTableService,
-    public dialogRef: MatDialogRef<FormEditCategoryComponent>,
+    private _usersTableService: UsersTableService,
+    public dialogRef: MatDialogRef<FormAddEditUsersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) {
-    this.id = data.id
-  }
+  ) { }
 
-  async ngOnInit() {
-    this.productsForm = this.fb.group({
-      category_name: [null, [Validators.required]],
-      products_id: [null, [Validators.required]],
+  ngOnInit(): void {
+    this.fetchRole()
+    this.usersForm = this.fb.group({
+      name: [null, [Validators.required]],
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(6)]],
+      role: [null, [Validators.required]],
     })
 
-    await this.fetchData()
-    this.fetchCategoryById()
-  }
-
-  async fetchData() {
-    try {
-      const get = await this._apiService.get("api/V1/products");
-      this.products = get.data;
-    } catch (error) {
-      console.error("Error fetching data:", error);
+    if (this.data.id != null && this.data.mode === 'edit') {
+      this.getUsersById()
     }
   }
 
-  async fetchCategoryById() {
+  async fetchRole() {
+    const response = await this._apiService.get("api/V1/role")
+    const { data } = response
+    this.role = data
+  }
+
+  async getUsersById() {
     try {
-      const response = await this._apiService.get(`api/V1/category/${this.id}`)
-      this.productsForm.patchValue({
-        category_name: response.data.category_name,
-        products_id: response.data.products_name
+      const response = await this._apiService.get(`api/V1/users/${this.data.id}`)
+      const { data } = response
+      this.usersForm.patchValue({
+        name: data.Name,
+        email: data.Email,
+        password: data.Password,
       })
+
     } catch (error) {
-      throw error
+      this.toast.error("Failed Get Users", "Error");
+      throw error;
     }
   }
 
   async onSubmit() {
-    if (this.productsForm.invalid) {
+    if (this.usersForm.invalid) {
       this.toast.warning("Please Fill All Form", "Warning")
       return
     }
 
+    let endpoint = "api/V1/register"
+    if (this.data.mode === 'edit') {
+      endpoint = `api/V1/users/${this.data.id}`
+    }
+
     try {
       this.isLoading = true
-      const { data, status } = await this._apiService.post(`api/V1/category/${this.id}`, {
-        category_name: this.productsForm.value.category_name,
-        products_id: this.productsForm.value.products_id
-      })
+      const { data, status } = await this._apiService.post(endpoint, this.usersForm.value)
 
-      if (status === 200) {
-        this.toast.success("Success Update Products", "Success")
-        this._categoryTableService.fetchData()
+      if (status === 201) {
+        this.toast.success("Success Create Users", "Success")
+        this._usersTableService.fetchData()
         this.dialogRef.close()
         this.isLoading = false
         return
-      } else if (status === 500) {
+      } else if (status === 200) {
+        this.toast.success("Success Update Users", "Success")
+        this._usersTableService.fetchData()
+        this.dialogRef.close()
+        this.isLoading = false
+        return
+      }
+      else if (status === 500) {
         this.toast.error("Internal Server Error", "Failed")
         this.dialogRef.close()
         this.isLoading = false
@@ -114,9 +122,9 @@ export class FormEditCategoryComponent {
         this.isLoading = false
         const confirm = this.fuseConfirmationService.open({
           title: 'Notification',
-          message: 'The Category already exists on the server. Would you like to create another Category time anyway?',
+          message: 'The Users already exists on the server. Would you like to create another Users time anyway?',
           icon: {
-            color: 'warn'
+            color: 'info'
           },
           actions: {
             confirm: {

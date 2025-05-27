@@ -33,7 +33,6 @@ import { MatDialog } from '@angular/material/dialog';
     MatIconModule,
     MatNativeDateModule,
     IonLoading,
-    MatDivider,
     MatIconModule,
   ],
   templateUrl: './form-add-tickets.component.html',
@@ -73,6 +72,8 @@ export class FormAddTicketsComponent implements OnInit {
     });
 
     this.secondTicketForm = this.fb.group({
+      PIC: ['', [Validators.required]],
+      no_whatsapp: ['', [Validators.required]],
       respon_diberikan: ['', Validators.required],
     });
 
@@ -135,14 +136,13 @@ export class FormAddTicketsComponent implements OnInit {
         hari_respon: formatDate(this.firstTicketForm.value.hari_respon),
         entry_day: formatDate(this.firstTicketForm.value.entry_day),
         response_day: formatDate(this.firstTicketForm.value.response_day),
-        PIC: "Jibril",
-        no_whatsapp: "081319107692"
+        PIC: this.secondTicketForm.value.PIC,
+        no_whatsapp: this.secondTicketForm.value.no_whatsapp
       };
 
       console.log("Data yang dikirim:", data);
 
       const post = await this._apiService.post("api/V1/tickets", data);
-      console.log("Response API:", post);
 
       this.isLoading = false;
 

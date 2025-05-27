@@ -87,6 +87,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         roles: ['admin', 'pegawai'],
         children: [
             {
+                id: 'dashboards.users',
+                title: 'Users',
+                type: 'basic',
+                icon: 'heroicons_outline:user',
+                link: '/dashboards/users',
+                roles: ['admin', 'pegawai'],
+            },
+            {
                 id: 'dashboards.shift-timing',
                 title: 'Shift Timing',
                 type: 'basic',

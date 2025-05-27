@@ -1,4 +1,4 @@
-<main class="w-full h-full p-5 sm:p-10 bg-white">
+<main class="w-full h-full p-5 sm:p-10 bg-[#f9fafb]">
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between">
         <div class="mb-5 sm:mb-0">
             <h1 class="text-4xl font-bold">Analytics</h1>
@@ -47,7 +47,7 @@
             <app-bar-chart-side [header]="'Tickets By Products'" [seriesData]="ChartTicketProductsData"
                 [labels]="ChartTicketProductsLabels" class="col-span-2"></app-bar-chart-side>
             <app-column-chart class="col-span-2"
-                [header]="'User Tickets'" [seriesData]="chartUserTicketsData"
+                [header]="'Tickets Create By Users'" [seriesData]="chartUserTicketsData"
                 [labels]="chartUserTicketsLabels"></app-column-chart>
             <app-area-chart [seriesData]="chartPeriodeData" [labels]="chartPeriodeLabels"
                 [header]="'Tickets By Periode'" class="col-span-2 h-full"></app-area-chart>

@@ -109,6 +109,7 @@ export const appRoutes: Route[] = [
                     { path: 'shift-timing', loadChildren: () => import('app/modules/admin/dashboards/shift-timing/shift-timing.routes') },
                     { path: 'products', loadChildren: () => import('app/modules/admin/dashboards/products/products.routes') },
                     { path: 'category', loadChildren: () => import('app/modules/admin/dashboards/category/category.routes') },
+                    { path: 'users', loadChildren: () => import('app/modules/admin/dashboards/users/users.routes') },
                 ]
             },
 

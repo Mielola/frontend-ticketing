@@ -18,11 +18,11 @@ import { ApiService } from 'app/services/api.service';
 import { Subject } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ToastrService } from 'ngx-toastr';
-import { CategoryTableService } from './category.service';
-import { FormAddCategoryComponent } from 'app/modules/admin/dashboards/category/form-add-category/form-add-category.component';
-import { FormEditCategoryComponent } from 'app/modules/admin/dashboards/category/form-edit-category/form-edit-category.component';
+import { UsersTableService } from './users.service';
+import { FormAddEditUsersComponent } from 'app/modules/admin/dashboards/users/form-add-edit-users/form-add-edit-users.component';
+
 @Component({
-  selector: 'app-table-category',
+  selector: 'app-table-users',
   standalone: true,
   imports: [
     CommonModule,
@@ -42,11 +42,9 @@ import { FormEditCategoryComponent } from 'app/modules/admin/dashboards/category
     MatOptionModule,
     MatButtonModule,
   ],
-  templateUrl: './category.component.html',
-  styleUrl: './category.component.scss'
+  templateUrl: './users.component.html',
 })
-export class TableCategoryComponent {
-
+export class TableUsersComponent {
   shiftStatus: boolean = true
   ticketStatus: boolean = false
 
@@ -54,7 +52,7 @@ export class TableCategoryComponent {
 
 
   // Table
-  public displayedColumns = ['category_name', 'products_name', 'action'];
+  public displayedColumns = ['users', 'password', 'role', 'action'];
   public dataSource = new MatTableDataSource<any>();
 
   // Paginator
@@ -65,7 +63,7 @@ export class TableCategoryComponent {
   constructor(
     private _apiService: ApiService,
     private fuseConfirmationService: FuseConfirmationService,
-    private _categoryService: CategoryTableService,
+    private _usersService: UsersTableService,
     private _matDialog: MatDialog,
     private _toastService: ToastrService,
   ) {
@@ -75,19 +73,19 @@ export class TableCategoryComponent {
   }
 
   get datas() {
-    return this._categoryService._data()
+    return this._usersService._data()
   }
 
   get isLoading(): boolean {
-    return this._categoryService.isLoading()
+    return this._usersService.isLoading()
   }
 
   get isNotDataFound(): boolean {
-    return this._categoryService.isNotFound()
+    return this._usersService.isNotFound()
   }
 
   ngOnInit(): void {
-    this._categoryService.fetchData()
+    this._usersService.fetchData()
   }
 
   /**
@@ -112,27 +110,32 @@ export class TableCategoryComponent {
   * Public Functions
   */
 
-  addCategory() {
-    this._matDialog.open(FormAddCategoryComponent, {
-      width: window.innerWidth < 600 ? '90%' : '50%',
-      maxWidth: '100vw',
-    })
-  }
-
-  editCategory(id: number) {
-    this._matDialog.open(FormEditCategoryComponent, {
+  addUsers() {
+    this._matDialog.open(FormAddEditUsersComponent, {
       width: window.innerWidth < 600 ? '90%' : '50%',
       maxWidth: '100vw',
       data: {
-        id: id
+        id: null,
+        mode: 'add'
       }
     })
   }
 
-  handleDeleteCategory(id: number) {
+  editUsers(id: number) {
+    this._matDialog.open(FormAddEditUsersComponent, {
+      width: window.innerWidth < 600 ? '90%' : '50%',
+      maxWidth: '100vw',
+      data: {
+        id: id,
+        mode: 'edit'
+      }
+    })
+  }
+
+  handleDeleteUsers(id: number, name: string) {
     const confirm = this.fuseConfirmationService.open({
-      title: 'Konfirmasi Hapus',
-      message: `Apakah Anda yakin ingin menghapus Category ${id}?`,
+      title: 'Confirmation Delete',
+      message: `Are you sure want to delete ${name}?`,
       actions: {
         confirm: {
           label: 'Delete',
@@ -142,25 +145,25 @@ export class TableCategoryComponent {
 
     confirm.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this.deleteCategory(id)
+        this.deleteUsers(id)
       }
     });
   }
 
-  async deleteCategory(id: number) {
+  async deleteUsers(id: number) {
     try {
-      const { data, status } = await this._apiService.delete(`api/V1/category/${id}`)
+      const { data, status } = await this._apiService.delete(`api/V1/users/${id}`)
 
       if (status === 200) {
-        this._toastService.success("Success Delete Products", "Success")
-        this._categoryService.fetchData()
+        this._toastService.success("Success Delete Users", "Success")
+        this._usersService.fetchData()
         return
       } else {
-        this._toastService.error("Failed Delete Products", "Failed")
+        this._toastService.error("Failed Delete Users", "Failed")
         return
       }
     } catch (error) {
-      this._toastService.error("Failed Delete Products", "Failed")
+      this._toastService.error("Failed Delete Users", "Failed")
       throw error
     }
   }

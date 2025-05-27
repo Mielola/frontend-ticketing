@@ -14,7 +14,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProductsTableService } from 'app/modules/component/table/products/products.service';
-import { CategoryTableService } from 'app/modules/component/table/category/products.service';
+import { CategoryTableService } from 'app/modules/component/table/category/category.service';
 
 @Component({
   selector: 'app-form-add-category',

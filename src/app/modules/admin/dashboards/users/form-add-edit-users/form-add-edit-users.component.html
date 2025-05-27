@@ -1,0 +1,63 @@
+<div class="h-full w-full flex flex-col">
+    <div class="flex justify-between p-2">
+        <div
+            class="truncate text-lg font-medium leading-6 tracking-tight px-5 py-3 flex flex-col sm:flex-row items-start sm:items-center w-full justify-between">
+            <h2 class="mb-2 text-xl font-semibold sm:mb-0">{{data.mode === 'edit' ? 'Edit Users' : 'Add Users'}}</h2>
+        </div>
+        <a (click)="dialogRef.close()">
+            <mat-icon svgIcon="mat_solid:close" class="cursor-pointer"></mat-icon>
+        </a>
+    </div>
+
+    <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
+    <form [formGroup]="usersForm" class="bg-card flex flex-col overflow-hidden rounded-2xl px-8 pt-2 pb-4 gap-1">
+        <!-- User Name Input -->
+        <mat-form-field class="w-full" floatLabel="always">
+            <mat-label>User Name</mat-label>
+            <input formControlName="name" matInput [placeholder]="'Users Name'" />
+            <mat-error *ngIf="usersForm.get('name').hasError('required')">
+                Users Name is required
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-full" floatLabel="always">
+            <mat-label>Email</mat-label>
+            <input formControlName="email" matInput placeholder="Email" />
+            <mat-error *ngIf="usersForm.get('email').hasError('required')">
+                Email is required
+            </mat-error>
+            <mat-error *ngIf="usersForm.get('email').hasError('email')">
+                Please enter a valid email address
+            </mat-error>
+        </mat-form-field>
+
+        <!-- Password Input -->
+        <mat-form-field class="w-full" floatLabel="always">
+            <mat-label>Password</mat-label>
+            <input formControlName="password" matInput [placeholder]="'******'" />
+            <mat-error *ngIf="usersForm.get('password').hasError('required')">
+                Password is required
+            </mat-error>
+            <mat-error *ngIf="usersForm.get('password').hasError('minlength')">
+                Password must be at least 6 characters long
+            </mat-error>
+        </mat-form-field>
+
+        <mat-form-field hideRequiredMarker class="w-full">
+            <mat-label>User Role</mat-label>
+            <mat-select formControlName="role" placeholder="Select User Role">
+                <mat-option *ngFor="let item of role" [value]="item.name"
+                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                    {{item.name}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <button class="text-white p-2 rounded"
+            [ngClass]="data.mode === 'edit' ? 'bg-blue-600 hover:bg-blue-700' : 'bg-green-600 hover:bg-green-700'"
+            type="submit" (click)="onSubmit()">
+            {{data.mode === 'edit' ? 'Edit Users' : 'Add Users'}}
+        </button>
+    </form>
+</div>

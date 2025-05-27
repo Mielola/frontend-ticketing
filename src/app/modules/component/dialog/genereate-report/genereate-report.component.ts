@@ -324,7 +324,7 @@ export class GenereateReportComponent implements OnInit {
       // 1️⃣ Gambar garis dulu supaya di bawah
       doc.setDrawColor(255, 255, 255);
       doc.setLineWidth(37);
-      doc.line(margin - 10, y, pageWidth, y );
+      doc.line(margin - 10, y, pageWidth, y);
 
       // 2️⃣ Setelah itu baru gambar logo dan teks (biar tampil di atas garis)
       doc.setFont("helvetica", "normal");
@@ -479,10 +479,11 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
     const tableTickets = [];
 
     data.data.data.forEach((detail: any) => {
+      const [date, time] = detail.created_at.split(' ');
       tableTickets.push([
         detail.tracking_id,
-        detail.hari_masuk,
-        detail.waktu_masuk,
+        date,
+        time,
         detail.category_name,
         detail.subject,
         detail.respon_admin,

@@ -75,25 +75,47 @@ export class ColumnChartComponent implements OnChanges {
             plotOptions: {
                 bar: {
                     columnWidth: "45%",
-                    distributed: true
+                    distributed: true,
+                    borderRadius: 5,
+                    borderRadiusApplication: "end",
                 }
             },
             dataLabels: {
                 enabled: true,
+                formatter: (val: number) => val !== null ? `${val} Ticket` : "N/A",
                 style: {
-                    fontWeight: 600,
-                    fontSize : '24px',
+                    fontWeight: "bold",
+                    colors: ["#3ECA22"],
+                    fontSize: "12px"
                 },
                 background: {
-                    padding: 5,
-                    foreColor: '#FF4560'
-                }
+                    enabled: true,
+                    foreColor: "#fff",
+                    borderRadius: 4,
+                    padding: 4,
+                    opacity: 0.9,
+                    borderWidth: 1,
+                    borderColor: "#3ECA22",
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 1,
+                        blur: 3,
+                        opacity: 0.3,
+                        color: "#3ECA22",
+                    },
+                },
             },
             legend: {
                 show: false
             },
             grid: {
-                show: true
+                borderColor: '#e7e7e7',
+                yaxis: {
+                    lines: {
+                        show: true,
+                    },
+                },
             },
             stroke: {
                 curve: "straight",

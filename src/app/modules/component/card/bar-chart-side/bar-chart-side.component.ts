@@ -51,7 +51,7 @@ export class BarChartSideComponent implements OnChanges {
             },
             plotOptions: {
                 bar: {
-                    barHeight: "100%",
+                    barHeight: "45%",
                     distributed: true,
                     horizontal: true,
                     dataLabels: {
@@ -69,15 +69,31 @@ export class BarChartSideComponent implements OnChanges {
                 enabled: true,
                 textAnchor: "start",
                 style: {
-                    colors: ["#fff"]
+                    fontWeight: "bold",
+                    colors: ["#3ECA22"],
+                    fontSize: "12px"
                 },
                 formatter: function (val, opt) {
                     return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val + "";
                 },
                 offsetX: 0,
-                dropShadow: {
-                    enabled: true
-                }
+                background: {
+                    enabled: true,
+                    foreColor: "#fff",
+                    borderRadius: 4,
+                    padding: 4,
+                    opacity: 0.9,
+                    borderWidth: 1,
+                    borderColor: "#3ECA22",
+                    dropShadow: {
+                        enabled: true,
+                        top: 2,
+                        left: 1,
+                        blur: 3,
+                        opacity: 0.3,
+                        color: "#3ECA22",
+                    },
+                },
             },
             stroke: {
                 width: 1,
@@ -99,7 +115,7 @@ export class BarChartSideComponent implements OnChanges {
                 y: {
                     title: {
                         formatter: function () {
-                            return "Ticket Resolved";
+                            return "Ticket";
                         }
                     }
                 }
