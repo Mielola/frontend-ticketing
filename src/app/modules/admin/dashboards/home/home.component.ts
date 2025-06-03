@@ -73,7 +73,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     chartGithubIssues: ApexOptions = {};
     data: any;
     isLoading: boolean = false
-    private _liveAnnouncer = inject(LiveAnnouncer);
+    chartTickesLabels: string[]
+    chartTotalTickets: number[]
+    chartTotalCategory: number[]
 
 
     /**
@@ -95,15 +97,6 @@ export class HomeComponent implements OnInit, OnDestroy {
      * On init
      */
     ngOnInit(): void {
-
-        this._homeService.data$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((data) => {
-                // Store the data
-                this.data = data;
-                this._prepareChartData();
-            });
-
         this._userService.user$.pipe(takeUntil(this._unsubscribeAll)).subscribe((users) => {
             this.user = users
         })
@@ -116,6 +109,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
             // Recent Tickets
             this.recent_tickets = dataTickets.data.recent_tickets
+
+            this.chartTickesLabels = dataTickets.data.chartTicketsProducts.map(item => item.name);
+            this.chartTotalTickets = dataTickets.data.chartTicketsProducts.map(item => parseInt(item.total_tickets));
+            this.chartTotalCategory = dataTickets.data.chartTicketsProducts.map(item => parseInt(item.total_category));
+            this._prepareChartData();
+
         })
     }
 
@@ -134,6 +133,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     // @ Public Methods
     // -----------------------------------------------------------------------------------------------------
 
+    formatTime(dateTime: string): string {
+        const [date, time] = dateTime.split(" ")
+        return time
+    }
+
     _prepareChartData() {
         this.chartGithubIssues = {
             chart: {
@@ -141,76 +145,70 @@ export class HomeComponent implements OnInit, OnDestroy {
                 foreColor: 'inherit',
                 height: '100%',
                 type: 'line',
-                toolbar: {
-                    show: false,
-                },
-                zoom: {
-                    enabled: false,
-                },
+                toolbar: { show: false },
+                zoom: { enabled: false }
             },
             colors: ['#64748B', '#94A3B8'],
             dataLabels: {
                 enabled: true,
-                enabledOnSeries: [0],
+                enabledOnSeries: [1],
                 background: {
-                    borderWidth: 0,
-                },
+                    borderWidth: 0
+                }
             },
             grid: {
-                borderColor: 'var(--fuse-border)',
+                borderColor: 'var(--fuse-border)'
             },
-            labels: this.data.githubIssues.labels,
+            labels: this.chartTickesLabels,
             legend: {
-                show: false,
+                show: true
             },
             plotOptions: {
                 bar: {
-                    columnWidth: '50%',
-                },
+                    columnWidth: '50%'
+                }
             },
-            series: this.data.githubIssues.series,
+            series: [
+                {
+                    name: 'Total Tickets',
+                    type: 'column',
+                    data: this.chartTotalTickets
+                },
+                {
+                    name: 'Total Category',
+                    type: 'line',
+                    data: this.chartTotalCategory
+                }
+            ],
             states: {
                 hover: {
                     filter: {
                         type: 'darken',
-                        value: 0.75,
-                    },
-                },
+                        value: 0.75
+                    }
+                }
             },
             stroke: {
-                width: [3, 0],
+                width: [0, 4]
             },
             tooltip: {
                 followCursor: true,
-                theme: 'dark',
+                theme: 'dark'
             },
             xaxis: {
-                axisBorder: {
-                    show: false,
-                },
-                axisTicks: {
-                    color: 'var(--fuse-border)',
-                },
+                axisBorder: { show: false },
+                axisTicks: { color: 'var(--fuse-border)' },
                 labels: {
-                    style: {
-                        colors: 'var(--fuse-text-secondary)',
-                    },
+                    style: { colors: 'var(--fuse-text-secondary)' }
                 },
-                tooltip: {
-                    enabled: false,
-                },
+                tooltip: { enabled: false }
             },
             yaxis: {
                 labels: {
                     offsetX: -16,
-                    style: {
-                        colors: 'var(--fuse-text-secondary)',
-                    },
-                },
-            },
+                    style: { colors: 'var(--fuse-text-secondary)' }
+                }
+            }
         };
     }
-
-
-
 }

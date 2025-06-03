@@ -19,11 +19,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 roles: ['admin', 'pegawai'],
             },
             {
-                id: 'dashboards.tickets',
-                title: 'Tickets',
+                id: 'dashboards.products',
+                title: 'Products',
                 type: 'basic',
-                icon: 'heroicons_outline:ticket',
-                link: '/dashboards/tickets',
+                icon: 'mat_outline:receipt_long',
+                link: '/dashboards/products',
                 roles: ['admin', 'pegawai'],
             },
             {
@@ -35,11 +35,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 roles: ['admin', 'pegawai'],
             },
             {
-                id: 'dashboards.products',
-                title: 'Products',
+                id: 'dashboards.tickets',
+                title: 'Tickets',
                 type: 'basic',
-                icon: 'mat_outline:receipt_long',
-                link: '/dashboards/products',
+                icon: 'heroicons_outline:ticket',
+                link: '/dashboards/tickets',
                 roles: ['admin', 'pegawai'],
             },
             {
@@ -66,7 +66,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'bar_chart',
                 link: '/dashboards/analytics',
-                roles: ['admin', 'pegawai']
+                roles: ['admin',]
             },
             {
                 id: 'dashboards.export',
@@ -74,7 +74,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:document-arrow-down',
                 link: '/dashboards/export',
-                roles: ['admin', 'pegawai']
+                roles: ['admin',]
             },
         ],
     },
@@ -84,7 +84,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         subtitle: 'Unique dashboard designs',
         type: 'group',
         icon: 'heroicons_outline:home',
-        roles: ['admin', 'pegawai'],
+        roles: ['admin'],
         children: [
             {
                 id: 'dashboards.users',
@@ -92,7 +92,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:user',
                 link: '/dashboards/users',
-                roles: ['admin', 'pegawai'],
+                roles: ['admin'],
             },
             {
                 id: 'dashboards.shift-timing',
@@ -100,7 +100,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'mat_solid:access_time',
                 link: '/dashboards/shift-timing',
-                roles: ['admin', 'pegawai'],
+                roles: ['admin'],
             },
             {
                 id: 'dashboards.shift',
@@ -108,7 +108,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'heroicons_outline:user-group',
                 link: '/dashboards/shift',
-                roles: ['admin', 'pegawai'],
+                roles: ['admin'],
             },
         ],
     },
@@ -128,6 +128,7 @@ export const compactNavigation: FuseNavigationItem[] = [
         tooltip: 'Users',
         type: 'aside',
         icon: 'heroicons_outline:user',
+        roles: ['admin'],
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
     {
@@ -136,6 +137,7 @@ export const compactNavigation: FuseNavigationItem[] = [
         tooltip: 'Reports',
         type: 'aside',
         icon: 'heroicons_outline:chart-pie',
+        roles: ['admin'],
         children: [], // This will be filled from defaultNavigation so we don't have to manage multiple sets of the same navigation
     },
 ];

@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import axios from 'axios';
-import { environment } from 'environments/environments.dev';
 import { FuseLoadingService } from '@fuse/services/loading';
+import { environment } from 'environments/environments.dev';
 
 @Injectable({
     providedIn: 'root'

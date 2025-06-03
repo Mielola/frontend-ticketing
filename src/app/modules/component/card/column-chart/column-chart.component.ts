@@ -62,7 +62,6 @@ export class ColumnChartComponent implements OnChanges {
                 type: "bar",
                 events: {
                     click: function (chart, w, e) {
-                        // console.log(chart, w, e)
                     }
                 }
             },

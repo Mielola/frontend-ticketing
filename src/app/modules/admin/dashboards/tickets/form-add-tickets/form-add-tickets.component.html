@@ -32,10 +32,10 @@
                         <!-- Category Input -->
                         <mat-form-field class="w-full">
                             <mat-label>Category</mat-label>
-                            <mat-select formControlName="category_name">
-                                <mat-option *ngFor="let item of category" [value]="item"
+                            <mat-select formControlName="category_id">
+                                <mat-option *ngFor="let item of category" [value]="item.id"
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full">
-                                    {{item}}
+                                    {{item.category_name}}
                                 </mat-option>
                             </mat-select>
                         </mat-form-field>
@@ -66,7 +66,7 @@
                         </mat-form-field>
 
                         <mat-form-field class="example-full-width">
-                            <mat-label>Entry day</mat-label>
+                            <mat-label>Ticket Entry day</mat-label>
                             <input formControlName="hari_masuk" matInput [matDatepicker]="picker"
                                 placeholder="Choose a date">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -74,7 +74,7 @@
                         </mat-form-field>
 
                         <mat-form-field class="example-full-width">
-                            <mat-label>Entry Time</mat-label>
+                            <mat-label>Ticket Entry Time</mat-label>
                             <input formControlName="waktu_masuk" matInput type="time">
                         </mat-form-field>
 

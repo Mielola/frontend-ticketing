@@ -28,6 +28,8 @@ import {
   ApexTitleSubtitle,
   ApexDataLabels,
 } from "ng-apexcharts";
+import { Capacitor } from '@capacitor/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -80,6 +82,7 @@ export class GenereateReportComponent implements OnInit {
     private fb: FormBuilder,
     private platform: Platform,
     private toast: ToastrService,
+    public dialogRef: MatDialogRef<GenereateReportComponent>,
   ) {
 
   }
@@ -493,7 +496,7 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
     });
 
     // Tambahkan tabel ke PDF atau laporan
-    await addTable(`A. Ticket`, [['Tracking ID', 'Created Date', 'Created Time', 'Category', 'Subject', "Action", 'Status', 'Priority']], tableTickets);
+    await addTable(`A. Ticket`, [['Tracking ID', 'Created Date', 'Created Time', 'Category', 'Subject', "Action",]], tableTickets);
     if (this.generateForm.value.products_name) {
 
       try {
@@ -569,10 +572,10 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
       doc.addImage(footer, 'PNG', 0, pageHeight - 30, pageWidth, 30);
     }
 
-    if (this.platform.is('desktop')) {
-      doc.save(`Report_Daily_ticketing_${startPdf}_${endPdf}.pdf`);
-    } else {
+    if (Capacitor.isNativePlatform()) {
       await this.savePdfToDevice(doc, `Report_Daily_ticketing_${startPdf}_${endPdf}.pdf`);
+    } else {
+      doc.save(`Report_Daily_ticketing_${startPdf}_${endPdf}.pdf`);
     }
   }
 }

@@ -30,28 +30,23 @@
     </div>
 
     <div class="mt-5 sm:mt-10 h-fit w-full flex flex-col gap-4">
-        <div class="w-full grid grid-cols-1 sm:grid-cols-5 gap-2">
+        <div class="w-full grid grid-cols-1 sm:grid-cols-4 gap-2">
 
             <app-column-chart [seriesData]="chartPriorityData" [labels]="chartPriorityLabels"
                 [header]="'Tickets By Priority'" class="col-span-2 sm:col-span-5 xl:col-span-2"></app-column-chart>
             <app-bar-chart [seriesData]="chartCategoryData" [labels]="chartCategoryLabels"
                 [header]="'Tickets By Category'" class="col-span-2 sm:col-span-3 xl:col-span-2"></app-bar-chart>
-            <app-pie-chart [header]="'User By Roles'" [seriesData]="pieSeriesData" [labels]="pieLabels"
-                class="col-span-1 sm:col-span-2 xl:col-span-1">
-            </app-pie-chart>
 
         </div>
         <div class="w-full grid grid-cols-1 sm:grid-cols-4 gap-2">
-            <app-bar-chart-side [header]="'Tickets Resolved By Users'" [seriesData]="ChartUserResolvedData"
-                [labels]="ChartUserResolvedLabels" class="col-span-2"></app-bar-chart-side>
-            <app-bar-chart-side [header]="'Tickets By Products'" [seriesData]="ChartTicketProductsData"
-                [labels]="ChartTicketProductsLabels" class="col-span-2"></app-bar-chart-side>
-            <app-column-chart class="col-span-2"
-                [header]="'Tickets Create By Users'" [seriesData]="chartUserTicketsData"
-                [labels]="chartUserTicketsLabels"></app-column-chart>
             <app-area-chart [seriesData]="chartPeriodeData" [labels]="chartPeriodeLabels"
                 [header]="'Tickets By Periode'" class="col-span-2 h-full"></app-area-chart>
-
+            <app-bar-chart-side [header]="'Tickets By Products'" [seriesData]="ChartTicketProductsData"
+                [labels]="ChartTicketProductsLabels" class="col-span-2"></app-bar-chart-side>
+            <app-bar-chart-side [header]="'Tickets Resolved By Users'" [seriesData]="ChartUserResolvedData"
+                [labels]="ChartUserResolvedLabels" class="col-span-2"></app-bar-chart-side>
+            <app-column-chart class="col-span-2" [header]="'Tickets Create By Users'"
+                [seriesData]="chartUserTicketsData" [labels]="chartUserTicketsLabels"></app-column-chart>
         </div>
     </div>
 </main>

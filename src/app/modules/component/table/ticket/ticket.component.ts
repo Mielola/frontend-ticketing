@@ -17,12 +17,9 @@ import { ApiService } from 'app/services/api.service';
 import { TicketLogsService } from '../ticket-logs/ticket-logs.service';
 import { Subject, takeUntil } from 'rxjs';
 import { TicketTableService } from './ticket.service';
-import { MatButton, MatButtonModule } from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { GenereateReportComponent } from '../../dialog/genereate-report/genereate-report.component';
-import { UserService } from 'app/services/userService/user.service';
-import { User } from 'app/core/user/user.types';
-import { data } from '../../card/area-chart/data';
 import { FormAddProductsComponent } from 'app/modules/admin/dashboards/products/form-add-products/form-add-products.component';
 
 const today = new Date();
@@ -70,6 +67,7 @@ export class TicketComponent implements OnInit, OnDestroy {
 
   shiftStatus: boolean = true
   ticketStatus: boolean = false
+  isAdmin: boolean = localStorage.getItem("userRole") === 'admin';
 
   statusList: string[] = ['New', 'On Progress', 'Resolved']
   productsItems: { name: string, checked: boolean }[] = []
@@ -81,7 +79,7 @@ export class TicketComponent implements OnInit, OnDestroy {
 
 
   // Table
-  public displayedColumns = ['tracking_id', 'create_date', 'create_time', 'category', 'name', 'subject', 'pic', 'no_whatsapp', 'status', 'solved_time', 'last_replier', 'priority'];
+  public displayedColumns = ['tracking_id', 'hari_masuk', 'waktu_masuk', 'name', 'category', 'subject', 'pic', 'no_whatsapp', 'status', 'solved_time', 'last_replier', 'priority', 'create_date', 'create_time',];
   public dataSource = new MatTableDataSource<any>();
 
   // Paginator
@@ -108,6 +106,8 @@ export class TicketComponent implements OnInit, OnDestroy {
     this.fetchUsers()
     this.fetchData()
 
+    this.dataSource.data.length === 0 ? this.isNotDataFound = true : this.isNotDataFound = false
+
     this.range.valueChanges.subscribe(({ start, end }) => {
       if (end) {
         const startDate = start instanceof Date ? start : new Date(start);
@@ -117,7 +117,6 @@ export class TicketComponent implements OnInit, OnDestroy {
       }
     });
   }
-
 
   /**
   * After View Init
@@ -172,6 +171,8 @@ export class TicketComponent implements OnInit, OnDestroy {
       this.isLoading = true
 
       this._ticketTableService.data$.pipe(takeUntil(this._unsubscribeAll)).subscribe((get) => {
+
+        console.log(get)
 
         const categorySet = new Set<string>();
         const statusSet = new Set<string>();
@@ -231,7 +232,7 @@ export class TicketComponent implements OnInit, OnDestroy {
 
 
         this.dataSource.data = get.data;
-        console.log(this.dataSource.data)
+        this.dataSource.data.length == 0 ? this.isNotDataFound = true : this.isNotDataFound = false
       })
 
     } catch (error) {

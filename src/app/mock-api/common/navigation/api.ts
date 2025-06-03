@@ -53,7 +53,7 @@ export class NavigationMockApi {
         // @ Navigation - GET
         // -----------------------------------------------------------------------------------------------------
         this._fuseMockApiService.onGet('api/common/navigation').reply(() => {
-            const userRole = localStorage.getItem('role') || 'pegawai';
+            const userRole = localStorage.getItem('userRole') || 'pegawai';
 
             // Isi children seperti biasa
             this._compactNavigation.forEach((compactNavItem) => {

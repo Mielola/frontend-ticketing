@@ -25,10 +25,10 @@
                 <!-- Category Input -->
                 <mat-form-field class="w-full">
                     <mat-label>Category</mat-label>
-                    <mat-select formControlName="category_name">
-                        <mat-option *ngFor="let item of category" [value]="item"
+                    <mat-select formControlName="category_id">
+                        <mat-option *ngFor="let item of category" [value]="item.id"
                             class="px-3 py-1 m-2 font-medium text-base rounded-full">
-                            {{item}}
+                            {{item.category_name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
@@ -39,7 +39,7 @@
                     <input formControlName="no_whatsapp" matInput [placeholder]="'No Whatsapp'" />
                 </mat-form-field>
 
-                <!-- No Whatsapp Input -->
+                <!-- PIC Input -->
                 <mat-form-field class="w-full">
                     <mat-label>PIC</mat-label>
                     <input formControlName="PIC" matInput [placeholder]="'PIC'" />
@@ -224,7 +224,6 @@
                             <mat-header-cell *matHeaderCellDef> Update at
                             </mat-header-cell>
                             <mat-cell *matCellDef="let element" class="flex items-center gap-3">
-                                <!-- <mat-icon svgIcon="mat_outline:access_time"></mat-icon> -->
                                 {{element.update_at}}
                             </mat-cell>
                         </ng-container>
@@ -241,10 +240,18 @@
 
         </div>
 
-        <button [disabled]="shiftStatus || data.status === 'Resolved'"
-            [ngClass]="shiftStatus || data.status === 'Resolved' ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
-            class=" w-full rounded-full p-3 text-white font-semibold " (click)=" onSubmit()">
-            Save Ticket
-        </button>
+        <div class="flex flex-col gap-4">
+            <button [disabled]="shiftStatus && !isAdmin || data?.status === 'Resolved'"
+                [ngClass]="shiftStatus && !isAdmin || data.status === 'Resolved' ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
+                class=" w-full rounded-full p-3 text-white font-semibold " (click)=" onSubmit()">
+                Save Ticket
+            </button>
+
+            <button *ngIf="isAdmin" [disabled]="shiftStatus && !isAdmin"
+                [ngClass]="shiftStatus && !isAdmin ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600'"
+                class=" w-full rounded-full p-3 text-white font-semibold " (click)=" handleDeleteTicket()">
+                Delete Ticket
+            </button>
+        </div>
     </div>
 </div>

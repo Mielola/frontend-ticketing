@@ -1,3 +1,18 @@
 <main class="p-4 h-full w-full">
+
+    <div class="px-4 pt-4 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
+        <div>
+            <h1 class="font-bold text-lg sm:text-3xl">Handover Tickets</h1>
+            <p class="text-sm sm:text-base">List of unresolved tickets pending handover to the next team.</p>
+        </div>
+
+        <div class="text-sm text-gray-600">
+            <span class="font-medium text-gray-500 hover:cursor-pointer hover:text-blue-400"
+                [routerLink]="['/dashboards/home']">Home</span>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="font-semibold text-blue-600 hover:text-blue-500">Hotspot User</span>
+        </div>
+    </div>
+
     <app-handovers></app-handovers>
 </main>

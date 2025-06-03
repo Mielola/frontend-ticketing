@@ -62,7 +62,7 @@ export class FormAddTicketsComponent implements OnInit {
     this.firstTicketForm = this.fb.group({
       products_name: ['', Validators.required],
       subject: [{ value: '', disabled: this.disableInput }, Validators.required],
-      category_name: [{ value: '', disabled: this.disableInput }, Validators.required],
+      category_id: [{ value: 0, disabled: this.disableInput }, Validators.required],
       detail_kendala: [{ value: '', disabled: this.disableInput }, Validators.required],
       priority: [{ value: '', disabled: this.disableInput }, Validators.required],
       hari_masuk: [{ value: null, disabled: this.disableInput }, Validators.required],
@@ -72,7 +72,7 @@ export class FormAddTicketsComponent implements OnInit {
     });
 
     this.secondTicketForm = this.fb.group({
-      PIC: ['', [Validators.required]],
+      PIC: ['', []],
       no_whatsapp: ['', [Validators.required]],
       respon_diberikan: ['', Validators.required],
     });

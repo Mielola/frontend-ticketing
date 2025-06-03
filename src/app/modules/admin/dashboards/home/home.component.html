@@ -103,31 +103,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Resolved Tickets -->
-                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
-                                        <div class="flex items-start justify-between">
-                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
-                                                Resolved Tickets
-                                            </div>
-                                        </div>
-                                        <div class="mt-2 flex flex-col items-center">
-                                            <div
-                                                class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
-                                                {{summary?.resolved_tickets}}
-                                            </div>
-                                            <div class="text-lg font-medium text-green-600 dark:text-green-500">
-                                                Resolved Tickets
-                                            </div>
-                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
-                                                <div class="truncate text-md font-medium">
-                                                    Critical Tickets:
-                                                </div>
-                                                <div class="ml-1.5 text-lg font-semibold">
-                                                    {{summary?.critical_tickets}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                     <!-- Critical Tickets -->
                                     <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
                                         <div class="flex items-start justify-between">
@@ -149,6 +124,31 @@
                                                 </div>
                                                 <div class="ml-1.5 text-lg font-semibold">
                                                     {{summary?.total_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Resolved Tickets -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                Resolved Tickets
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
+                                                {{summary?.resolved_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-green-600 dark:text-green-500">
+                                                Resolved Tickets
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    Critical Tickets:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.critical_tickets}}
                                                 </div>
                                             </div>
                                         </div>
@@ -214,10 +214,7 @@
                                                                                     " [plotOptions]="
                                                                                         chartGithubIssues.plotOptions
                                                                                     " [series]="
-                                                                                        chartGithubIssues.series[
-                                                                                            githubIssuesWeekSelector
-                                                                                                .value
-                                                                                        ]
+                                                                                        chartGithubIssues.series
                                                                                     " [states]="
                                                                                         chartGithubIssues.states
                                                                                     " [stroke]="
@@ -241,13 +238,14 @@
                                                 *ngFor="let tickets of recent_tickets">
                                                 <!-- Detail Tickets -->
                                                 <div>
-                                                    <h1 class="text-white">{{tickets.subject == '' ? 'Tidak Ada Subject'
+                                                    <h1 class="text-white">{{tickets.tracking_id == '' ? 'Tidak Ada
+                                                        Subject'
                                                         :
-                                                        tickets.subject}}</h1>
+                                                        tickets.tracking_id}}</h1>
                                                     <div class="flex items-center mt-2 gap-5 text-white opacity-60">
                                                         <p> {{tickets.hari_masuk}}</p>
                                                         <p>{{tickets.user_email}}</p>
-                                                        <p class="max-sm:hidden">{{tickets.waktu_masuk}}</p>
+                                                        <p class="max-sm:hidden">{{formatTime(tickets.created_at)}}</p>
                                                     </div>
                                                 </div>
 

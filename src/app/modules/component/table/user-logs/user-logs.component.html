@@ -4,8 +4,7 @@
 
     <!-- Table -->
     <div class="w-full overflow-auto whitespace-nowrap mt-10">
-        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading"
-            class="min-w-160 max-sm:min-w-128">
+        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading" class="min-w-160 max-sm:min-w-128">
 
             <div>
                 <!-- Name Column -->
@@ -38,8 +37,8 @@
                 <ng-container matColumnDef="shift">
                     <mat-header-cell *matHeaderCellDef> User Shift
                     </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.shift_name === null ?
-                        'Anomati Not Have Shift' : element.shift_name}} </mat-cell>
+                    <mat-cell *matCellDef="let element"> {{element.shift_name === "" ?
+                        'Not Have Shift' : element.shift_name}} </mat-cell>
                 </ng-container>
 
                 <!-- Login Date Column -->

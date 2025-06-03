@@ -26,9 +26,10 @@
 
         <div class="flex items-center gap-3">
             <!-- Button New Tickets -->
-            <button [disabled]="shiftStatus" mat-raised-button [routerLink]="['/dashboards/tickets/add-tickets']"
+            <button [disabled]="shiftStatus && !isAdmin" mat-raised-button
+                [routerLink]="['/dashboards/tickets/add-tickets']"
                 class="flex w-fit text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 text-white"
-                [ngClass]="shiftStatus ? 'bg-gray-400' : 'bg-primary'">
+                [ngClass]="shiftStatus && !isAdmin? 'bg-gray-400' : 'bg-primary'">
                 <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
                 <span class="max-sm:hidden font-semibold">New Ticket</span>
             </button>
@@ -80,14 +81,6 @@
                             {{ item.name }}
                         </mat-checkbox>
                     </div>
-
-                    <!-- <div class="px-5 py-3 w-full">
-                        <button (click)="addProducts()" mat-flat-button color="primary"
-                            class="w-full text-white bg-blue-600">
-                            <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
-                            Add Products
-                        </button>
-                    </div> -->
                 </mat-menu>
 
 
@@ -102,14 +95,6 @@
                             (click)="$event.stopPropagation();"
                             (change)="applyCategoryFilter()">{{item.name}}</mat-checkbox>
                     </div>
-
-                    <!-- <div class="px-5 py-3 w-full">
-                        <button (click)="addProducts()" mat-flat-button color="primary"
-                            class="w-full text-white bg-blue-600">
-                            <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
-                            Add Category
-                        </button>
-                    </div> -->
                 </mat-menu>
 
                 <!-- Menu Status -->
@@ -173,17 +158,16 @@
         <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full"></div>
     </div>
 
-    <div *ngIf="isNotDataFound && !isLoading">
+    <div *ngIf="isNotDataFound && !isLoading" class="py-10">
         <div class="flex flex-col items-center">
             <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
             <h1 class="mt-2 font-semibold text-xl -tracking-tighter">Data Not Found</h1>
         </div>
     </div>
-
     <!-- Table -->
     <div class="w-full overflow-auto whitespace-nowrap mt-5">
         <mat-table #table [dataSource]="dataSource" matSort
-            *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-[2180px]">
+            *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-[2480px]">
 
             <div>
                 <!-- Tracking ID Column -->
@@ -196,21 +180,23 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Create Date Column -->
-                <ng-container matColumnDef="create_date">
-                    <mat-header-cell *matHeaderCellDef> Created Date
+                <!-- Hari Masuk Column -->
+                <ng-container matColumnDef="hari_masuk">
+                    <mat-header-cell *matHeaderCellDef> Ticket Entry Day
                     </mat-header-cell>
-                    <mat-cell *matCellDef="let element"> {{element.hari_masuk}}
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <mat-icon svgIcon="mat_solid:date_range"></mat-icon>
+                        {{element.hari_masuk}}
                     </mat-cell>
                 </ng-container>
 
-                <!-- Create Time Column -->
-                <ng-container matColumnDef="create_time">
-                    <mat-header-cell *matHeaderCellDef> Created Time
+                <!-- Waktu Masuk Column -->
+                <ng-container matColumnDef="waktu_masuk">
+                    <mat-header-cell *matHeaderCellDef> Ticket Entry Time
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="flex items-center gap-3">
                         <mat-icon svgIcon="mat_outline:access_time"></mat-icon>
-                        {{element.created_time}}
+                        {{element.waktu_masuk}}
                     </mat-cell>
                 </ng-container>
 
@@ -271,7 +257,7 @@
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
                         <mat-form-field hideRequiredMarker class="w-full">
                             <mat-select [(value)]="element.status" placeholder="Select"
-                                [disabled]="element.status === 'Resolved' || shiftStatus">
+                                [disabled]="element.status === 'Resolved' || shiftStatus && !isAdmin">
                                 <mat-option *ngFor="let status of statusList" [value]="status"
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full"
                                     (click)="changeStatus(element.tracking_id, status)">
@@ -281,7 +267,6 @@
                         </mat-form-field>
                     </mat-cell>
                 </ng-container>
-
 
                 <!-- Solved Time Column -->
                 <ng-container matColumnDef="solved_time">
@@ -322,6 +307,26 @@
                             'text-red-600': element.priority === 'Critical',
                         }"></mat-icon>
                         <h1 class="font-medium uppercase">{{element.priority}}</h1>
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Date Column -->
+                <ng-container matColumnDef="create_date">
+                    <mat-header-cell *matHeaderCellDef> Created Date
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <mat-icon svgIcon="mat_solid:date_range"></mat-icon>
+                        {{element.created_date}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Create Time Column -->
+                <ng-container matColumnDef="create_time">
+                    <mat-header-cell *matHeaderCellDef> Created Time
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        <mat-icon svgIcon="mat_outline:access_time"></mat-icon>
+                        {{element.created_time}}
                     </mat-cell>
                 </ng-container>
 

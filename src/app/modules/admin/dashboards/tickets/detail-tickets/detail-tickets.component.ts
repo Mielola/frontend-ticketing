@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Route } from '@angular/router';
+import { ActivatedRoute, Route, Router } from '@angular/router';
 import { ApiService } from 'app/services/api.service';
 import { Ticket } from 'app/types/tickets';
 import { CommonModule } from '@angular/common';
@@ -20,6 +20,8 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { TicketLogsService } from 'app/modules/component/table/ticket-logs/ticket-logs.service';
 import { takeUntil } from 'rxjs';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-detail-tickets',
@@ -56,6 +58,8 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   isLoading: boolean = false
   isNotDataFound: boolean
   shiftStatus: boolean = false
+  isAdmin: boolean = localStorage.getItem("userRole") === 'admin';
+
 
 
   public displayedColumns = ['tracking_id', 'user', 'new_status', 'priority', 'details', 'update_at',];
@@ -67,11 +71,12 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private _apiService: ApiService,
     private fb: FormBuilder,
-    private _ticketLogsService: TicketLogsService,
     private cdr: ChangeDetectorRef,
-
+    private _toastService: ToastrService,
+    private fuseConfirmationService: FuseConfirmationService,
   ) { }
 
   data: Ticket
@@ -80,7 +85,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     this.fetchUsers()
     this.TicketForm = this.fb.group({
       products_name: ['', Validators.required],
-      category_name: [{ value: '', disabled: this.disableInput }, Validators.required],
+      category_id: [{ value: 0, disabled: this.disableInput }, Validators.required],
       no_whatsapp: [{ value: '', disabled: this.disableInput }, Validators.required],
       detail_kendala: [{ value: '', disabled: this.disableInput }, Validators.required],
       priority: [{ value: '', disabled: this.disableInput }, Validators.required],
@@ -88,7 +93,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       hari_masuk: [{ value: null, disabled: this.disableInput }, Validators.required],
       waktu_masuk: [{ value: '', disabled: this.disableInput }, Validators.required],
       respon_diberikan: [{ value: '', disabled: this.disableInput }, Validators.required],
-      PIC: [{ value: '', disabled: this.disableInput }, Validators.required],
+      PIC: [{ value: '', disabled: this.disableInput }],
     })
 
     this.fetchDataProducts();
@@ -106,6 +111,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       if (value) {
         const { data } = await this._apiService.post("api/V1/get-data-form", { name: value })
         this.category = data.data
+        console.log(this.category)
         this.enableFields();
       } else {
         this.disableFields();
@@ -147,6 +153,42 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  handleDeleteTicket() {
+    const confirm = this.fuseConfirmationService.open({
+      title: 'Delete Confirmation',
+      message: `Are you sure want to delete this ticket ${this.tracking_id}?`,
+      actions: {
+        confirm: {
+          label: 'Delete',
+        },
+      },
+    });
+
+    confirm.afterClosed().subscribe((result) => {
+      if (result === 'confirmed') {
+        this.deleteProducts(this.tracking_id)
+      }
+    });
+  }
+
+  async deleteProducts(id: string) {
+    try {
+      const { data, status } = await this._apiService.delete(`api/V1/tickets/${id}`)
+
+      if (status === 200) {
+        this._toastService.success("Success Delete Products", "Success")
+        this.router.navigate(['/dashboards/tickets'])
+        return
+      } else {
+        this._toastService.error("Failed Delete Products", "Failed")
+        return
+      }
+    } catch (error) {
+      this._toastService.error("Failed Delete Products", "Failed")
+      throw error
+    }
+  }
+
 
   async fetchDataProducts() {
     try {
@@ -169,7 +211,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
 
     this.TicketForm.patchValue({
       products_name: data.data.products_name,
-      category_name: data.data.category,
+      category_id: data.data.category_id,
       no_whatsapp: data.data.no_whatsapp,
       detail_kendala: data.data.detail_kendala,
       priority: data.data.priority,

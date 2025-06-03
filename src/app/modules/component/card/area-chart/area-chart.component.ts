@@ -44,7 +44,7 @@ export class AreaChartComponent implements OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         this.chartOptions = {
-            colors: ["#8979FF"],
+            colors: ["#26e7a6"],
             series: this.seriesData,
             chart: {
                 id: "dailyHumadityChart",
@@ -56,7 +56,7 @@ export class AreaChartComponent implements OnChanges {
                     left: 2,
                     blur: 6,
                     opacity: 0.5,
-                    color: "#8979FF",
+                    color: "#26e7a6",
                 },
                 animations: {
                     enabled: true,
@@ -77,7 +77,7 @@ export class AreaChartComponent implements OnChanges {
                 formatter: (val: number) => val !== null ? `${val} Ticket` : "N/A",
                 style: {
                     fontWeight: "bold",
-                    colors: ["#8979FF"],
+                    colors: ["#26e7a6"],
                     fontSize: "12px"
                 },
                 background: {
@@ -87,14 +87,14 @@ export class AreaChartComponent implements OnChanges {
                     padding: 4,
                     opacity: 0.9,
                     borderWidth: 1,
-                    borderColor: "#8979FF",
+                    borderColor: "#26e7a6",
                     dropShadow: {
                         enabled: true,
                         top: 2,
                         left: 1,
                         blur: 3,
                         opacity: 0.3,
-                        color: "#8979FF",
+                        color: "#26e7a6",
                     },
                 },
             },
@@ -107,7 +107,7 @@ export class AreaChartComponent implements OnChanges {
                     stops: [0, 90, 100]
                 }
             },
-            stroke: { curve: "smooth", width: 2, colors: ["#8979FF"] },
+            stroke: { curve: "smooth", width: 2, colors: ["#26e7a6"] },
             xaxis: {
                 categories: this.labels
             },

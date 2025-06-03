@@ -176,11 +176,6 @@ export class AnalyticsComponent implements OnInit {
           data: this.data.ChartCategory.map((e) => e.total_tickets),
           type: 'bar'
         },
-        {
-          name: 'Total Tiket',
-          data: this.data.ChartCategory.map((e) => e.total_tickets),
-          type: 'line'
-        },
       ];
       this.chartCategoryLabels = this.data.ChartCategory.map((e) => e.category_name);
 
