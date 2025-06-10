@@ -54,7 +54,7 @@ export class TableCategoryComponent {
 
 
   // Table
-  public displayedColumns = ['category_name', 'products_name', 'action'];
+  public displayedColumns = ['id','category_name', 'products_name', 'action'];
   public dataSource = new MatTableDataSource<any>();
 
   // Paginator

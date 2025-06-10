@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AuthUtils } from 'app/core/auth/auth.utils';
 import { UserService } from 'app/core/user/user.service';
-import { environment } from 'environments/environments.dev';
+import { environment } from 'environments/environments';
 import { catchError, Observable, of, switchMap, throwError } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
@@ -68,7 +68,7 @@ export class AuthService {
             return throwError('User is already logged in.');
         }
 
-        return this._httpClient.post(`http://localhost:8089/api/V1/login`, credentials).pipe(
+        return this._httpClient.post(`${environment.apiUrl}api/V1/login`, credentials).pipe(
             switchMap((response: any) => {
                 // Store cookies for OTP
                 document.cookie = "otp=true; path=/; max-age=3600";

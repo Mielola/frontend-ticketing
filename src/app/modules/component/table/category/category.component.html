@@ -45,7 +45,16 @@
             *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-160">
 
             <div>
-                <!-- Tracking ID Column -->
+
+                <!-- Category Name Column -->
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef> Category Id
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="text-lg font-medium whitespace-nowrap">
+                        {{element.id}}
+                    </mat-cell> </ng-container>
+
+                <!-- Category Name Column -->
                 <ng-container matColumnDef="category_name">
                     <mat-header-cell *matHeaderCellDef> Category Name
                     </mat-header-cell>
@@ -54,7 +63,7 @@
                     </mat-cell>
                 </ng-container>
 
-                <!-- Create Date Column -->
+                <!-- Products Name Column -->
                 <ng-container matColumnDef="products_name">
                     <mat-header-cell *matHeaderCellDef> Products Name
                     </mat-header-cell>

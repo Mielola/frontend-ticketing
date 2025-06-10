@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -14,9 +14,11 @@ import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProductsTableService } from 'app/modules/component/table/products/products.service';
+import * as XLSX from 'xlsx';
+import { TicketTableService } from 'app/modules/component/table/ticket/ticket.service';
 
 @Component({
-  selector: 'app-form-add-products',
+  selector: 'app-import-excel',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -31,44 +33,56 @@ import { ProductsTableService } from 'app/modules/component/table/products/produ
     MatSelectModule,
     CommonModule,
   ],
-  templateUrl: './form-add-products.component.html',
-  styleUrl: './form-add-products.component.scss'
+  templateUrl: './import-excel.component.html',
+  styleUrl: './import-excel.component.scss'
 })
-export class FormAddProductsComponent {
-  productsForm!: FormGroup
+export class ImportExcelComponent {
+  excelForm!: FormGroup
   isLoading: boolean = false
+
+  excelData: any[] = [];
+  selectedFile: File | null = null;
 
   constructor(
     private _apiService: ApiService,
-    private fb: FormBuilder,
     private toast: ToastrService,
+    private _ticketTableSerivce: TicketTableService,
     private fuseConfirmationService: FuseConfirmationService,
-    private _productsTableService: ProductsTableService,
-    public dialogRef: MatDialogRef<FormAddProductsComponent>,
+    public dialogRef: MatDialogRef<ImportExcelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit(): void {
-    this.productsForm = this.fb.group({
-      name: [null, [Validators.required]],
-    })
+
+  }
+
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        this.excelData = XLSX.utils.sheet_to_json(worksheet);
+      };
+      reader.readAsArrayBuffer(file);
+    }
   }
 
   async onSubmit() {
-    if (this.productsForm.invalid) {
-      this.toast.warning("Please Fill All Form", "Warning")
-      return
-    }
 
     try {
       this.isLoading = true
-      const { data, status } = await this._apiService.post("api/V1/products", {
-        name: this.productsForm.value.name
-      })
+      console.log(this.excelData)
+      const { data, status } = await this._apiService.post("api/V1/tickets/excel", this.excelData)
 
       if (status === 201) {
-        this.toast.success("Success Create Products", "Success")
-        this._productsTableService.fetchData()
+        this.toast.success("Success Create Tickets", "Success")
+        this._ticketTableSerivce.fetchData()
         this.dialogRef.close()
         this.isLoading = false
         return
@@ -81,7 +95,7 @@ export class FormAddProductsComponent {
         this.isLoading = false
         const confirm = this.fuseConfirmationService.open({
           title: 'Notification',
-          message: 'The Products already exists on the server. Would you like to create another Products time anyway?',
+          message: 'The Tickets already exists on the server. Would you like to create another Tickets time anyway?',
           icon: {
             color: 'info'
           },
@@ -92,6 +106,11 @@ export class FormAddProductsComponent {
             },
           },
         })
+      } else if (status === 400) {
+        this.toast.error("Bad Request", "Failed")
+        this.dialogRef.close()
+        this.isLoading = false
+        return
       }
 
     } catch (error) {

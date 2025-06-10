@@ -12,7 +12,6 @@ export default [
         resolve: {
             check: () => inject(TicketTableService).checkTickets(),
             data: () => inject(TicketLogsService).fetchData(),
-            ticket: () => inject(TicketTableService).fetchData()
         },
     },
     {

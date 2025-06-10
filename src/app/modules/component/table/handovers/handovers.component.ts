@@ -103,7 +103,62 @@ export class HandoversComponent implements OnInit, OnDestroy {
   ) {
     effect(() => {
       this.dataSource.data = this.datas
-      console.log(this.dataSource.data)
+
+      const categorySet = new Set<string>();
+      const statusSet = new Set<string>();
+      const prioritySet = new Set<string>();
+      const productsSet = new Set<string>();
+
+      this.datas.forEach(tickets => {
+
+        // Push product to Set
+        if (tickets.products_name) {
+          if (Array.isArray(tickets.products_name)) {
+            tickets.products_name.forEach(product => productsSet.add(product));
+          } else {
+            productsSet.add(tickets.products_name)
+          }
+        }
+
+        // Push category to Set
+        if (tickets.category_name) {
+          if (Array.isArray(tickets.category_name)) {
+            tickets.category_name.forEach(cat => categorySet.add(cat));
+          } else {
+            categorySet.add(tickets.category_name)
+            statusSet.add(tickets.status)
+          }
+        }
+
+        // Push status to Set
+        if (tickets.status) {
+          if (Array.isArray(tickets.status)) {
+            tickets.status.forEach(stat => statusSet.add(stat));
+          } else {
+            statusSet.add(tickets.status)
+          }
+        }
+
+        // push priority to Set
+        if (tickets.priority) {
+          if (Array.isArray(tickets.priority)) {
+            tickets.priority.forEach(priority => priority.add(priority));
+          } else {
+            prioritySet.add(tickets.priority)
+          }
+        }
+
+
+        if (!tickets.subject) {
+          tickets.subject = "Subject Not Found";
+        }
+      });
+
+      // Convert Set ke array unik dan tambahkan properti checked
+      this.statusItems = [...statusSet].map(stats => ({ name: stats, checked: false }));
+      this.category = [...categorySet].map(category => ({ name: category, checked: false }));
+      this.priorityItems = [...prioritySet].map(priority => ({ name: priority, checked: false }));
+      this.productsItems = [...productsSet].map(product => ({ name: product, checked: false }));
     })
   }
 
@@ -174,13 +229,6 @@ export class HandoversComponent implements OnInit, OnDestroy {
     })
   }
 
-  async fetchDataByDate(startDate: string, endDate: string) {
-    const data = await this._apiService.get(`api/V1/tickets-date?start_date=${startDate}&end_date=${endDate}`);
-    this.dataSource.data = data.data;
-
-
-  }
-
   async fetchUsers() {
     try {
       const findUser = await this._apiService.get(`api/V1/get-profile`)
@@ -201,7 +249,7 @@ export class HandoversComponent implements OnInit, OnDestroy {
         filters.search === '' ||
         data.tracking_id.toLowerCase().includes(filters.search) ||
         data.products_name.toLowerCase().includes(filters.search) ||
-        data.category.toLowerCase().includes(filters.search) ||
+        data.category_name.toLowerCase().includes(filters.search) ||
         data.subject.toLowerCase().includes(filters.search) ||
         data.status.toLowerCase().includes(filters.search) ||
         data.priority.toLowerCase().includes(filters.search) ||
@@ -211,7 +259,7 @@ export class HandoversComponent implements OnInit, OnDestroy {
         || data.last_replier?.name.toLowerCase().includes(filters.search);
 
       let categoryMatch =
-        filters.category.length === 0 || filters.category.includes(data.category.toLowerCase());
+        filters.category.length === 0 || filters.category.includes(data.category_name.toLowerCase());
 
       let statusMatch =
         filters.status.length === 0 || filters.status.includes(data.status.toLowerCase());

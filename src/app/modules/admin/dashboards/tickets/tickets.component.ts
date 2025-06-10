@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TicketLogsComponent } from 'app/modules/component/table/ticket-logs/ticket-logs.component';
 import { TicketComponent } from 'app/modules/component/table/ticket/ticket.component';
 
@@ -8,7 +9,11 @@ import { TicketComponent } from 'app/modules/component/table/ticket/ticket.compo
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
-  imports: [TicketComponent, TicketLogsComponent],
+  imports: [
+    TicketComponent,
+    TicketLogsComponent,
+    RouterLink,
+  ],
   templateUrl: './tickets.component.html',
 })
 export class TicketsComponent {

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
@@ -13,10 +13,10 @@ import { ApiService } from 'app/services/api.service';
 import { ToastrService } from 'ngx-toastr';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
-import { ProductsTableService } from 'app/modules/component/table/products/products.service';
+import { HandoverService } from '../handover.service';
 
 @Component({
-  selector: 'app-form-add-products',
+  selector: 'app-form-add-notes',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -31,44 +31,47 @@ import { ProductsTableService } from 'app/modules/component/table/products/produ
     MatSelectModule,
     CommonModule,
   ],
-  templateUrl: './form-add-products.component.html',
-  styleUrl: './form-add-products.component.scss'
+  templateUrl: './form-add-notes.component.html',
 })
-export class FormAddProductsComponent {
-  productsForm!: FormGroup
+export class FormAddNotesComponent {
+  notesForm!: FormGroup
   isLoading: boolean = false
+  products: { id: string, name: string }[]
+
 
   constructor(
     private _apiService: ApiService,
     private fb: FormBuilder,
     private toast: ToastrService,
     private fuseConfirmationService: FuseConfirmationService,
-    private _productsTableService: ProductsTableService,
-    public dialogRef: MatDialogRef<FormAddProductsComponent>,
+    private _handoverService: HandoverService,
+    public dialogRef: MatDialogRef<FormAddNotesComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
   ngOnInit(): void {
-    this.productsForm = this.fb.group({
-      name: [null, [Validators.required]],
+    this.notesForm = this.fb.group({
+      title: [null],
+      content: [null],
     })
   }
 
   async onSubmit() {
-    if (this.productsForm.invalid) {
+    if (this.notesForm.invalid) {
       this.toast.warning("Please Fill All Form", "Warning")
       return
     }
 
     try {
       this.isLoading = true
-      const { data, status } = await this._apiService.post("api/V1/products", {
-        name: this.productsForm.value.name
+      const { data, status } = await this._apiService.post("api/V1/notes", {
+        title: this.notesForm.value.title,
+        content: this.notesForm.value.content
       })
 
       if (status === 201) {
-        this.toast.success("Success Create Products", "Success")
-        this._productsTableService.fetchData()
+        this.toast.success("Success Create Notes", "Success")
+        this._handoverService.fetchData()
         this.dialogRef.close()
         this.isLoading = false
         return

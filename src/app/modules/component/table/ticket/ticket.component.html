@@ -26,13 +26,25 @@
 
         <div class="flex items-center gap-3">
             <!-- Button New Tickets -->
-            <button [disabled]="shiftStatus && !isAdmin" mat-raised-button
-                [routerLink]="['/dashboards/tickets/add-tickets']"
+            <button [disabled]="shiftStatus && !isAdmin" mat-raised-button [matMenuTriggerFor]="addUserMenu"
                 class="flex w-fit text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 text-white"
                 [ngClass]="shiftStatus && !isAdmin? 'bg-gray-400' : 'bg-primary'">
-                <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
-                <span class="max-sm:hidden font-semibold">New Ticket</span>
+                <div class="flex items-center gap-1">
+                    <span class="m-2 pr-4 border-r-[1px]">New Tickets</span>
+                    <mat-icon class="font-bold text-2xl" svgIcon="keyboard_arrow_down"></mat-icon>
+                </div>
             </button>
+
+            <mat-menu #addUserMenu="matMenu">
+                <button mat-menu-item [routerLink]="['/dashboards/tickets/add-tickets']">
+                    <mat-icon class="icon-size-5" svgIcon="mat_outline:add"></mat-icon>
+                    <span>Add Tickets</span>
+                </button>
+                <button mat-menu-item (click)="importExcel()">
+                    <mat-icon class="icon-size-5" svgIcon="mat_outline:upload_file"></mat-icon>
+                    <span>Import Excel</span>
+                </button>
+            </mat-menu>
 
             <!-- Button PDF -->
             <button mat-raised-button (click)="generateReport()"
@@ -146,7 +158,7 @@
             <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
     </div>
-
+    
     <!-- Skeleton Loader -->
     <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
         <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
@@ -158,16 +170,18 @@
         <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full"></div>
     </div>
 
-    <div *ngIf="isNotDataFound && !isLoading" class="py-10">
+    <div *ngIf="isNotFound && !isLoading" class="py-10">
         <div class="flex flex-col items-center">
             <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
-            <h1 class="mt-2 font-semibold text-xl -tracking-tighter">Data Not Found</h1>
+            <br />
+            <p class="text-lg font-semibold">Data Not Found</p>
+            <p class="text-sm">try using a different keyword or add a new tickets</p>
         </div>
     </div>
     <!-- Table -->
     <div class="w-full overflow-auto whitespace-nowrap mt-5">
         <mat-table #table [dataSource]="dataSource" matSort
-            *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-[2480px]">
+            *ngIf="!isNotFound && !isLoading && dataSource.data.length != 0 " class="min-w-[2480px]">
 
             <div>
                 <!-- Tracking ID Column -->

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HandoverComponent } from './handover.component';
+import { ImportExcelComponent } from './import-excel.component';
 
-describe('HandoverComponent', () => {
-  let component: HandoverComponent;
-  let fixture: ComponentFixture<HandoverComponent>;
+describe('ImportExcelComponent', () => {
+  let component: ImportExcelComponent;
+  let fixture: ComponentFixture<ImportExcelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [HandoverComponent]
+      imports: [ImportExcelComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(HandoverComponent);
+    fixture = TestBed.createComponent(ImportExcelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,5 +1,5 @@
 import { CommonModule, NgClass } from '@angular/common';
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatOptionModule } from '@angular/material/core';
@@ -21,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { GenereateReportComponent } from '../../dialog/genereate-report/genereate-report.component';
 import { FormAddProductsComponent } from 'app/modules/admin/dashboards/products/form-add-products/form-add-products.component';
+import { ImportExcelComponent } from 'app/modules/admin/dashboards/tickets/import-excel/import-excel.component';
 
 const today = new Date();
 const month = today.getMonth();
@@ -55,8 +56,6 @@ const day = today.getDay()
 
 })
 export class TicketComponent implements OnInit, OnDestroy {
-  isLoading: boolean = false
-  isNotDataFound: boolean
   filterValues = {
     search: '',
     category: [],
@@ -91,6 +90,17 @@ export class TicketComponent implements OnInit, OnDestroy {
     end: new FormControl<Date | null>(new Date()),
   });
 
+  get datas() {
+    return this._ticketTableService._datas()
+  }
+
+  get isLoading() {
+    return this._ticketTableService.isLoading()
+  }
+
+  get isNotFound() {
+    return this._ticketTableService.isNotFound()
+  }
 
   constructor(
     private _apiService: ApiService,
@@ -99,21 +109,71 @@ export class TicketComponent implements OnInit, OnDestroy {
     private _ticketTableService: TicketTableService,
     private _matDialog: MatDialog,
   ) {
+    effect(() => {
+      const getData = this.datas;
 
+      const categorySet = new Set<string>();
+      const statusSet = new Set<string>();
+      const prioritySet = new Set<string>();
+      const productsSet = new Set<string>();
+
+      getData.forEach(tickets => {
+        if (tickets.products_name) {
+          if (Array.isArray(tickets.products_name)) {
+            tickets.products_name.forEach(product => productsSet.add(product));
+          } else {
+            productsSet.add(tickets.products_name)
+          }
+        }
+
+        if (tickets.category) {
+          if (Array.isArray(tickets.category)) {
+            tickets.category.forEach(cat => categorySet.add(cat));
+          } else {
+            categorySet.add(tickets.category)
+            statusSet.add(tickets.status)
+          }
+        }
+
+        if (tickets.status) {
+          if (Array.isArray(tickets.status)) {
+            tickets.status.forEach(stat => statusSet.add(stat));
+          } else {
+            statusSet.add(tickets.status)
+          }
+        }
+
+        if (tickets.priority) {
+          if (Array.isArray(tickets.priority)) {
+            tickets.priority.forEach(priority => prioritySet.add(priority));
+          } else {
+            prioritySet.add(tickets.priority)
+          }
+        }
+
+        if (!tickets.subject) {
+          tickets.subject = "Subject Not Found";
+        }
+      });
+
+      this.statusItems = [...statusSet].map(stats => ({ name: stats, checked: false }));
+      this.category = [...categorySet].map(category => ({ name: category, checked: false }));
+      this.priorityItems = [...prioritySet].map(priority => ({ name: priority, checked: false }));
+      this.productsItems = [...productsSet].map(product => ({ name: product, checked: false }));
+
+      this.dataSource.data = getData;
+    });
   }
 
   ngOnInit(): void {
     this.fetchUsers()
-    this.fetchData()
-
-    this.dataSource.data.length === 0 ? this.isNotDataFound = true : this.isNotDataFound = false
 
     this.range.valueChanges.subscribe(({ start, end }) => {
       if (end) {
         const startDate = start instanceof Date ? start : new Date(start);
         const endDate = end instanceof Date ? end : new Date(end);
 
-        this.fetchDataByDate(startDate.toLocaleDateString("en-CA"), endDate.toLocaleDateString("en-CA"));
+        this._ticketTableService.fetchDataByDate(startDate.toLocaleDateString("en-CA"), endDate.toLocaleDateString("en-CA"));
       }
     });
   }
@@ -140,8 +200,8 @@ export class TicketComponent implements OnInit, OnDestroy {
   * Public Functions
   */
 
-  addProducts() {
-    this._matDialog.open(FormAddProductsComponent, {
+  importExcel() {
+    this._matDialog.open(ImportExcelComponent, {
       width: window.innerWidth < 600 ? '90%' : '50%',
       maxWidth: '100vw',
     })
@@ -154,117 +214,29 @@ export class TicketComponent implements OnInit, OnDestroy {
     })
   }
 
-  async fetchDataByDate(startDate: string, endDate: string) {
-    console.log('Fetching data for range:', startDate, 'to  ', endDate);
-    const data = await this._apiService.get(`api/V1/tickets-date?start_date=${startDate}&end_date=${endDate}`);
-    this.dataSource.data = data.data;
-    console.log('Data fetched:', this.dataSource.data);
-    if (this.dataSource.data.length === 0 || this.dataSource.data === null) {
-      this.isNotDataFound = true;
-    } else {
-      this.isNotDataFound = false;
-    }
-  }
-
-  private fetchData() {
-    try {
-      this.isLoading = true
-
-      this._ticketTableService.data$.pipe(takeUntil(this._unsubscribeAll)).subscribe((get) => {
-
-        console.log(get)
-
-        const categorySet = new Set<string>();
-        const statusSet = new Set<string>();
-        const prioritySet = new Set<string>();
-        const productsSet = new Set<string>();
-
-        get.data.forEach(tickets => {
-
-          // Push product to Set
-          if (tickets.products_name) {
-            if (Array.isArray(tickets.products_name)) {
-              tickets.products_name.forEach(product => productsSet.add(product));
-            } else {
-              productsSet.add(tickets.products_name)
-            }
-          }
-
-          // Push category to Set
-          if (tickets.category) {
-            if (Array.isArray(tickets.category)) {
-              tickets.category.forEach(cat => categorySet.add(cat));
-            } else {
-              categorySet.add(tickets.category)
-              statusSet.add(tickets.status)
-            }
-          }
-
-          // Push status to Set
-          if (tickets.status) {
-            if (Array.isArray(tickets.status)) {
-              tickets.status.forEach(stat => statusSet.add(stat));
-            } else {
-              statusSet.add(tickets.status)
-            }
-          }
-
-          // push priority to Set
-          if (tickets.priority) {
-            if (Array.isArray(tickets.priority)) {
-              tickets.priority.forEach(priority => priority.add(priority));
-            } else {
-              prioritySet.add(tickets.priority)
-            }
-          }
-
-
-          if (!tickets.subject) {
-            tickets.subject = "Subject Not Found";
-          }
-        });
-
-        // Convert Set ke array unik dan tambahkan properti checked
-        this.statusItems = [...statusSet].map(stats => ({ name: stats, checked: false }));
-        this.category = [...categorySet].map(category => ({ name: category, checked: false }));
-        this.priorityItems = [...prioritySet].map(priority => ({ name: priority, checked: false }));
-        this.productsItems = [...productsSet].map(product => ({ name: product, checked: false }));
-
-
-        this.dataSource.data = get.data;
-        this.dataSource.data.length == 0 ? this.isNotDataFound = true : this.isNotDataFound = false
-      })
-
-    } catch (error) {
-      this.isLoading = false
-      throw error
-    } finally {
-      this.isLoading = false
-    }
-  }
 
   async fetchUsers() {
     try {
-      this.isLoading = true
       const findUser = await this._apiService.get(`api/V1/get-profile`)
 
       this.shiftStatus = findUser.data.shift_status !== 'Active Shift'
       this.cdr.detectChanges();
     } catch (error) {
       throw error
-    } finally {
-      this.isLoading = false
     }
   }
 
   applyFilter() {
     this.dataSource.filterPredicate = (data: any, filter: string) => {
       let filters = JSON.parse(filter);
-      console.log(data)
 
       let searchMatch =
         filters.search === '' ||
         data.tracking_id.toLowerCase().includes(filters.search) ||
+        data.created_date.toLowerCase().includes(filters.search) ||
+        data.created_time.toLowerCase().includes(filters.search) ||
+        data.hari_masuk.toLowerCase().includes(filters.search) ||
+        data.waktu_masuk.toLowerCase().includes(filters.search) ||
         data.products_name.toLowerCase().includes(filters.search) ||
         data.category.toLowerCase().includes(filters.search) ||
         data.subject.toLowerCase().includes(filters.search) ||
@@ -291,7 +263,6 @@ export class TicketComponent implements OnInit, OnDestroy {
     };
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
-    this.isNotDataFound = this.dataSource.filteredData.length === 0;
   }
 
   applySearchFilter(filterValue: string) {
@@ -332,8 +303,6 @@ export class TicketComponent implements OnInit, OnDestroy {
       const { status, data } = await this._apiService.post(`api/V1/ticket-status/${ticketId}`, {
         status: newStatus
       });
-
-      console.log(status === 200)
       if (status === 200) {
         const getLogs = await this._apiService.get(`api/V1/tickets-logs`)
         this._ticketLogsService.Update(getLogs)

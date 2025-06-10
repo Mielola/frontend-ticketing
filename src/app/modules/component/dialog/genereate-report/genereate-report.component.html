@@ -29,18 +29,18 @@
                 <mat-datepicker touchUi #pickers></mat-datepicker>
             </mat-form-field>
 
+            <!-- Start Time Input -->
+            <mat-form-field class="example-full-width">
+                <mat-label>Start Time</mat-label>
+                <input formControlName="start_time" matInput type="time">
+            </mat-form-field>
+
             <!-- End Day Input -->
             <mat-form-field class="example-full-width">
                 <mat-label>End day</mat-label>
                 <input formControlName="end_date" matInput [matDatepicker]="pickers2" placeholder="Choose a date">
                 <mat-datepicker-toggle matSuffix [for]="pickers2"></mat-datepicker-toggle>
                 <mat-datepicker touchUi #pickers2></mat-datepicker>
-            </mat-form-field>
-
-            <!-- Start Time Input -->
-            <mat-form-field class="example-full-width">
-                <mat-label>Start Time</mat-label>
-                <input formControlName="start_time" matInput type="time">
             </mat-form-field>
 
             <!-- End Time Input -->
@@ -69,13 +69,13 @@
 </div>
 
 <div *ngIf="chartOptions" #chartContainer [style.position]="'absolute'" [style.left]="'-9999px'" class="w-full h-full">
-    <apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [xaxis]="chartOptions.xaxis"
-        [title]="chartOptions.title" [dataLabels]="chartOptions.dataLabels">
+    <apx-chart [series]="chartOptions.series" [legend]="chartOptions.legend" [chart]="chartOptions.chart"
+        [xaxis]="chartOptions.xaxis" [title]="chartOptions.title" [dataLabels]="chartOptions.dataLabels">
     </apx-chart>
 </div>
 
 <div *ngIf="chartOptions2" #chartContainer2 [style.position]="'absolute'" [style.left]="'-8999px'"
     class="w-full h-full">
-    <apx-chart [series]="chartOptions2.series" [chart]="chartOptions2.chart" [xaxis]="chartOptions2.xaxis"
-        [title]="chartOptions2.title" [dataLabels]="chartOptions2.dataLabels"></apx-chart>
+    <apx-chart [series]="chartOptions2.series" [legend]="chartOptions2.legend" [chart]="chartOptions2.chart"
+        [xaxis]="chartOptions2.xaxis" [title]="chartOptions2.title" [dataLabels]="chartOptions2.dataLabels"></apx-chart>
 </div>

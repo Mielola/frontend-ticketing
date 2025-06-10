@@ -1,13 +1,13 @@
 import { Injectable, inject } from '@angular/core';
 import axios from 'axios';
 import { FuseLoadingService } from '@fuse/services/loading';
-import { environment } from 'environments/environments.dev';
+import { environment } from 'environments/environments';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ApiService {
-    private apiUrl = 'http://localhost:8089/';
+    private apiUrl = environment.apiUrl;
     private _loadingService = inject(FuseLoadingService);
 
     private getHeaders() {

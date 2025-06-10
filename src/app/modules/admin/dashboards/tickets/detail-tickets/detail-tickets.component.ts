@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Route, Router, RouterLink } from '@angular/router';
 import { ApiService } from 'app/services/api.service';
 import { Ticket } from 'app/types/tickets';
 import { CommonModule } from '@angular/common';
@@ -22,6 +22,7 @@ import { TicketLogsService } from 'app/modules/component/table/ticket-logs/ticke
 import { takeUntil } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ToastrService } from 'ngx-toastr';
+import { TicketTableService } from 'app/modules/component/table/ticket/ticket.service';
 
 @Component({
   selector: 'app-detail-tickets',
@@ -41,7 +42,7 @@ import { ToastrService } from 'ngx-toastr';
     MatTableModule,
     MatPaginatorModule,
     FormsModule,
-    IonLoading,
+    RouterLink,
   ],
   templateUrl: './detail-tickets.component.html',
   styleUrl: './detail-tickets.component.scss'
@@ -77,6 +78,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     private cdr: ChangeDetectorRef,
     private _toastService: ToastrService,
     private fuseConfirmationService: FuseConfirmationService,
+    private _ticketTableService: TicketTableService,
   ) { }
 
   data: Ticket
@@ -111,13 +113,16 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       if (value) {
         const { data } = await this._apiService.post("api/V1/get-data-form", { name: value })
         this.category = data.data
-        console.log(this.category)
         this.enableFields();
       } else {
         this.disableFields();
       }
     });
 
+  }
+
+  goBack() {
+    window.history.back();
   }
 
   ngAfterViewInit() {
@@ -147,6 +152,9 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
 
       if (post.status === 200) {
         this.fetchData(this.tracking_id)
+        this._toastService.success("Success Update Ticket", "Success")
+      } else {
+        this._toastService.error("Failed Update Ticket", "Error")
       }
     } catch (error) {
       throw error
@@ -178,6 +186,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       if (status === 200) {
         this._toastService.success("Success Delete Products", "Success")
         this.router.navigate(['/dashboards/tickets'])
+        this._ticketTableService.fetchData()
         return
       } else {
         this._toastService.error("Failed Delete Products", "Failed")

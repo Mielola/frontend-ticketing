@@ -142,7 +142,7 @@ export class GenereateReportComponent implements OnInit {
             },
           ],
           legend: {
-            show: false
+            show: false,
           },
           chart: {
             type: "line",
@@ -163,7 +163,7 @@ export class GenereateReportComponent implements OnInit {
             categories: post.data.chart.ChartPriority.map((item: any) => item.label),
             labels: {
               style: {
-                fontSize: '18px',
+                fontSize: '16px',
                 fontFamily: 'Helvetica, Arial, sans-serif',
                 colors: '#000000'
               }
@@ -182,7 +182,7 @@ export class GenereateReportComponent implements OnInit {
             enabled: true,
             enabledOnSeries: [1],
             style: {
-              fontSize: '26px',
+              fontSize: '20px',
               fontFamily: 'Helvetica, Arial, sans-serif',
             }
           },
@@ -202,7 +202,7 @@ export class GenereateReportComponent implements OnInit {
             },
           ],
           legend: {
-            show: false
+            show: false,
           },
           chart: {
             type: "line",
@@ -223,7 +223,7 @@ export class GenereateReportComponent implements OnInit {
             categories: post.data.chart.ChartCategory.map((item: any) => item.category_name),
             labels: {
               style: {
-                fontSize: '18px',
+                fontSize: '16px',
                 fontFamily: 'Helvetica, Arial, sans-serif',
                 colors: '#000000'
               }
@@ -243,7 +243,7 @@ export class GenereateReportComponent implements OnInit {
             enabled: true,
             enabledOnSeries: [1],
             style: {
-              fontSize: '26px',
+              fontSize: '20',
               fontFamily: 'Helvetica, Arial, sans-serif',
             }
           },
@@ -251,8 +251,6 @@ export class GenereateReportComponent implements OnInit {
 
         await new Promise(resolve => setTimeout(resolve, 500));
         await this.generateTable(post)
-      } else {
-        console.log("Form is not valid")
       }
 
       this.isLoading = false
@@ -356,7 +354,7 @@ export class GenereateReportComponent implements OnInit {
     doc.setTextColor(110, 170, 30); // RGB hijau
     doc.setFontSize(24);
     doc.setFont("helvetica", "bold");
-    doc.text(` LAPORAN HARIAN ${this.generateForm.value.products_name}`, pageWidth / 2, y, { align: 'center' });
+    doc.text(` LAPORAN HARIAN ${this.generateForm.value.products_name.toUpperCase()}`, pageWidth / 2, y, { align: 'center' });
     y += 8;
 
     doc.setFont("helvetica", "normal");
@@ -455,7 +453,6 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
         didDrawPage: (data) => {
           // This runs when a new page is added during table rendering
           const currentPage = doc.getCurrentPageInfo().pageNumber;
-          console.log("Current page:", currentPage);
 
           // For new pages, add the header first
           if (currentPage > 1) {
@@ -485,18 +482,16 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
       const [date, time] = detail.created_at.split(' ');
       tableTickets.push([
         detail.tracking_id,
-        date,
-        time,
+        `${detail.hari_masuk} ${detail.waktu_masuk}`,
         detail.category_name,
         detail.subject,
         detail.respon_admin,
-        detail.status,
-        detail.priority
+        detail.created_at,
       ]);
     });
 
     // Tambahkan tabel ke PDF atau laporan
-    await addTable(`A. Ticket`, [['Tracking ID', 'Created Date', 'Created Time', 'Category', 'Subject', "Action",]], tableTickets);
+    await addTable(`A. Ticket`, [['Tracking ID', 'Tickets Entry', 'Category', 'Subject', "Action", 'Created At']], tableTickets);
     if (this.generateForm.value.products_name) {
 
       try {

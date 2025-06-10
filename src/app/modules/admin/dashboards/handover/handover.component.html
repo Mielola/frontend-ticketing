@@ -1,6 +1,6 @@
 <main class="p-4 h-full w-full">
 
-    <div class="px-4 pt-4 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
+    <div class="px-1 pt-3 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
         <div>
             <h1 class="font-bold text-lg sm:text-3xl">Handover Tickets</h1>
             <p class="text-sm sm:text-base">List of unresolved tickets pending handover to the next team.</p>
@@ -10,9 +10,69 @@
             <span class="font-medium text-gray-500 hover:cursor-pointer hover:text-blue-400"
                 [routerLink]="['/dashboards/home']">Home</span>
             <span class="mx-2 text-gray-400">/</span>
-            <span class="font-semibold text-blue-600 hover:text-blue-500">Hotspot User</span>
+            <span class="font-semibold text-blue-600 hover:text-blue-500">Handover Tickets</span>
         </div>
     </div>
 
     <app-handovers></app-handovers>
+
+
+    <div class="px-1 pt-10 pb-3 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
+        <div>
+            <h1 class="font-bold text-lg sm:text-3xl">List Task</h1>
+            <p class="text-sm sm:text-base">Review and manage all pending tasks assigned to your team.</p>
+        </div>
+    </div>
+
+    <div class="">
+
+        <div class="flex items-center justify-between">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 rounded-full w-full">
+                <label for="table-search" class="sr-only">Search</label>
+                <div class="relative my-2 w-full">
+                    <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                        </svg>
+                    </div>
+                    <input type="text" matInput [(ngModel)]="searchText" (ngModelChange)="filterNotes()"
+                        class="block w-full p-4 ps-10 text-sm rounded-full text-gray-900 border bg-white focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="Search Notes">
+
+                </div>
+            </div>
+
+            <button (click)="addNotes()" class="ml-4 min-w-10 px-1 sm:px-4" mat-flat-button [color]="'primary'">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                <span class="ml-2 hidden sm:inline-block">New note</span>
+            </button>
+        </div>
+
+        <div *ngIf="isNotFound" class="text-center py-10 text-gray-500">
+            <mat-icon class="text-5xl mb-2">note_alt</mat-icon>
+            <p class="text-lg font-semibold">Tidak ada catatan ditemukan</p>
+            <p class="text-sm">Coba gunakan kata kunci lain atau tambahkan catatan baru.</p>
+        </div>
+
+        <div *ngIf="!isNotFound"  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2 p-3">
+            <div *ngFor="let note of filteredData"
+                class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md shadow-md relative">
+                <h3 class="text-md font-semibold text-gray-800">{{ note.title }}</h3>
+                <p class="text-sm text-gray-600 mt-1">{{ note.content }}</p>
+
+                <div class="mt-4 flex justify-between items-center">
+                    <span class="text-xs text-gray-500 italic">Ditulis oleh {{ note.name }}</span>
+                    <span class="text-xs text-gray-500 italic">{{ note.updated_at }}</span>
+                </div>
+
+                <button (click)="handleDeleteNotes(note.id)" mat-icon-button
+                    class="absolute top-2 right-2 text-gray-500 hover:text-red-600" aria-label="Delete note">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </div>
+        </div>
+
+    </div>
 </main>

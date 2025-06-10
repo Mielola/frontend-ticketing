@@ -26,16 +26,6 @@
 
         <div class="flex items-center gap-3">
 
-            <!-- Button Filter Date-->
-            <mat-form-field class="min-w-[300px] max-w-full self-end hidden sm:block">
-                <mat-date-range-input [rangePicker]="picker" [formGroup]="range" class="w-full">
-                    <input matStartDate formControlName="start" placeholder="Start date" class="w-full" />
-                    <input matEndDate formControlName="end" placeholder="End date" class="w-full" />
-                </mat-date-range-input>
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-date-range-picker touchUi #picker></mat-date-range-picker>
-            </mat-form-field>
-
             <!-- Button Filter -->
             <button [matMenuTriggerFor]="menu"
                 class="flex items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 border-[1px] text-white">
@@ -66,12 +56,6 @@
                             {{ item.name }}
                         </mat-checkbox>
                     </div>
-
-                    <div class="px-5 py-3 w-full">
-                        <button mat-flat-button color="primary" class="w-full text-white bg-blue-600">
-                            Add Products
-                        </button>
-                    </div>
                 </mat-menu>
 
 
@@ -85,18 +69,6 @@
                         <mat-checkbox class="h-full w-full" *ngFor="let item of category" [(ngModel)]="item.checked"
                             (click)="$event.stopPropagation();"
                             (change)="applyCategoryFilter()">{{item.name}}</mat-checkbox>
-                    </div>
-
-                    <div class="px-5 py-3 w-full">
-                        <button mat-raised-button
-                            class="flex w-full text-nowrap items-center gap-2 p-2.5 rounded-full px-3 sm:px-5 bg-primary text-white">
-                            <mat-icon svgIcon="mat_outline:add" class="text-white font-semibold"></mat-icon>
-                            <span class="max-sm:hidden font-semibold">Add Category</span>
-                        </button>
-                        <button mat-raised-button color="primary"
-                            class="w-full font-semibold text-white bg-red-600 mt-2">
-                            Delete Category Selected
-                        </button>
                     </div>
                 </mat-menu>
 
@@ -155,7 +127,9 @@
     <div *ngIf="isNotDataFound && !isLoading">
         <div class="flex flex-col items-center">
             <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
-            <h1 class="mt-2 font-semibold text-xl -tracking-tighter">Data Not Found</h1>
+            <br />
+            <p class="text-lg font-semibold">Data Not Found</p>
+            <p class="text-sm">try using a different keyword or add a new tickets</p>
         </div>
     </div>
 

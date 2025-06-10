@@ -1,257 +1,288 @@
-<div class="h-full w-full flex flex-col sm:flex-row items-center justify-center gap-3 p-5 sm:px-10 lg:px-20">
+<main>
+    <div class="px-20 py-5 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
+        <div class="flex items-center gap-5">
+            <!-- Tombol Back -->
+            <button (click)="goBack()" mat-mini-fab color="primary" aria-label="Back">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
 
-    <!-- Ticket Information -->
-    <div
-        class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
-        <div class="flex flex-col">
-            <h1 class="text-3xl font-semibold">{{data?.tracking_id}}</h1>
-            <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
+            <!-- Judul dan Subtitle -->
+            <div>
+                <h1 class="font-bold text-lg sm:text-3xl">Detail Tickets</h1>
+                <p class="text-sm sm:text-base">Review the details and progress of this support ticket.</p>
+            </div>
         </div>
 
-        <form [formGroup]="TicketForm" class="mt-5 w-full">
-            <div action="" class="mt-2.5 flex flex-col gap-5">
+        <!-- Breadcrumb -->
+        <div class="text-sm text-gray-600">
+            <span class="font-medium text-gray-500 hover:cursor-pointer hover:text-blue-400"
+                [routerLink]="['/dashboards/home']">Home</span>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="font-medium text-gray-500 hover:cursor-pointer hover:text-blue-400"
+                [routerLink]="['/dashboards/tickets']">Tickets</span>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="font-semibold text-blue-600 hover:text-blue-500">Detail Tickets</span>
+        </div>
+    </div>
 
-                <!-- Product Input -->
-                <mat-form-field hideRequiredMarker class="w-full">
-                    <mat-label>Products</mat-label>
-                    <mat-select formControlName="products_name" placeholder="Select Products">
-                        <mat-option *ngFor="let item of products" [value]="item"
-                            class="px-3 py-1 m-2 font-medium text-base rounded-full">
-                            {{item}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
 
-                <!-- Category Input -->
-                <mat-form-field class="w-full">
-                    <mat-label>Category</mat-label>
-                    <mat-select formControlName="category_id">
-                        <mat-option *ngFor="let item of category" [value]="item.id"
-                            class="px-3 py-1 m-2 font-medium text-base rounded-full">
-                            {{item.category_name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+    <div class="h-fit w-full flex flex-col xl:flex-row items-center justify-center gap-3 p-5 sm:px-10 lg:px-20">
 
-                <!-- No Whatsapp Input -->
-                <mat-form-field class="w-full">
-                    <mat-label>No Whatsapp</mat-label>
-                    <input formControlName="no_whatsapp" matInput [placeholder]="'No Whatsapp'" />
-                </mat-form-field>
+        <!-- Ticket Information -->
+        <div
+            class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
+            <div class="flex flex-col">
+                <h1 class="text-3xl font-semibold">{{data?.tracking_id}}</h1>
+                <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
+            </div>
 
-                <!-- PIC Input -->
-                <mat-form-field class="w-full">
-                    <mat-label>PIC</mat-label>
-                    <input formControlName="PIC" matInput [placeholder]="'PIC'" />
-                </mat-form-field>
+            <form [formGroup]="TicketForm" class="mt-5 w-full">
+                <div action="" class="mt-2.5 flex flex-col gap-5">
 
-                <!-- Detail Input -->
-                <mat-form-field class="w-full mb-2" floatLabel="always">
-                    <mat-label>Problem Detail</mat-label>
-                    <textarea formControlName="detail_kendala" matInput rows="4" cols="50"
-                        placeholder="Problem Detail"></textarea>
-                </mat-form-field>
-
-                <div class="grid grid-cols-2 h-fit gap-2">
-                    <!-- Priority Input -->
+                    <!-- Product Input -->
                     <mat-form-field hideRequiredMarker class="w-full">
-                        <mat-label>Priority</mat-label>
-                        <mat-select formControlName="priority" placeholder="Select Priority">
-                            <mat-option *ngFor="let item of priority" [value]="item"
+                        <mat-label>Products</mat-label>
+                        <mat-select formControlName="products_name" placeholder="Select Products">
+                            <mat-option *ngFor="let item of products" [value]="item"
                                 class="px-3 py-1 m-2 font-medium text-base rounded-full">
-                                <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
-                                                                'text-green-600': item.toLowerCase() === 'low',
-                                                                'text-blue-600': item.toLowerCase() === 'medium',
-                                                                'text-yellow-600': item.toLowerCase() === 'high',
-                                                                'text-red-600': item.toLowerCase() === 'critical',
-                                                            }"></mat-icon>
                                 {{item}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
 
-                    <!-- Status Input -->
+                    <!-- Category Input -->
                     <mat-form-field class="w-full">
-                        <mat-label>Status</mat-label>
-                        <mat-select formControlName="status">
-                            <mat-option *ngFor="let item of status" [value]="item"
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="category_id">
+                            <mat-option *ngFor="let item of category" [value]="item.id"
                                 class="px-3 py-1 m-2 font-medium text-base rounded-full">
-                                {{item}}
+                                {{item.category_name}}
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
 
-                    <!-- Hari Masuk Input -->
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Entry day</mat-label>
-                        <input formControlName="hari_masuk" matInput [matDatepicker]="picker"
-                            placeholder="Choose a date">
-                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                        <mat-datepicker touchUi #picker></mat-datepicker>
+                    <!-- No Whatsapp Input -->
+                    <mat-form-field class="w-full">
+                        <mat-label>No Whatsapp</mat-label>
+                        <input formControlName="no_whatsapp" matInput [placeholder]="'No Whatsapp'" />
                     </mat-form-field>
 
-                    <!-- Waktu Masuk Input -->
-                    <mat-form-field class="example-full-width">
-                        <mat-label>Entry Time</mat-label>
-                        <input formControlName="waktu_masuk" matInput type="time">
+                    <!-- PIC Input -->
+                    <mat-form-field class="w-full">
+                        <mat-label>PIC</mat-label>
+                        <input formControlName="PIC" matInput [placeholder]="'PIC'" />
                     </mat-form-field>
+
+                    <!-- Detail Input -->
+                    <mat-form-field class="w-full mb-2" floatLabel="always">
+                        <mat-label>Problem Detail</mat-label>
+                        <textarea formControlName="detail_kendala" matInput rows="4" cols="50"
+                            placeholder="Problem Detail"></textarea>
+                    </mat-form-field>
+
+                    <div class="grid grid-cols-2 h-fit gap-2">
+                        <!-- Priority Input -->
+                        <mat-form-field hideRequiredMarker class="w-full">
+                            <mat-label>Priority</mat-label>
+                            <mat-select formControlName="priority" placeholder="Select Priority">
+                                <mat-option *ngFor="let item of priority" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
+                                                                        'text-green-600': item.toLowerCase() === 'low',
+                                                                        'text-blue-600': item.toLowerCase() === 'medium',
+                                                                        'text-yellow-600': item.toLowerCase() === 'high',
+                                                                        'text-red-600': item.toLowerCase() === 'critical',
+                                                                    }"></mat-icon>
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Status Input -->
+                        <mat-form-field class="w-full">
+                            <mat-label>Status</mat-label>
+                            <mat-select formControlName="status">
+                                <mat-option *ngFor="let item of status" [value]="item"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    {{item}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
+                        <!-- Hari Masuk Input -->
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Entry day</mat-label>
+                            <input formControlName="hari_masuk" matInput [matDatepicker]="picker"
+                                placeholder="Choose a date">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker touchUi #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <!-- Waktu Masuk Input -->
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Entry Time</mat-label>
+                            <input formControlName="waktu_masuk" matInput type="time">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Admin Information -->
+        <div
+            class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
+            <div class="flex flex-col mb-4">
+                <h1 class="text-3xl font-semibold">Admin Information</h1>
+                <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
+            </div>
+            <div class="flex flex-col xl:flex-row gap-2">
+                <div class="h-fit bg-sky-500 p-5 xl:w-1/2 w-full rounded-lg">
+                    <h1 class="font-semibold text-white text-lg mb-3">Created Ticket :</h1>
+                    <div class="flex items-center justify-around rounded">
+                        <img src={{data?.user.avatar}} alt="avatar.png"
+                            class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
+                        <div class="text-white font-medium">
+                            <h1>Email : {{data?.user.email}}</h1>
+                            <h1>Nama : {{data?.user.name}}</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-fit bg-green-500 p-5 xl:w-1/2 w-full rounded-lg">
+                    <h1 class="font-semibold text-white text-lg mb-3">Last Replier :</h1>
+                    <div class="flex items-center justify-around rounded">
+                        <img src={{data?.last_replier?.avatar}} alt="avatar.png"
+                            class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
+                        <div class="text-white font-medium">
+                            <h1>Email : {{data?.last_replier?.email}}</h1>
+                            <h1>Nama : {{data?.last_replier?.name}}</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+
+            <!-- Detail Input -->
+            <form [formGroup]="TicketForm" class="my-4 w-full">
+                <mat-form-field class="w-full" floatLabel="always">
+                    <mat-label>Response Admin</mat-label>
+                    <textarea formControlName="respon_diberikan" matInput rows="4" cols="50"
+                        placeholder="Response Admin"></textarea>
+                </mat-form-field>
+            </form>
+
+            <div class=" h-fit w-full shadow-xl border-[0.4px] border-opacity-20 border-black rounded-lg my-4 p-4">
+                <h1 class="text-lg font-semibold">History Tickets</h1>
+
+
+
+                <!-- Table -->
+                <div class="w-full overflow-auto whitespace-nowrap mt-5">
+                    <mat-table #table [dataSource]="dataSource" matSort
+                        *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-256">
+
+                        <div>
+                            <!-- Tracking ID Column -->
+                            <ng-container matColumnDef="tracking_id">
+                                <mat-header-cell *matHeaderCellDef> Tracking ID
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element"
+                                    class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
+                                    <a
+                                        [routerLink]="['/dashboards/tickets', element.tickets_id]">{{element.tickets_id}}</a>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- User Column -->
+                            <ng-container matColumnDef="user">
+                                <mat-header-cell *matHeaderCellDef>
+                                    User
+                                </mat-header-cell>
+                                <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
+                                    <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
+                                    </div>
+                                </div>
+                                <mat-cell *matCellDef="let element" class="py-3.5 flex items-center gap-3 w-fit">
+                                    <div class="w-full flex items-center gap-3">
+                                        <img [src]="element.user.avatar" alt=""
+                                            class="w-7 h-7 object-cover rounded-full">
+                                        <p class="font-medium">{{element.user.name}}</p>
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- New Status Column -->
+                            <ng-container matColumnDef="new_status">
+                                <mat-header-cell *matHeaderCellDef> New Status
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
+                                                                            'bg-blue-500': element.new_status === 'New',
+                                                                            'bg-yellow-500': element.new_status === 'On Progress',
+                                                                            'bg-green-500': element.new_status === 'Resolved',
+                                                                            }">
+                                        <h1 class="font-medium">{{element.new_status}}</h1>
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Priority Column -->
+                            <ng-container matColumnDef="priority">
+                                <mat-header-cell *matHeaderCellDef> Priority
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                                    <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
+                                                                            'text-green-600': element.priority === 'Low',
+                                                                            'text-blue-600': element.priority === 'Medium',
+                                                                            'text-yellow-600': element.priority === 'High',
+                                                                            'text-red-600': element.priority === 'Critical',
+                                                                        }"></mat-icon>
+                                    <h1 class="font-medium uppercase">{{element.priority}}</h1>
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Detail Column -->
+                            <ng-container matColumnDef="details">
+                                <mat-header-cell *matHeaderCellDef> Details
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="flex items-center gap-3 py-5">
+                                    {{element.details}}
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Update At Column -->
+                            <ng-container matColumnDef="update_at">
+                                <mat-header-cell *matHeaderCellDef> Update at
+                                </mat-header-cell>
+                                <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                                    {{element.update_at}}
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </div>
+                    </mat-table>
+                </div>
+
+                <mat-paginator #paginator [pageSize]="3" [showFirstLastButtons]="true">
+                </mat-paginator>
+
+
+            </div>
+
+            <div class="flex flex-col gap-4">
+                <button [disabled]="shiftStatus && !isAdmin || data?.status === 'Resolved'"
+                    [ngClass]="shiftStatus && !isAdmin || data?.status === 'Resolved' ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
+                    class=" w-full rounded-full p-3 text-white font-semibold " (click)=" onSubmit()">
+                    Save Ticket
+                </button>
+
+                <button *ngIf="isAdmin" [disabled]="shiftStatus && !isAdmin"
+                    [ngClass]="shiftStatus && !isAdmin ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600'"
+                    class=" w-full rounded-full p-3 text-white font-semibold " (click)=" handleDeleteTicket()">
+                    Delete Ticket
+                </button>
+            </div>
+        </div>
     </div>
-
-    <!-- Admin Information -->
-    <div
-        class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
-        <div class="flex flex-col mb-4">
-            <h1 class="text-3xl font-semibold">Admin Information</h1>
-            <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
-        </div>
-        <div class="flex flex-col xl:flex-row gap-2">
-            <div class="h-fit bg-sky-500 p-5 xl:w-1/2 w-full rounded-lg">
-                <h1 class="font-semibold text-white text-lg mb-3">Created Ticket :</h1>
-                <div class="flex items-center justify-around rounded">
-                    <img src={{data?.user.avatar}} alt="avatar.png"
-                        class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
-                    <div class="text-white font-medium">
-                        <h1>Email : {{data?.user.email}}</h1>
-                        <h1>Nama : {{data?.user.name}}</h1>
-                    </div>
-                </div>
-            </div>
-
-            <div class="h-fit bg-green-500 p-5 xl:w-1/2 w-full rounded-lg">
-                <h1 class="font-semibold text-white text-lg mb-3">Last Replier :</h1>
-                <div class="flex items-center justify-around rounded">
-                    <img src={{data?.last_replier?.avatar}} alt="avatar.png"
-                        class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
-                    <div class="text-white font-medium">
-                        <h1>Email : {{data?.last_replier?.email}}</h1>
-                        <h1>Nama : {{data?.last_replier?.name}}</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Detail Input -->
-        <form [formGroup]="TicketForm" class="my-4 w-full">
-            <mat-form-field class="w-full" floatLabel="always">
-                <mat-label>Response Admin</mat-label>
-                <textarea formControlName="respon_diberikan" matInput rows="4" cols="50"
-                    placeholder="Response Admin"></textarea>
-            </mat-form-field>
-        </form>
-
-        <div class=" h-fit w-full shadow-xl border-[0.4px] border-opacity-20 border-black rounded-lg my-4 p-4">
-            <h1 class="text-lg font-semibold">History Tickets</h1>
-
-
-
-            <!-- Table -->
-            <div class="w-full overflow-auto whitespace-nowrap mt-5">
-                <mat-table #table [dataSource]="dataSource" matSort
-                    *ngIf="!isNotDataFound && !isLoading && dataSource.data.length != 0 " class="min-w-256">
-
-                    <div>
-                        <!-- Tracking ID Column -->
-                        <ng-container matColumnDef="tracking_id">
-                            <mat-header-cell *matHeaderCellDef> Tracking ID
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element"
-                                class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
-                                <a [routerLink]="['/dashboards/tickets', element.tickets_id]">{{element.tickets_id}}</a>
-                            </mat-cell>
-                        </ng-container>
-
-                        <!-- User Column -->
-                        <ng-container matColumnDef="user">
-                            <mat-header-cell *matHeaderCellDef>
-                                User
-                            </mat-header-cell>
-                            <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
-                                <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
-                                </div>
-                            </div>
-                            <mat-cell *matCellDef="let element" class="py-3.5 flex items-center gap-3 w-fit">
-                                <div class="w-full flex items-center gap-3">
-                                    <img [src]="element.user.avatar" alt="" class="w-7 h-7 object-cover rounded-full">
-                                    <p class="font-medium">{{element.user.name}}</p>
-                                </div>
-                            </mat-cell>
-                        </ng-container>
-
-                        <!-- New Status Column -->
-                        <ng-container matColumnDef="new_status">
-                            <mat-header-cell *matHeaderCellDef> New Status
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element">
-                                <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
-                                                                    'bg-blue-500': element.new_status === 'New',
-                                                                    'bg-yellow-500': element.new_status === 'On Progress',
-                                                                    'bg-green-500': element.new_status === 'Resolved',
-                                                                    }">
-                                    <h1 class="font-medium">{{element.new_status}}</h1>
-                                </div>
-                            </mat-cell>
-                        </ng-container>
-
-                        <!-- Priority Column -->
-                        <ng-container matColumnDef="priority">
-                            <mat-header-cell *matHeaderCellDef> Priority
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="flex items-center gap-3">
-                                <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
-                                                                    'text-green-600': element.priority === 'Low',
-                                                                    'text-blue-600': element.priority === 'Medium',
-                                                                    'text-yellow-600': element.priority === 'High',
-                                                                    'text-red-600': element.priority === 'Critical',
-                                                                }"></mat-icon>
-                                <h1 class="font-medium uppercase">{{element.priority}}</h1>
-                            </mat-cell>
-                        </ng-container>
-
-                        <!-- Detail Column -->
-                        <ng-container matColumnDef="details">
-                            <mat-header-cell *matHeaderCellDef> Details
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="flex items-center gap-3 py-5">
-                                {{element.details}}
-                            </mat-cell>
-                        </ng-container>
-
-                        <!-- Update At Column -->
-                        <ng-container matColumnDef="update_at">
-                            <mat-header-cell *matHeaderCellDef> Update at
-                            </mat-header-cell>
-                            <mat-cell *matCellDef="let element" class="flex items-center gap-3">
-                                {{element.update_at}}
-                            </mat-cell>
-                        </ng-container>
-
-                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-                    </div>
-                </mat-table>
-            </div>
-
-            <mat-paginator #paginator [pageSize]="3" [showFirstLastButtons]="true">
-            </mat-paginator>
-
-
-        </div>
-
-        <div class="flex flex-col gap-4">
-            <button [disabled]="shiftStatus && !isAdmin || data?.status === 'Resolved'"
-                [ngClass]="shiftStatus && !isAdmin || data.status === 'Resolved' ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
-                class=" w-full rounded-full p-3 text-white font-semibold " (click)=" onSubmit()">
-                Save Ticket
-            </button>
-
-            <button *ngIf="isAdmin" [disabled]="shiftStatus && !isAdmin"
-                [ngClass]="shiftStatus && !isAdmin ? 'bg-gray-400' : 'bg-red-500 hover:bg-red-600'"
-                class=" w-full rounded-full p-3 text-white font-semibold " (click)=" handleDeleteTicket()">
-                Delete Ticket
-            </button>
-        </div>
-    </div>
-</div>
+</main>
