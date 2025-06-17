@@ -24,7 +24,6 @@ const year = today.getFullYear();
   selector: 'app-analytics',
   standalone: true,
   imports: [
-    PieChartComponent,
     AreaChartComponent,
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -78,6 +77,10 @@ export class AnalyticsComponent implements OnInit {
   // Chart Total Tickets By Products
   ChartTicketProductsData: { data: number[] }[]
   ChartTicketProductsLabels: string[] = []
+
+  // Chart Tickets By Place
+  ChartTicketPlaceData: { name: string, data: number[] }[] = []
+  ChartTicketPlaceLabels: string[] = []
 
   range = new FormGroup({
     start: new FormControl<Date | null>(new Date(year, month)),
@@ -225,7 +228,22 @@ export class AnalyticsComponent implements OnInit {
       ]
       this.ChartTicketProductsLabels = this.data.ChartTicketProducts.map((e) => e.name)
 
+      // Chart Total Tickets By Place
+      const chartPlacesData = (this.data.ChartPlaces ?? []).map((e) => e.total_tickets);
+      const chartPlacesLabels = (this.data.ChartPlaces ?? []).map((e) => e.places_name);
 
+      if (chartPlacesData.length > 0) {
+        this.ChartTicketPlaceData = [
+          {
+            name: 'Total Tiket',
+            data: chartPlacesData
+          }
+        ];
+        this.ChartTicketPlaceLabels = chartPlacesLabels;
+      } else {
+        this.ChartTicketPlaceData = [];
+        this.ChartTicketPlaceLabels = [];
+      }
 
     } catch (error) {
       this._toast.error("Failed Fetch Data", "Error")

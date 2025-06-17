@@ -9,14 +9,14 @@
     <div class="flex items-start flex-row sm:items-center justify-between">
         <!-- Search Tickets -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-1/3 max-lg:w-full">
-            <h1 class="text-xl font-semibold">Products</h1>
+            <h1 class="text-xl font-semibold">Places</h1>
         </div>
 
         <div class="flex items-center gap-3">
             <!-- Button New Tickets -->
-            <button mat-raised-button (click)="addProducts()" class="bg-blue-600 hover:bg-blue-700 text-white">
+            <button mat-raised-button (click)="addPlaces()" class="bg-blue-600 hover:bg-blue-700 text-white">
                 <mat-icon svgIcon="mat_outline:add" class="text-white"></mat-icon>
-                <span class="font-semibold">Add Products</span>
+                <span class="font-semibold">Add Places</span>
             </button>
         </div>
     </div>
@@ -46,35 +46,43 @@
 
             <div>
                 <!-- Tracking ID Column -->
-                <ng-container matColumnDef="name">
-                    <mat-header-cell *matHeaderCellDef> Products Name
+                <ng-container matColumnDef="id">
+                    <mat-header-cell *matHeaderCellDef> Places Id
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="text-lg font-medium whitespace-nowrap">
-                        {{element.name}}
+                        {{element.ID}}
+                    </mat-cell> </ng-container>
+
+                <!-- Tracking ID Column -->
+                <ng-container matColumnDef="name">
+                    <mat-header-cell *matHeaderCellDef> Places Name
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="text-lg font-medium whitespace-nowrap">
+                        {{element.Name}}
                     </mat-cell>
                 </ng-container>
 
                 <!-- Create Date Column -->
-                <ng-container matColumnDef="total_tickets">
-                    <mat-header-cell *matHeaderCellDef> Total Tickets
+                <ng-container matColumnDef="products">
+                    <mat-header-cell *matHeaderCellDef> Products Name
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element">
-                        {{ element.total_tickets}}
+                        {{ element.Product.Name}}
                     </mat-cell>
                 </ng-container>
 
                 <!-- Action Column -->
-                <ng-container matColumnDef="action" n>
+                <ng-container matColumnDef="action">
                     <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
                     <mat-cell *matCellDef="let element">
                         <div class="flex items-center" *ngIf="element.name != 'default-trial'">
                             <!-- Action Buttons -->
-                            <a (click)="handleDeleteProducts(element.id)" *ngIf="element.total_tickets == 0"
+                            <a (click)="handleDeletePlaces(element.ID)"
                                 class="font-medium mx-1 text-white dark:text-white bg-red-500 hover:cursor-pointer hover:bg-red-600 rounded hover:underline">
                                 <mat-icon svgIcon="heroicons_solid:trash" class="text-white"
                                     style="transform: scale(0.7);"></mat-icon>
                             </a>
-                            <a (click)="editProducts(element.id)"
+                            <a (click)="editPlaces(element)"
                                 class="font-medium mx-1 text-white dark:text-white bg-blue-500 hover:bg-blue-600 rounded hover:underline">
                                 <mat-icon svgIcon="heroicons_solid:pencil-square" class="text-white"
                                     style="transform: scale(0.7);"></mat-icon>

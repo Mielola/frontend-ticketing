@@ -5,20 +5,20 @@ export interface FuseConfirmationConfig {
         show?: boolean;
         name?: string;
         color?:
-            | 'primary'
-            | 'accent'
-            | 'warn'
-            | 'basic'
-            | 'info'
-            | 'success'
-            | 'warning'
-            | 'error';
+        | 'primary'
+        | 'accent'
+        | 'warn'
+        | 'basic'
+        | 'info'
+        | 'success'
+        | 'warning'
+        | 'error';
     };
     actions?: {
         confirm?: {
             show?: boolean;
             label?: string;
-            color?: 'primary' | 'accent' | 'warn';
+            color?: 'primary' | 'accent' | 'warn' | 'warning';
         };
         cancel?: {
             show?: boolean;

@@ -11,7 +11,6 @@ export default [
         resolve: {
             datas: () => inject(HomeService).fetchData(),
             data: () => inject(HomeService).getData(),
-            ticket: () => inject(TicketLogsService).fetchData()
 
         },
     },

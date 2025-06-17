@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ToastrService } from 'ngx-toastr';
 import { FormAddNotesComponent } from './form-add-notes/form-add-notes.component';
 import { FormsModule } from '@angular/forms';
+import { FormEditNotesComponent } from './form-edit-notes/form-edit-notes.component';
 
 @Component({
   selector: 'app-handover',
@@ -73,6 +74,14 @@ export class HandoverComponent implements OnInit {
     this._matDialog.open(FormAddNotesComponent, {
       width: window.innerWidth < 600 ? '90%' : '50%',
       maxWidth: '100vw',
+    })
+  }
+
+  editNotes(notes: any) {
+    this._matDialog.open(FormEditNotesComponent, {
+      width: window.innerWidth < 600 ? '90%' : '50%',
+      maxWidth: '100vw',
+      data: notes
     })
   }
 

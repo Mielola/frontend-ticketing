@@ -15,12 +15,11 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ApiService } from 'app/services/api.service';
 import { TicketLogsService } from '../ticket-logs/ticket-logs.service';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import { TicketTableService } from './ticket.service';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { GenereateReportComponent } from '../../dialog/genereate-report/genereate-report.component';
-import { FormAddProductsComponent } from 'app/modules/admin/dashboards/products/form-add-products/form-add-products.component';
 import { ImportExcelComponent } from 'app/modules/admin/dashboards/tickets/import-excel/import-excel.component';
 
 const today = new Date();
@@ -60,6 +59,7 @@ export class TicketComponent implements OnInit, OnDestroy {
     search: '',
     category: [],
     products: [],
+    places: [],
     status: [],
     priority: []
   };
@@ -73,12 +73,13 @@ export class TicketComponent implements OnInit, OnDestroy {
   category: { name: string, checked: boolean }[] = []
   statusItems: { name: string, checked: boolean }[] = []
   priorityItems: { name: string, checked: boolean }[] = []
+  placesItems: { name: string, checked: boolean }[] = []
 
   private _unsubscribeAll: Subject<any> = new Subject<any>();
 
 
   // Table
-  public displayedColumns = ['tracking_id', 'hari_masuk', 'waktu_masuk', 'name', 'category', 'subject', 'pic', 'no_whatsapp', 'status', 'solved_time', 'last_replier', 'priority', 'create_date', 'create_time',];
+  public displayedColumns = ['tracking_id', 'hari_masuk', 'waktu_masuk', 'place', 'name', 'category', 'subject', 'pic', 'no_whatsapp', 'status', 'solved_time', 'last_replier', 'priority', 'create_date', 'create_time',];
   public dataSource = new MatTableDataSource<any>();
 
   // Paginator
@@ -90,18 +91,6 @@ export class TicketComponent implements OnInit, OnDestroy {
     end: new FormControl<Date | null>(new Date()),
   });
 
-  get datas() {
-    return this._ticketTableService._datas()
-  }
-
-  get isLoading() {
-    return this._ticketTableService.isLoading()
-  }
-
-  get isNotFound() {
-    return this._ticketTableService.isNotFound()
-  }
-
   constructor(
     private _apiService: ApiService,
     private cdr: ChangeDetectorRef,
@@ -109,6 +98,8 @@ export class TicketComponent implements OnInit, OnDestroy {
     private _ticketTableService: TicketTableService,
     private _matDialog: MatDialog,
   ) {
+    this._ticketTableService.checkTickets()
+    this._ticketTableService.fetchData()
     effect(() => {
       const getData = this.datas;
 
@@ -116,6 +107,7 @@ export class TicketComponent implements OnInit, OnDestroy {
       const statusSet = new Set<string>();
       const prioritySet = new Set<string>();
       const productsSet = new Set<string>();
+      const placesSet = new Set<string>();
 
       getData.forEach(tickets => {
         if (tickets.products_name) {
@@ -123,6 +115,14 @@ export class TicketComponent implements OnInit, OnDestroy {
             tickets.products_name.forEach(product => productsSet.add(product));
           } else {
             productsSet.add(tickets.products_name)
+          }
+        }
+
+        if (tickets.places_name) {
+          if (Array.isArray(tickets.places_name)) {
+            tickets.places_name.forEach(product => placesSet.add(product));
+          } else {
+            placesSet.add(tickets.places_name)
           }
         }
 
@@ -160,9 +160,27 @@ export class TicketComponent implements OnInit, OnDestroy {
       this.category = [...categorySet].map(category => ({ name: category, checked: false }));
       this.priorityItems = [...prioritySet].map(priority => ({ name: priority, checked: false }));
       this.productsItems = [...productsSet].map(product => ({ name: product, checked: false }));
+      this.placesItems = [...placesSet].map(places => ({ name: places, checked: false }));
+
+      if (this._ticketTableService._datas().length === 0) {
+        this.dataSource.data = [];
+        return
+      }
 
       this.dataSource.data = getData;
     });
+  }
+
+  get datas() {
+    return this._ticketTableService._datas()
+  }
+
+  get isLoading() {
+    return this._ticketTableService.isLoading()
+  }
+
+  get isNotFound() {
+    return this._ticketTableService.isNotFound()
   }
 
   ngOnInit(): void {
@@ -242,6 +260,7 @@ export class TicketComponent implements OnInit, OnDestroy {
         data.subject.toLowerCase().includes(filters.search) ||
         data.status.toLowerCase().includes(filters.search) ||
         data.priority.toLowerCase().includes(filters.search) ||
+        data.places_name.toLowerCase().includes(filters.search) ||
         data.no_whatsapp
           .toLowerCase().includes(filters.search)
         || data.user?.name.toLowerCase().includes(filters.search)
@@ -259,7 +278,10 @@ export class TicketComponent implements OnInit, OnDestroy {
       let productsMatch =
         filters.products.length === 0 || filters.products.includes(data.products_name.toLowerCase());
 
-      return searchMatch && categoryMatch && statusMatch && priorityMatch && productsMatch;
+      let placesMatch =
+        filters.places.length === 0 || filters.places.includes((data.places_name || '').toLowerCase());
+
+      return searchMatch && categoryMatch && statusMatch && priorityMatch && productsMatch && placesMatch;
     };
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
@@ -272,6 +294,13 @@ export class TicketComponent implements OnInit, OnDestroy {
 
   applyProductsFilter() {
     this.filterValues.products = this.productsItems
+      .filter(item => item.checked)
+      .map(item => item.name.toLowerCase());
+    this.applyFilter();
+  }
+
+  applyPlacesFilter() {
+    this.filterValues.places = this.placesItems
       .filter(item => item.checked)
       .map(item => item.name.toLowerCase());
     this.applyFilter();
@@ -304,11 +333,9 @@ export class TicketComponent implements OnInit, OnDestroy {
         status: newStatus
       });
       if (status === 200) {
-        const getLogs = await this._apiService.get(`api/V1/tickets-logs`)
-        this._ticketLogsService.Update(getLogs)
+        this._ticketLogsService.fetchDatas()
 
-        const updateDataTable = await this._apiService.get("api/V1/tickets")
-        this._ticketTableService.Update(updateDataTable)
+        this._ticketTableService.fetchData()
       }
     } catch (error) {
       throw error

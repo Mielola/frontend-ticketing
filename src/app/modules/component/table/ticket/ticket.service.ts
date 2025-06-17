@@ -16,7 +16,6 @@ export class TicketTableService {
         private _apiService: ApiService,
         private _toastService: ToastrService,
     ) {
-        this.fetchData()
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -48,7 +47,7 @@ export class TicketTableService {
     public checkTickets(): Observable<any> {
         return from(this._apiService.get("api/V1/check-tickets-deadline")).pipe(
             tap((response: any) => {
-
+                console.log(response)
             })
         );
     }
@@ -76,7 +75,7 @@ export class TicketTableService {
 
     }
 
-    fetchData() {
+    async fetchData() {
         this.isLoading.set(true)
         this._apiService.get("api/V1/tickets")
             .then(response => {

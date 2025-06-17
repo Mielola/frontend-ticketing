@@ -1,0 +1,40 @@
+<div class="h-full w-full flex flex-col">
+    <div class="flex justify-between p-2">
+        <div
+            class="truncate text-lg font-medium leading-6 tracking-tight px-5 py-3 flex flex-col sm:flex-row items-start sm:items-center w-full justify-between">
+            <h2 class="mb-2 text-xl font-semibold sm:mb-0">{{data.mode == "Add" ? 'Add Place' : 'Edit Place'}}</h2>
+        </div>
+        <a (click)="dialogRef.close()">
+            <mat-icon svgIcon="mat_solid:close" class="cursor-pointer"></mat-icon>
+        </a>
+    </div>
+
+    <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
+
+    <div class="">
+        <form [formGroup]="placesForm" class="bg-card flex flex-col overflow-hidden rounded-2xl px-8 py-4 pb-4">
+            <!-- Product Input -->
+            <mat-form-field hideRequiredMarker class="w-full">
+                <mat-label>Products</mat-label>
+                <mat-select formControlName="products_id" placeholder="Select Products">
+                    <mat-option *ngFor="let item of products" [value]="item.id"
+                        class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Shift Name Input -->
+            <mat-form-field class="w-full">
+                <mat-label>Places Name</mat-label>
+                <input formControlName="name" matInput [placeholder]="'Place Name'" />
+            </mat-form-field>
+
+            <button
+                [ngClass]="data.mode == 'Add' ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700' "
+                class="text-white p-2 rounded" type="submit" (click)="onSubmit()">
+                {{data.mode == "Add" ? 'Add Place' : 'Edit Place'}}
+            </button>
+        </form>
+    </div>
+</div>

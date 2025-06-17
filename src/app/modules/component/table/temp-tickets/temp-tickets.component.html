@@ -1,7 +1,7 @@
-<!-- Log Users -->
-<section class="h-fit border-[1px] shadow-xl mt-4 bg-white rounded-lg p-5">
+<!-- Temp Tickets -->
+<section class="h-fit border-[1px] shadow-xl mt-4 bg-white rounded-lg p-5" *ngIf="isAdmin">
     <div class="flex flex-col items-start sm:flex-row sm:items-center justify-between">
-        <h1 class="text-2xl font-semibold">Ticket Logs</h1>
+        <h1 class="text-2xl font-semibold">Deleted Tickets</h1>
         <!-- Search Tickets -->
         <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-1/3 max-lg:w-full">
             <label for="table-search" class="sr-only">Search</label>
@@ -40,77 +40,63 @@
                 <ng-container matColumnDef="tracking_id">
                     <mat-header-cell *matHeaderCellDef> Tracking ID
                     </mat-header-cell>
-                    <mat-cell *matCellDef="let element"
-                        class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
-                        <a [routerLink]="['/dashboards/tickets', element.tickets_id]">{{element.tickets_id}}</a>
+                    <mat-cell *matCellDef="let element" class="text-lg whitespace-nowrap">
+                        <a>{{element.tracking_id}}</a>
                     </mat-cell>
                 </ng-container>
 
-                <!-- User Column -->
-                <ng-container matColumnDef="user">
-                    <mat-header-cell *matHeaderCellDef>
-                        User
-                    </mat-header-cell>
-                    <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
-                        <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]">
-                        </div>
-                    </div>
-                    <mat-cell *matCellDef="let element" class="py-3.5 flex items-center gap-3 w-fit">
-                        <div class="w-full flex items-center gap-3">
-                            <img [src]="element.user.avatar" alt="" class="w-7 h-7 object-cover rounded-full">
-                            <p class="font-medium">{{element.user.name}}</p>
-                        </div>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- New Status Column -->
-                <ng-container matColumnDef="new_status">
-                    <mat-header-cell *matHeaderCellDef> Status
-                    </mat-header-cell>
-                    <mat-cell *matCellDef="let element">
-                        <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
-                                                        'bg-blue-500': element.new_status === 'New',
-                                                        'bg-yellow-500': element.new_status === 'On Progress',
-                                                        'bg-green-500': element.new_status === 'Resolved',
-                                                        }">
-                            <h1 class="font-medium">{{element.new_status}}</h1>
-                        </div>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Priority Column -->
-                <ng-container matColumnDef="priority">
-                    <mat-header-cell *matHeaderCellDef> Priority
-                    </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
-                        <mat-icon svgIcon="mat_outline:bookmark" class="-rotate-90" [ngClass]="{
-                                                        'text-green-600': element.priority === 'Low',
-                                                        'text-blue-600': element.priority === 'Medium',
-                                                        'text-yellow-600': element.priority === 'High',
-                                                        'text-red-600': element.priority === 'Critical',
-                                                    }"></mat-icon>
-                        <h1 class="font-medium uppercase">{{element.priority}}</h1>
-                    </mat-cell>
-                </ng-container>
-
-                <!-- Detail Column -->
-                <ng-container matColumnDef="details">
-                    <mat-header-cell *matHeaderCellDef> Details
+                <!-- Category -->
+                <ng-container matColumnDef="category">
+                    <mat-header-cell *matHeaderCellDef> Category
                     </mat-header-cell>
                     <mat-cell *matCellDef="let element" class="flex items-center gap-3 py-5">
-                        {{element.details}}
+                        {{element.category}}
+                    </mat-cell> </ng-container>
+
+                <!-- Product Column -->
+                <ng-container matColumnDef="product">
+                    <mat-header-cell *matHeaderCellDef> Products
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3 py-5">
+                        {{element.product}}
                     </mat-cell>
                 </ng-container>
 
-                <!-- Update At Column -->
-                <ng-container matColumnDef="update_at">
-                    <mat-header-cell *matHeaderCellDef> Update at
+                <!-- Deleted By Column -->
+                <ng-container matColumnDef="deleted_by">
+                    <mat-header-cell *matHeaderCellDef> Deleted By
                     </mat-header-cell>
-                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
-                        <!-- <mat-icon svgIcon="mat_outline:access_time"></mat-icon> -->
-                        {{element.update_at}}
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3 py-5">
+                        {{element.deleted_by}}
                     </mat-cell>
                 </ng-container>
+
+                <!-- Deleted At Column -->
+                <ng-container matColumnDef="deleted_at">
+                    <mat-header-cell *matHeaderCellDef> Deleted at
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3">
+                        {{element.deleted_at}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <div class="flex items-center" *ngIf="element.name != 'default-trial'">
+                            <a (click)="handleRestoreTickets(element.tracking_id)"
+                                class="font-medium mx-1 text-white dark:text-white bg-yellow-500 hover:bg-yellow-600 rounded hover:cursor-pointer hover:underline">
+                                <mat-icon svgIcon="restore" class="text-white"
+                                    style="transform: scale(0.8);"></mat-icon>
+                            </a>
+                            <a (click)="handleDeleteTempTicket(element.tracking_id)"
+                                class="font-medium mx-1 text-white dark:text-white bg-red-500 hover:cursor-pointer hover:bg-red-600 rounded hover:underline">
+                                <mat-icon svgIcon="heroicons_solid:trash" class="text-white"
+                                    style="transform: scale(0.7);"></mat-icon>
+                            </a>
+                        </div>
+                    </mat-cell> </ng-container>
 
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
@@ -118,7 +104,7 @@
         </mat-table>
     </div>
 
-    <div *ngIf="isNotDataFound && !isLoading"  class="py-10">
+    <div *ngIf="isNotDataFound && !isLoading" class="py-10">
         <div class="flex flex-col items-center">
             <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
             <br />

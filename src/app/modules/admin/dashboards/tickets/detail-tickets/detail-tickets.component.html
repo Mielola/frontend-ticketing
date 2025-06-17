@@ -1,6 +1,7 @@
-<main>
-    <div class="px-20 py-5 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
-        <div class="flex items-center gap-5">
+<main class="w-full h-full">
+    <div
+        class="px-8 xl:px-20 py-5 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
+        <div class="flex items-center gap-5 w-fit">
             <!-- Tombol Back -->
             <button (click)="goBack()" mat-mini-fab color="primary" aria-label="Back">
                 <mat-icon>arrow_back</mat-icon>
@@ -14,7 +15,7 @@
         </div>
 
         <!-- Breadcrumb -->
-        <div class="text-sm text-gray-600">
+        <div class="text-sm text-gray-600 w-fit">
             <span class="font-medium text-gray-500 hover:cursor-pointer hover:text-blue-400"
                 [routerLink]="['/dashboards/home']">Home</span>
             <span class="mx-2 text-gray-400">/</span>
@@ -30,7 +31,7 @@
 
         <!-- Ticket Information -->
         <div
-            class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
+            class="h-fit bg-white shadow-xl self-start p-5 w-full xl:w-1/2 mx-2 sm:mx-0 border-[0.4px] border-opacity-20 border-black rounded-md">
             <div class="flex flex-col">
                 <h1 class="text-3xl font-semibold">{{data?.tracking_id}}</h1>
                 <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
@@ -49,6 +50,16 @@
                             </mat-option>
                         </mat-select>
                     </mat-form-field>
+
+                    <!-- Place Input -->
+                    <mat-form-field class="w-full" *ngIf="place?.length !== 0">
+                        <mat-label>Place</mat-label>
+                        <mat-select formControlName="places_id">
+                            <mat-option *ngFor="let item of place" [value]="item.id"
+                                class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                {{item.name}}
+                            </mat-option>
+                        </mat-select> </mat-form-field>
 
                     <!-- Category Input -->
                     <mat-form-field class="w-full">
@@ -111,7 +122,7 @@
 
                         <!-- Hari Masuk Input -->
                         <mat-form-field class="example-full-width">
-                            <mat-label>Entry day</mat-label>
+                            <mat-label>Ticket Entry day</mat-label>
                             <input formControlName="hari_masuk" matInput [matDatepicker]="picker"
                                 placeholder="Choose a date">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -120,7 +131,7 @@
 
                         <!-- Waktu Masuk Input -->
                         <mat-form-field class="example-full-width">
-                            <mat-label>Entry Time</mat-label>
+                            <mat-label>Ticket Entry Time</mat-label>
                             <input formControlName="waktu_masuk" matInput type="time">
                         </mat-form-field>
                     </div>
@@ -130,32 +141,37 @@
 
         <!-- Admin Information -->
         <div
-            class="h-fit bg-white shadow-xl self-start p-5 w-full mx-2 sm:mx-0 sm:w-1/2 border-[0.4px] border-opacity-20 border-black rounded-md">
+            class="h-fit bg-white shadow-xl self-start p-5 w-full xl:w-1/2 mx-2 sm:mx-0 border-[0.4px] border-opacity-20 border-black rounded-md">
             <div class="flex flex-col mb-4">
                 <h1 class="text-3xl font-semibold">Admin Information</h1>
                 <p class="opacity-80 text-base">Subject : {{data?.subject}}</p>
             </div>
-            <div class="flex flex-col xl:flex-row gap-2">
-                <div class="h-fit bg-sky-500 p-5 xl:w-1/2 w-full rounded-lg">
-                    <h1 class="font-semibold text-white text-lg mb-3">Created Ticket :</h1>
-                    <div class="flex items-center justify-around rounded">
-                        <img src={{data?.user.avatar}} alt="avatar.png"
-                            class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
-                        <div class="text-white font-medium">
-                            <h1>Email : {{data?.user.email}}</h1>
-                            <h1>Nama : {{data?.user.name}}</h1>
+
+
+            <!-- Admin Info Cards -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+                <!-- Created Ticket Card -->
+                <div class="bg-gradient-to-r from-sky-500 to-sky-600 p-4 sm:p-5 rounded-lg text-white">
+                    <h2 class="font-semibold text-base sm:text-lg mb-3">Created Ticket:</h2>
+                    <div class="flex items-center gap-3">
+                        <img [src]="data?.user.avatar" alt="avatar"
+                            class="bg-white h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover flex-shrink-0">
+                        <div class="font-medium text-sm sm:text-base min-w-0 flex-1">
+                            <p class="truncate">Email: {{data?.user.email}}</p>
+                            <p class="truncate">Name: {{data?.user.name}}</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="h-fit bg-green-500 p-5 xl:w-1/2 w-full rounded-lg">
-                    <h1 class="font-semibold text-white text-lg mb-3">Last Replier :</h1>
-                    <div class="flex items-center justify-around rounded">
-                        <img src={{data?.last_replier?.avatar}} alt="avatar.png"
-                            class="bg-white h-12 w-12 md:h-14 md:w-14 rounded-full">
-                        <div class="text-white font-medium">
-                            <h1>Email : {{data?.last_replier?.email}}</h1>
-                            <h1>Nama : {{data?.last_replier?.name}}</h1>
+                <!-- Last Replier Card -->
+                <div class="bg-gradient-to-r from-green-500 to-green-600 p-4 sm:p-5 rounded-lg text-white">
+                    <h2 class="font-semibold text-base sm:text-lg mb-3">Last Replier:</h2>
+                    <div class="flex items-center gap-3">
+                        <img [src]="data?.last_replier?.avatar" alt="avatar"
+                            class="bg-white h-10 w-10 sm:h-12 sm:w-12 rounded-full object-cover flex-shrink-0">
+                        <div class="font-medium text-sm sm:text-base min-w-0 flex-1">
+                            <p class="truncate">Email: {{data?.last_replier?.email}}</p>
+                            <p class="truncate">Name: {{data?.last_replier?.name}}</p>
                         </div>
                     </div>
                 </div>
@@ -271,8 +287,8 @@
             </div>
 
             <div class="flex flex-col gap-4">
-                <button [disabled]="shiftStatus && !isAdmin || data?.status === 'Resolved'"
-                    [ngClass]="shiftStatus && !isAdmin || data?.status === 'Resolved' ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
+                <button [disabled]="!isAdmin && (shiftStatus || data?.status === 'Resolved')"
+                    [ngClass]="!isAdmin && (shiftStatus || data?.status === 'Resolved') ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'"
                     class=" w-full rounded-full p-3 text-white font-semibold " (click)=" onSubmit()">
                     Save Ticket
                 </button>

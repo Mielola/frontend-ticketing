@@ -63,15 +63,21 @@ export type ChartOptions = {
   templateUrl: './genereate-report.component.html',
 })
 export class GenereateReportComponent implements OnInit {
-  public chartOptions: Partial<ChartOptions>;
-  public chartOptions2: Partial<ChartOptions>;
+  public chartPrriorityOptions: Partial<ChartOptions>;
+  public chartCategoryOptions: Partial<ChartOptions>;
+  public chartPlacesOptions: Partial<ChartOptions>;
 
   generateForm!: FormGroup
   isLoading: boolean = false
   products: string[] = [];
+  category: string[] = [];
+  place: { id: number, name: string }[] = []
+  dataResponse: any
+
   hiddenChart: boolean = false;
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
   @ViewChild('chartContainer2', { static: false }) chartContainer2!: ElementRef;
+  @ViewChild('chartContainer3', { static: false }) chartContainer3!: ElementRef;
 
 
   selectedStatus: string = '';
@@ -90,6 +96,8 @@ export class GenereateReportComponent implements OnInit {
   ngOnInit(): void {
     this.generateForm = this.fb.group({
       products_name: ['', Validators.required],
+      places_id: [null],
+      category_id: [{ value: 0, }, Validators.required],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       status: ['', Validators.required],
@@ -98,6 +106,32 @@ export class GenereateReportComponent implements OnInit {
     })
 
     this.fetchData()
+    this.generateForm.get('products_name')?.valueChanges.subscribe(async (value) => {
+      if (value) {
+        const { data } = await this._apiService.post("api/V1/get-data-form", { name: value })
+        this.category = data.data.category
+        this.place = data.data.places
+        this.enableFields();
+      } else {
+        this.disableFields();
+      }
+    });
+  }
+
+  enableFields() {
+    Object.keys(this.generateForm.controls).forEach((field) => {
+      if (field !== 'products_name') {
+        this.generateForm.get(field)?.enable();
+      }
+    });
+  }
+
+  disableFields() {
+    Object.keys(this.generateForm.controls).forEach((field) => {
+      if (field !== 'products_name') {
+        this.generateForm.get(field)?.disable();
+      }
+    });
   }
 
   async fetchData() {
@@ -122,13 +156,17 @@ export class GenereateReportComponent implements OnInit {
           products_name: this.generateForm.value.products_name,
           start_date: formatDate(this.generateForm.value.start_date),
           end_date: formatDate(this.generateForm.value.end_date),
+          places_id: this.generateForm.value.places_id ? String(this.generateForm.value.places_id) : null,
+          category_id: this.generateForm.value.category_id.toString(),
           start_time: this.generateForm.value.start_time,
           end_time: this.generateForm.value.end_time,
           status: this.selectedStatus
         }
 
         const post = await this._apiService.post("api/V1/report", formData)
-        this.chartOptions = {
+        this.dataResponse = post
+
+        this.chartPrriorityOptions = {
           series: [
             {
               data: post.data.chart.ChartPriority.map((item: any) => item.value),
@@ -188,7 +226,7 @@ export class GenereateReportComponent implements OnInit {
           },
         };
 
-        this.chartOptions2 = {
+        this.chartCategoryOptions = {
           series: [
             {
               data: post.data.chart.ChartCategory.map((item: any) => item.total_tickets),
@@ -249,6 +287,71 @@ export class GenereateReportComponent implements OnInit {
           },
         };
 
+        if (post.data.chart.ChartPlaces && post.data.chart.ChartPlaces.length > 0) {
+          this.chartPlacesOptions = {
+            series: [
+              {
+                data: post.data.chart.ChartPlaces.map((item: any) => item.total_tickets),
+                type: "column",
+                color: '#0d3b5f'
+              },
+              {
+                data: post.data.chart.ChartPlaces.map((item: any) => item.total_tickets),
+                type: "line",
+                color: '#669940'
+              },
+            ],
+            legend: {
+              show: false,
+            },
+            chart: {
+              type: "line",
+              animations: {
+                enabled: false
+              },
+              toolbar: {
+                show: false,
+              }
+            },
+            tooltip: {
+              enabled: false
+            },
+            stroke: {
+              width: [0, 4]
+            },
+            xaxis: {
+              categories: post.data.chart.ChartPlaces.map((item: any) => item.places_name),
+              labels: {
+                style: {
+                  fontSize: '16px',
+                  fontFamily: 'Helvetica, Arial, sans-serif',
+                  colors: '#000000'
+                }
+              }
+            },
+            yaxis: {
+              tickAmount: 5,
+              forceNiceScale: true,
+              decimalsInFloat: 1,
+              labels: {
+                formatter: function (val: number) {
+                  return Number.isInteger(val) ? val.toString() : '';
+                }
+              }
+            },
+            dataLabels: {
+              enabled: true,
+              enabledOnSeries: [1],
+              style: {
+                fontSize: '20',
+                fontFamily: 'Helvetica, Arial, sans-serif',
+              }
+            },
+          };
+        } else {
+          this.chartPlacesOptions = undefined;
+        }
+
         await new Promise(resolve => setTimeout(resolve, 500));
         await this.generateTable(post)
       }
@@ -297,7 +400,7 @@ export class GenereateReportComponent implements OnInit {
   }
 
 
-  async generateTable(data: any, chartPriority?: any) {
+  async generateTable(data: any) {
     const doc = new jsPDF();
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -414,19 +517,9 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
     // Add date
     doc.setFontSize(10);
     doc.setFont('Inter', 'normal');
-    const today = new Date()
-
-
-    const start = new Date(this.generateForm.value.start_date).toLocaleDateString('en-CA');
-    const end = new Date(this.generateForm.value.end_date).toLocaleDateString('en-CA');
 
     const startPdf = new Date(this.generateForm.value.start_date).toLocaleDateString('id-ID', options);
     const endPdf = new Date(this.generateForm.value.end_date).toLocaleDateString('id-ID', options);
-
-
-    const optionsDate: Intl.DateTimeFormatOptions = { day: '2-digit', month: 'long', year: 'numeric' };
-    const formattedDate = today.toLocaleDateString('id-ID', optionsDate);
-    const formattedTime = today.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
     // Helper function to add a table
     const addTable = async (title: string, head: string[][], body: any[][], styles: any = {}) => {
@@ -483,6 +576,7 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
       tableTickets.push([
         detail.tracking_id,
         `${detail.hari_masuk} ${detail.waktu_masuk}`,
+        detail.places_name ?? 'Tidak Ada',
         detail.category_name,
         detail.subject,
         detail.respon_admin,
@@ -491,13 +585,18 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
     });
 
     // Tambahkan tabel ke PDF atau laporan
-    await addTable(`A. Ticket`, [['Tracking ID', 'Tickets Entry', 'Category', 'Subject', "Action", 'Created At']], tableTickets);
+    await addTable(`A. Ticket`, [['Tracking ID', 'Tickets Entry', 'Place', 'Category', 'Subject', "Action", 'Created At']], tableTickets);
     if (this.generateForm.value.products_name) {
 
       try {
         // Ensure chart is visible
         const chartElement = this.chartContainer.nativeElement;
         const chartElement2 = this.chartContainer2.nativeElement;
+        let chartElement3 = null;
+        if (this.dataResponse.data.chart.ChartPlaces &&
+          this.dataResponse.data.chart.ChartPlaces.length > 0) {
+          chartElement3 = this.chartContainer3.nativeElement;
+        }
 
         let y2 = 30;
 
@@ -515,8 +614,22 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
             scale: 2
           });
 
+          let canvas3 = null;
+          if (chartElement3) {
+            canvas3 = await html2canvas(chartElement3, {
+              logging: false,
+              useCORS: true,
+              scale: 2
+            });
+          }
+
           const imgData = canvas.toDataURL('image/png');
           const imgData2 = canvas2.toDataURL('image/png');
+
+          let imgData3 = null;
+          if (canvas3) {
+            imgData3 = canvas3.toDataURL('image/png');
+          }
           doc.addPage();
 
           const currentPage = doc.getCurrentPageInfo().pageNumber;
@@ -551,6 +664,28 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
           doc.text(`Jumlah Aduan Berdasarkan Tingkat Prioritas`, 20, y2);
           y2 += 5;
           doc.addImage(imgData, 'PNG', 20, y2, imgWidth, imgHeight);
+
+          if (this.dataResponse.data.chart.ChartPlaces &&
+            this.dataResponse.data.chart.ChartPlaces.length > 0 &&
+            imgData3) {
+            doc.addPage();
+            const newPage = doc.getCurrentPageInfo().pageNumber;
+            if (newPage >= 2) {
+              y = margin;
+              addHeader(newPage);
+              y2 = margin
+              y2 += 30;
+            }
+
+            doc.setFontSize(14);
+            doc.setFont("helvetica", "semibold");
+            doc.setTextColor(0, 0, 0, 0.8);
+            y2 += 5;
+            doc.text(`Jumlah Aduan Berdasarkan Tempat`, 20, y2);
+            y2 += 5;
+            doc.addImage(imgData3, 'PNG', 20, y2, imgWidth, imgHeight);
+          }
+
         } else {
           console.warn("Chart container has no dimensions, skipping chart in PDF");
         }

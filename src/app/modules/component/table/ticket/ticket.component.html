@@ -40,7 +40,7 @@
                     <mat-icon class="icon-size-5" svgIcon="mat_outline:add"></mat-icon>
                     <span>Add Tickets</span>
                 </button>
-                <button mat-menu-item (click)="importExcel()">
+                <button mat-menu-item (click)="importExcel()" *ngIf="isAdmin">
                     <mat-icon class="icon-size-5" svgIcon="mat_outline:upload_file"></mat-icon>
                     <span>Import Excel</span>
                 </button>
@@ -74,6 +74,8 @@
             <mat-menu #menu="matMenu">
                 <button mat-menu-item [matMenuTriggerFor]="products"
                     [matMenuTriggerData]="{disableClose: true}">Products</button>
+                <button mat-menu-item [matMenuTriggerFor]="places"
+                    [matMenuTriggerData]="{disableClose: true}">Places</button>
                 <button mat-menu-item [matMenuTriggerFor]="categorys"
                     [matMenuTriggerData]="{disableClose: true}">Category</button>
                 <button mat-menu-item [matMenuTriggerFor]="status"
@@ -81,7 +83,7 @@
                 <button mat-menu-item [matMenuTriggerFor]="priority"
                     [matMenuTriggerData]="{disableClose: true}">Priority</button>
 
-                <!-- Products Category -->
+                <!-- Menu Products -->
                 <mat-menu #products="matMenu" class="min-w-[300px]">
                     <div class="px-5 py-3 w-full">
                         <h1 class="font-semibold mb-2">Choose Products</h1>
@@ -90,6 +92,20 @@
                     <div class="px-5 flex flex-col gap-2 w-full">
                         <mat-checkbox class="h-full" *ngFor="let item of productsItems" [(ngModel)]="item.checked"
                             (click)="$event.stopPropagation();" (change)="applyProductsFilter()">
+                            {{ item.name }}
+                        </mat-checkbox>
+                    </div>
+                </mat-menu>
+
+                <!-- Menu Places -->
+                <mat-menu #places="matMenu" class="min-w-[300px]">
+                    <div class="px-5 py-3 w-full">
+                        <h1 class="font-semibold mb-2">Choose Places</h1>
+                    </div>
+
+                    <div class="px-5 flex flex-col gap-2 w-full">
+                        <mat-checkbox class="h-full" *ngFor="let item of placesItems" [(ngModel)]="item.checked"
+                            (click)="$event.stopPropagation();" (change)="applyPlacesFilter()">
                             {{ item.name }}
                         </mat-checkbox>
                     </div>
@@ -158,7 +174,7 @@
             <mat-date-range-picker #picker></mat-date-range-picker>
         </mat-form-field>
     </div>
-    
+
     <!-- Skeleton Loader -->
     <div role="status" class="p-5 animate-pulse" *ngIf="isLoading">
         <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full mb-[22px]"></div>
@@ -170,18 +186,9 @@
         <div class="h-6 bg-gray-300 rounded-full dark:bg-gray-700 w-full"></div>
     </div>
 
-    <div *ngIf="isNotFound && !isLoading" class="py-10">
-        <div class="flex flex-col items-center">
-            <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
-            <br />
-            <p class="text-lg font-semibold">Data Not Found</p>
-            <p class="text-sm">try using a different keyword or add a new tickets</p>
-        </div>
-    </div>
     <!-- Table -->
     <div class="w-full overflow-auto whitespace-nowrap mt-5">
-        <mat-table #table [dataSource]="dataSource" matSort
-            *ngIf="!isNotFound && !isLoading && dataSource.data.length != 0 " class="min-w-[2480px]">
+        <mat-table #table [dataSource]="dataSource" matSort *ngIf="!isLoading" class="min-w-[2480px]">
 
             <div>
                 <!-- Tracking ID Column -->
@@ -211,6 +218,15 @@
                     <mat-cell *matCellDef="let element" class="flex items-center gap-3">
                         <mat-icon svgIcon="mat_outline:access_time"></mat-icon>
                         {{element.waktu_masuk}}
+                    </mat-cell>
+                </ng-container>
+
+                <!-- Category Column -->
+                <ng-container matColumnDef="place">
+                    <mat-header-cell *matHeaderCellDef> Place
+                    </mat-header-cell>
+                    <mat-cell *matCellDef="let element" class="flex items-center gap-3 font-medium">
+                        {{element.places_name ?? 'Not Found'}}
                     </mat-cell>
                 </ng-container>
 
@@ -271,7 +287,7 @@
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
                         <mat-form-field hideRequiredMarker class="w-full">
                             <mat-select [(value)]="element.status" placeholder="Select"
-                                [disabled]="element.status === 'Resolved' || shiftStatus && !isAdmin">
+                                [disabled]="!isAdmin && (shiftStatus || element?.status === 'Resolved')">
                                 <mat-option *ngFor="let status of statusList" [value]="status"
                                     class="px-3 py-1 m-2 font-medium text-base rounded-full"
                                     (click)="changeStatus(element.tracking_id, status)">
@@ -348,6 +364,15 @@
                 <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
             </div>
         </mat-table>
+    </div>
+
+    <div *ngIf="isNotFound && !isLoading" class="py-10">
+        <div class="flex flex-col items-center">
+            <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
+            <br />
+            <p class="text-lg font-semibold">Data Not Found</p>
+            <p class="text-sm">try using a different keyword or add a new tickets</p>
+        </div>
     </div>
 
     <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 20]" [showFirstLastButtons]="true">

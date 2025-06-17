@@ -9,10 +9,6 @@ export default [
     {
         path: '',
         component: TicketsComponent,
-        resolve: {
-            check: () => inject(TicketTableService).checkTickets(),
-            data: () => inject(TicketLogsService).fetchData(),
-        },
     },
     {
         path: 'add-tickets',

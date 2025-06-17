@@ -56,9 +56,9 @@
             <p class="text-sm">Coba gunakan kata kunci lain atau tambahkan catatan baru.</p>
         </div>
 
-        <div *ngIf="!isNotFound"  class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2 p-3">
-            <div *ngFor="let note of filteredData"
-                class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-md shadow-md relative">
+        <div *ngIf="!isNotFound" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2 p-3">
+            <div *ngFor="let note of filteredData" (click)="editNotes(note)"
+                class="bg-yellow-100 border-l-4 border-yellow-500 p-4 hover:cursor-pointer rounded-md shadow-md relative">
                 <h3 class="text-md font-semibold text-gray-800">{{ note.title }}</h3>
                 <p class="text-sm text-gray-600 mt-1">{{ note.content }}</p>
 

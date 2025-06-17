@@ -15,15 +15,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ApiService } from 'app/services/api.service';
-import { Subject } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ToastrService } from 'ngx-toastr';
-import { ProductsTableService } from './products.service';
 import { FormAddProductsComponent } from 'app/modules/admin/dashboards/products/form-add-products/form-add-products.component';
 import { FormEditProductsComponent } from 'app/modules/admin/dashboards/products/form-edit-products/form-edit-products.component';
+import { PlacesTableService } from './places.service';
+import { FormAddEditPlacesComponent } from 'app/modules/admin/dashboards/place/form-add-edit-places/form-add-edit-places.component';
+
 
 @Component({
-  selector: 'app-table-products',
+  selector: 'app-table-places',
   standalone: true,
   imports: [
     CommonModule,
@@ -43,12 +44,11 @@ import { FormEditProductsComponent } from 'app/modules/admin/dashboards/products
     MatOptionModule,
     MatButtonModule,
   ],
-  templateUrl: './products.component.html',
-  styleUrl: './products.component.scss'
+  templateUrl: './places.component.html',
+  styleUrl: './places.component.scss'
 })
-export class TableProductsComponent {
-
-  public displayedColumns = [ 'name', 'total_tickets', 'action'];
+export class TablePlacesComponent {
+  public displayedColumns = ['id', 'name', 'products', 'action'];
   public dataSource = new MatTableDataSource<any>();
 
   // Paginator
@@ -59,7 +59,7 @@ export class TableProductsComponent {
   constructor(
     private _apiService: ApiService,
     private fuseConfirmationService: FuseConfirmationService,
-    private _productsService: ProductsTableService,
+    private _placesService: PlacesTableService,
     private _matDialog: MatDialog,
     private _toastService: ToastrService,
   ) {
@@ -69,19 +69,19 @@ export class TableProductsComponent {
   }
 
   get datas() {
-    return this._productsService._data()
+    return this._placesService._data()
   }
 
   get isLoading(): boolean {
-    return this._productsService.isLoading()
+    return this._placesService.isLoading()
   }
 
   get isNotDataFound(): boolean {
-    return this._productsService.isNotFound()
+    return this._placesService.isNotFound()
   }
 
   ngOnInit(): void {
-    this._productsService.fetchData()
+    this._placesService.fetchData()
   }
 
   /**
@@ -97,27 +97,31 @@ export class TableProductsComponent {
   * Public Functions
   */
 
-  addProducts() {
-    this._matDialog.open(FormAddProductsComponent, {
-      width: window.innerWidth < 600 ? '90%' : '50%',
-      maxWidth: '100vw',
-    })
-  }
-
-  editProducts(id: number) {
-    this._matDialog.open(FormEditProductsComponent, {
+  addPlaces() {
+    this._matDialog.open(FormAddEditPlacesComponent, {
       width: window.innerWidth < 600 ? '90%' : '50%',
       maxWidth: '100vw',
       data: {
-        id: id
+        mode: "Add"
       }
     })
   }
 
-  handleDeleteProducts(id: number) {
+  editPlaces( place: any) {
+    this._matDialog.open(FormAddEditPlacesComponent, {
+      width: window.innerWidth < 600 ? '90%' : '50%',
+      maxWidth: '100vw',
+      data: {
+        mode: "Edit",
+        place: place
+      }
+    })
+  }
+
+  handleDeletePlaces(id: number) {
     const confirm = this.fuseConfirmationService.open({
       title: 'Delete Confirmation',
-      message: `Are you sure want to delete this Products ?`,
+      message: `Are you sure want to delete this Places ?`,
       actions: {
         confirm: {
           label: 'Delete',
@@ -127,25 +131,25 @@ export class TableProductsComponent {
 
     confirm.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this.deleteProducts(id)
+        this.deletePlaces(id)
       }
     });
   }
 
-  async deleteProducts(id: number) {
+  async deletePlaces(id: number) {
     try {
-      const { data, status } = await this._apiService.delete(`api/V1/products/${id}`)
+      const { data, status } = await this._apiService.delete(`api/V1/places/${id}`)
 
       if (status === 200) {
-        this._toastService.success("Success Delete Products", "Success")
-        this._productsService.fetchData()
+        this._toastService.success("Success Delete Places", "Success")
+        this._placesService.fetchData()
         return
       } else {
-        this._toastService.error("Failed Delete Products", "Failed")
+        this._toastService.error("Failed Delete Places", "Failed")
         return
       }
     } catch (error) {
-      this._toastService.error("Failed Delete Products", "Failed")
+      this._toastService.error("Failed Delete Places", "Failed")
       throw error
     }
   }

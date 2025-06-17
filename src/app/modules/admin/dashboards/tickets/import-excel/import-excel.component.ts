@@ -16,6 +16,7 @@ import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ProductsTableService } from 'app/modules/component/table/products/products.service';
 import * as XLSX from 'xlsx';
 import { TicketTableService } from 'app/modules/component/table/ticket/ticket.service';
+import { TicketLogsService } from 'app/modules/component/table/ticket-logs/ticket-logs.service';
 
 @Component({
   selector: 'app-import-excel',
@@ -37,8 +38,8 @@ import { TicketTableService } from 'app/modules/component/table/ticket/ticket.se
   styleUrl: './import-excel.component.scss'
 })
 export class ImportExcelComponent {
-  excelForm!: FormGroup
-  isLoading: boolean = false
+  excelForm!: FormGroup;
+  isLoading: boolean = false;
 
   excelData: any[] = [];
   selectedFile: File | null = null;
@@ -47,13 +48,27 @@ export class ImportExcelComponent {
     private _apiService: ApiService,
     private toast: ToastrService,
     private _ticketTableSerivce: TicketTableService,
+    private _ticketLogsTableService: TicketLogsService,
     private fuseConfirmationService: FuseConfirmationService,
     public dialogRef: MatDialogRef<ImportExcelComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void { }
 
+  formatDate(date: Date): string {
+    // Kompensasi timezone offset
+    const offsetDate = new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    const year = offsetDate.getFullYear();
+    const month = String(offsetDate.getMonth() + 1).padStart(2, '0');
+    const day = String(offsetDate.getDate() + 1).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  formatTime(date: Date): string {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
   }
 
   onFileChange(event: any) {
@@ -64,35 +79,55 @@ export class ImportExcelComponent {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
+        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
         const firstSheetName = workbook.SheetNames[0];
         const worksheet = workbook.Sheets[firstSheetName];
         this.excelData = XLSX.utils.sheet_to_json(worksheet);
+
+        this.excelData = this.excelData.map((item: any) => ({
+          ...item,
+          hari_masuk: item.hari_masuk instanceof Date ? this.formatDate(item.hari_masuk) : item.hari_masuk,
+          hari_respon: item.hari_respon instanceof Date ? this.formatDate(item.hari_respon) : item.hari_respon,
+          waktu_masuk: item.waktu_masuk instanceof Date ? this.formatTime(item.waktu_masuk) : item.waktu_masuk,
+          waktu_respon: item.waktu_respon instanceof Date ? this.formatTime(item.waktu_respon) : item.waktu_respon,
+        }));
+
+        console.log('Formatted Excel Data:', this.excelData);
       };
       reader.readAsArrayBuffer(file);
     }
   }
 
   async onSubmit() {
+    if (!this.selectedFile) {
+      this.toast.warning('Please select a file before submitting.', 'Warning');
+      return;
+    }
+
+    if (!this.excelData || this.excelData.length === 0) {
+      this.toast.warning('The selected file is empty or invalid.', 'Warning');
+      return;
+    }
 
     try {
-      this.isLoading = true
-      console.log(this.excelData)
-      const { data, status } = await this._apiService.post("api/V1/tickets/excel", this.excelData)
+      this.isLoading = true;
+      console.log(this.excelData);
+      const { data, status } = await this._apiService.post("api/V1/tickets/excel", this.excelData);
 
       if (status === 201) {
-        this.toast.success("Success Create Tickets", "Success")
-        this._ticketTableSerivce.fetchData()
-        this.dialogRef.close()
-        this.isLoading = false
-        return
+        this.toast.success("Success Create Tickets", "Success");
+        this._ticketTableSerivce.fetchData();
+        this._ticketLogsTableService.fetchDatas()
+        this.dialogRef.close();
+        this.isLoading = false;
+        return;
       } else if (status === 500) {
-        this.toast.error("Internal Server Error", "Failed")
-        this.dialogRef.close()
-        this.isLoading = false
-        return
+        this.toast.error("Internal Server Error", "Failed");
+        this.dialogRef.close();
+        this.isLoading = false;
+        return;
       } else if (status === 409) {
-        this.isLoading = false
+        this.isLoading = false;
         const confirm = this.fuseConfirmationService.open({
           title: 'Notification',
           message: 'The Tickets already exists on the server. Would you like to create another Tickets time anyway?',
@@ -105,16 +140,15 @@ export class ImportExcelComponent {
               color: 'primary'
             },
           },
-        })
+        });
       } else if (status === 400) {
-        this.toast.error("Bad Request", "Failed")
-        this.dialogRef.close()
-        this.isLoading = false
-        return
+        this.toast.error("Bad Request", "Failed");
+        this.dialogRef.close();
+        this.isLoading = false;
+        return;
       }
-
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }

@@ -44,6 +44,8 @@ export class FormAddTicketsComponent implements OnInit {
   products: string[] = [];
   category: string[] = [];
   priority: string[] = ['Low', 'Medium', 'High'];
+  place: { id: number, name: string }[] = []
+
   disableInput: boolean = true;
 
   isLoading: boolean = false
@@ -61,6 +63,7 @@ export class FormAddTicketsComponent implements OnInit {
     this.firstTicketForm = this.fb.group({
       products_name: ['', Validators.required],
       subject: [{ value: '', disabled: this.disableInput }, Validators.required],
+      places_id: [{ value: null, disabled: this.disableInput }],
       category_id: [{ value: 0, disabled: this.disableInput }, Validators.required],
       detail_kendala: [{ value: '', disabled: this.disableInput }, Validators.required],
       priority: [{ value: '', disabled: this.disableInput }, Validators.required],
@@ -79,7 +82,8 @@ export class FormAddTicketsComponent implements OnInit {
     this.firstTicketForm.get('products_name')?.valueChanges.subscribe(async (value) => {
       if (value) {
         const { data } = await this._apiService.post("api/V1/get-data-form", { name: value })
-        this.category = data.data
+        this.category = data.data.category
+        this.place = data.data.places
         this.enableFields();
       } else {
         this.disableFields();
@@ -108,7 +112,7 @@ export class FormAddTicketsComponent implements OnInit {
       const get = await this._apiService.get("api/V1/list-products");
       this.products = get.data;
     } catch (error) {
-      console.error("Error fetching data:", error);
+      throw error
     }
   }
 
@@ -139,13 +143,11 @@ export class FormAddTicketsComponent implements OnInit {
         no_whatsapp: this.secondTicketForm.value.no_whatsapp
       };
 
-      console.log("Data yang dikirim:", data);
-
       const post = await this._apiService.post("api/V1/tickets", data);
 
-      this.isLoading = false;
 
       if (post.status === 201) {
+        this.isLoading = false;
         // Reset Form 1
         this.router.navigateByUrl("/dashboards/tickets")
         this.firstTicketForm.disable()
@@ -156,7 +158,6 @@ export class FormAddTicketsComponent implements OnInit {
         this.secondTicketForm.reset()
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
       this.isLoading = false;
     }
   }

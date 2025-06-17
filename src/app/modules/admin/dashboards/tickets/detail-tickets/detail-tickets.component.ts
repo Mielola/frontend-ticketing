@@ -23,6 +23,7 @@ import { takeUntil } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ToastrService } from 'ngx-toastr';
 import { TicketTableService } from 'app/modules/component/table/ticket/ticket.service';
+import { TempTicketsTableService } from 'app/modules/component/table/temp-tickets/temp-tickets.service';
 
 @Component({
   selector: 'app-detail-tickets',
@@ -60,8 +61,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   isNotDataFound: boolean
   shiftStatus: boolean = false
   isAdmin: boolean = localStorage.getItem("userRole") === 'admin';
-
-
+  place: { id: number, name: string }[] = []
 
   public displayedColumns = ['tracking_id', 'user', 'new_status', 'priority', 'details', 'update_at',];
   public dataSource = new MatTableDataSource<any>();
@@ -79,6 +79,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     private _toastService: ToastrService,
     private fuseConfirmationService: FuseConfirmationService,
     private _ticketTableService: TicketTableService,
+    private _tempTicketService: TempTicketsTableService,
   ) { }
 
   data: Ticket
@@ -88,7 +89,8 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     this.TicketForm = this.fb.group({
       products_name: ['', Validators.required],
       category_id: [{ value: 0, disabled: this.disableInput }, Validators.required],
-      no_whatsapp: [{ value: '', disabled: this.disableInput }, Validators.required],
+      places_id: [{ value: null, disabled: this.disableInput }],
+      no_whatsapp: [{ value: '', disabled: this.disableInput }],
       detail_kendala: [{ value: '', disabled: this.disableInput }, Validators.required],
       priority: [{ value: '', disabled: this.disableInput }, Validators.required],
       status: [{ value: '', disabled: this.disableInput }, Validators.required],
@@ -112,7 +114,9 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     this.TicketForm.get('products_name')?.valueChanges.subscribe(async (value) => {
       if (value) {
         const { data } = await this._apiService.post("api/V1/get-data-form", { name: value })
-        this.category = data.data
+        this.category = data.data.category
+        this.place = data.data.places
+
         this.enableFields();
       } else {
         this.disableFields();
@@ -174,26 +178,27 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
 
     confirm.afterClosed().subscribe((result) => {
       if (result === 'confirmed') {
-        this.deleteProducts(this.tracking_id)
+        this.deleteTickets(this.tracking_id)
       }
     });
   }
 
-  async deleteProducts(id: string) {
+  async deleteTickets(id: string) {
     try {
       const { data, status } = await this._apiService.delete(`api/V1/tickets/${id}`)
 
       if (status === 200) {
-        this._toastService.success("Success Delete Products", "Success")
+        this._toastService.success("Success Delete Tickets", "Success")
+        await this._ticketTableService.fetchData()
+        await this._tempTicketService.fetchData()
         this.router.navigate(['/dashboards/tickets'])
-        this._ticketTableService.fetchData()
         return
       } else {
-        this._toastService.error("Failed Delete Products", "Failed")
+        this._toastService.error("Failed Delete Tickets", "Failed")
         return
       }
     } catch (error) {
-      this._toastService.error("Failed Delete Products", "Failed")
+      this._toastService.error("Failed Delete Tickets", "Failed")
       throw error
     }
   }
@@ -213,13 +218,9 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     this.dataSource.data = data.data.history;
     this.data = data.data
 
-    const formatDate = (date: any) => {
-      if (!date) return null;
-      return DateTime.fromJSDate(new Date(date)).toISODate();
-    };
-
     this.TicketForm.patchValue({
       products_name: data.data.products_name,
+      places_id: data.data.place_id,
       category_id: data.data.category_id,
       no_whatsapp: data.data.no_whatsapp,
       detail_kendala: data.data.detail_kendala,

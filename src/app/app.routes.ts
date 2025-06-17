@@ -5,7 +5,6 @@ import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { RoleGuard } from './core/auth/guards/role.guard';
 import { OTPGuard } from './core/auth/guards/otp.guard';
-import { CanDeactivateGuard } from './core/auth/guards/can-deactive.guard';
 
 // prettier-ignore
 /* eslint-disable max-len */
@@ -110,6 +109,7 @@ export const appRoutes: Route[] = [
                     { path: 'products', loadChildren: () => import('app/modules/admin/dashboards/products/products.routes') },
                     { path: 'category', loadChildren: () => import('app/modules/admin/dashboards/category/category.routes') },
                     { path: 'users', loadChildren: () => import('app/modules/admin/dashboards/users/users.routes') },
+                    { path: 'places', loadChildren: () => import('app/modules/admin/dashboards/place/place.routes') },
                 ]
             },
 

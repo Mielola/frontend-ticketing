@@ -7,8 +7,9 @@
 
     <ion-loading [isOpen]="isLoading" message="Sumbitting Form..." spinner="circular"></ion-loading>
 
-    <div class="">
-        <form [formGroup]="generateForm" class="bg-card mt-2 flex flex-col overflow-hidden rounded-2xl p-8 pb-4 gap-5">
+    <div class="max-h-180">
+        <form [formGroup]="generateForm"
+            class="bg-card mt-2 flex flex-col overflow-y-scroll rounded-2xl px-8 pt-4 pb-4 gap-5">
 
             <!-- Product Input -->
             <mat-form-field hideRequiredMarker class="w-full">
@@ -17,6 +18,34 @@
                     <mat-option *ngFor="let item of products" [value]="item"
                         class="px-3 py-1 m-2 font-medium text-base rounded-full">
                         {{item}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Place Input -->
+            <mat-form-field class="w-full" *ngIf="place?.length !== 0">
+                <mat-label>Place (Optional)</mat-label>
+                <mat-select formControlName="places_id">
+                    <mat-option [value]="'all'" class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        All
+                    </mat-option>
+                    <mat-option *ngFor="let item of place" [value]="item.id.toString()"
+                        class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        {{item.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Category Input -->
+            <mat-form-field class="w-full">
+                <mat-label>Category</mat-label>
+                <mat-select formControlName="category_id">
+                    <mat-option [value]="'all'" class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        All
+                    </mat-option>
+                    <mat-option *ngFor="let item of category" [value]="item.id"
+                        class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        {{item.category_name}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -68,14 +97,24 @@
     </div>
 </div>
 
-<div *ngIf="chartOptions" #chartContainer [style.position]="'absolute'" [style.left]="'-9999px'" class="w-full h-full">
-    <apx-chart [series]="chartOptions.series" [legend]="chartOptions.legend" [chart]="chartOptions.chart"
-        [xaxis]="chartOptions.xaxis" [title]="chartOptions.title" [dataLabels]="chartOptions.dataLabels">
+<div *ngIf="chartPrriorityOptions" #chartContainer [style.position]="'absolute'" [style.left]="'-9999px'"
+    class="w-full h-full">
+    <apx-chart [series]="chartPrriorityOptions.series" [legend]="chartPrriorityOptions.legend"
+        [chart]="chartPrriorityOptions.chart" [xaxis]="chartPrriorityOptions.xaxis"
+        [title]="chartPrriorityOptions.title" [dataLabels]="chartPrriorityOptions.dataLabels">
     </apx-chart>
 </div>
 
-<div *ngIf="chartOptions2" #chartContainer2 [style.position]="'absolute'" [style.left]="'-8999px'"
+<div *ngIf="chartCategoryOptions" #chartContainer2 [style.position]="'absolute'" [style.left]="'-5999px'"
     class="w-full h-full">
-    <apx-chart [series]="chartOptions2.series" [legend]="chartOptions2.legend" [chart]="chartOptions2.chart"
-        [xaxis]="chartOptions2.xaxis" [title]="chartOptions2.title" [dataLabels]="chartOptions2.dataLabels"></apx-chart>
+    <apx-chart [series]="chartCategoryOptions.series" [legend]="chartCategoryOptions.legend"
+        [chart]="chartCategoryOptions.chart" [xaxis]="chartCategoryOptions.xaxis" [title]="chartCategoryOptions.title"
+        [dataLabels]="chartCategoryOptions.dataLabels"></apx-chart>
+</div>
+
+<div *ngIf="chartPlacesOptions && dataResponse?.data?.chart?.ChartPlaces?.length > 0" #chartContainer3
+    [style.position]="'absolute'" [style.left]="'-1999px'" class="w-full h-full">
+    <apx-chart [series]="chartPlacesOptions.series" [legend]="chartPlacesOptions.legend"
+        [chart]="chartPlacesOptions.chart" [xaxis]="chartPlacesOptions.xaxis" [title]="chartPlacesOptions.title"
+        [dataLabels]="chartPlacesOptions.dataLabels"></apx-chart>
 </div>

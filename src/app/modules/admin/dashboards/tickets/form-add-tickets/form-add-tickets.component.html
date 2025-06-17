@@ -29,6 +29,17 @@
                             <input formControlName="subject" matInput [placeholder]="'Subject Judul'" />
                         </mat-form-field>
 
+                        <!-- Place Input -->
+                        <mat-form-field class="w-full" *ngIf="place?.length !== 0">
+                            <mat-label>Place (Optional)</mat-label>
+                            <mat-select formControlName="places_id">
+                                <mat-option *ngFor="let item of place" [value]="item.id"
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                    {{item.name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+
                         <!-- Category Input -->
                         <mat-form-field class="w-full">
                             <mat-label>Category</mat-label>
