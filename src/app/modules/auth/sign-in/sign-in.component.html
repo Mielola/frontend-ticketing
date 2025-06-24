@@ -7,10 +7,8 @@
         <!-- Form Login -->
         <div class="md:w-1/2">
             <img src="images/logo/commandcenter.png" alt="" class="w-16 mb-5">
-            <h1 class="font-bold text-4xl max-sm:text-2xl">Create an Account</h1>
-            <p class="opacity-80">Don't have an account? <span [routerLink]="['/sign-up']" class="hover:cursor-pointer text-blue-800
-                    font-semibold">Sign Up</span> </p>
-
+            <h1 class="font-bold text-4xl max-sm:text-2xl">Sign In to Your Account</h1>
+            
             @if (showAlert) {
             <fuse-alert class="mt-8" [appearance]="'outline'" [showIcon]="false" [type]="alert.type"
                 [@shake]="alert.type === 'error'">
@@ -55,7 +53,7 @@
                     </mat-form-field>
 
                     <!-- Actions -->
-                    <div class="mt-1.5 inline-flex w-full items-center justify-between">
+                    <!-- <div class="mt-1.5 inline-flex w-full items-center justify-between">
                         <mat-checkbox class="-ml-2" [color]="'primary'" [formControlName]="'rememberMe'">
                             Remember me
                         </mat-checkbox>
@@ -63,7 +61,7 @@
                             [routerLink]="['/forgot-password']">Forgot
                             password?
                         </a>
-                    </div>
+                    </div> -->
 
                     <!-- Submit button -->
                     <button class="fuse-mat-button-large mt-6 w-full" mat-flat-button [color]="'primary'"

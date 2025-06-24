@@ -23,7 +23,8 @@ export class OtpComponent implements OnInit {
   @HostBinding('class') className = 'w-full';
   data = '';
   email: String
-
+  countdown: number = 60;
+  private timer: any;
 
   constructor(
     private cookieService: CookieService,
@@ -34,11 +35,45 @@ export class OtpComponent implements OnInit {
     private _router: Router,
     private _httpClient: HttpClient,
     private _cookies: CookieService,
-    private _userService : UserService,
+    private _userService: UserService,
   ) { }
 
   ngOnInit(): void {
     this.email = this.cookieService.get("otp-email")
+    this.startCountdown()
+  }
+
+  startCountdown() {
+    this.timer = setInterval(() => {
+      if (this.countdown > 0) {
+        this.countdown--;
+      } else {
+        this.DeleteOtp();
+        clearInterval(this.timer);
+      }
+    }, 1000);
+  }
+
+  async resendOtp() {
+    try {
+      const { data, status } = await this.apiService.post("api/V1/resend-otp", {
+        email: this.email,
+      })
+      this.countdown = 60;
+      this.startCountdown();
+    } catch (error) {
+      this.toast.error("Failed to resend OTP. Please try again later.", "Error");
+    }
+  }
+
+  async DeleteOtp() {
+    try {
+      const { data, status } = await this.apiService.post("api/V1/delete-otp", {
+        email: this.email,
+      })
+    } catch (error) {
+      this.toast.error("Failed to delete OTP. Please try again later.", "Error");
+    }
   }
 
   async onSubmit() {
@@ -50,18 +85,18 @@ export class OtpComponent implements OnInit {
 
       if (status === 401) {
         // If OTP Error
+        this.data = '';
         this.toast.error("The OTP you entered is incorrect. Please try again.", "Invalid OTP");
         return
       } else if (status === 500) {
         // If Internal Server Error
         this.toast.error("Internal Server Error.", "Internal Error");
         return
-      } else if (status === 200 ) {
+      } else if (status === 200) {
         localStorage.setItem('userRole', data.user.role);
         localStorage.setItem("accessToken", data.user.token)
-        
+
         this._userService.Update(data.user)
-        
         this._cookies.deleteAll("/")
       }
 

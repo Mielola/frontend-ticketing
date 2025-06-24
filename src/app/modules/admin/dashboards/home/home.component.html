@@ -238,10 +238,7 @@
                                                 *ngFor="let tickets of recent_tickets">
                                                 <!-- Detail Tickets -->
                                                 <div>
-                                                    <h1 class="text-white">{{tickets.tracking_id == '' ? 'Tidak Ada
-                                                        Subject'
-                                                        :
-                                                        tickets.tracking_id}}</h1>
+                                                    <h1 class="text-white">{{tickets.tracking_id == '' ? 'Tidak Ada Subject':tickets.tracking_id}}</h1>
                                                     <div class="flex items-center mt-2 gap-5 text-white opacity-60">
                                                         <p> {{tickets.hari_masuk}}</p>
                                                         <p>{{tickets.user_email}}</p>
@@ -260,8 +257,8 @@
                             </section>
 
                             <!-- Log Users -->
-                            <app-user-logs></app-user-logs>
                             <app-ticket-logs></app-ticket-logs>
+                            <app-user-logs></app-user-logs>
                         </div>
                     </ng-template>
                 </mat-tab>

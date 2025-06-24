@@ -74,9 +74,9 @@ export class FormAddEditUsersComponent {
       const response = await this._apiService.get(`api/V1/users/${this.data.id}`)
       const { data } = response
       this.usersForm.patchValue({
-        name: data.Name,
-        email: data.Email,
-        password: data.Password,
+        name: data.name,
+        email: data.email,
+        password: data.password,
       })
 
     } catch (error) {

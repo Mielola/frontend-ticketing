@@ -15,6 +15,7 @@ import { ApiService } from 'app/services/api.service';
 import { DateTime } from 'luxon';
 import { FormAddProductsComponent } from '../../products/form-add-products/form-add-products.component';
 import { MatDialog } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-form-add-tickets',
@@ -55,6 +56,7 @@ export class FormAddTicketsComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private _matDialog: MatDialog,
+    private _toastService: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -147,7 +149,6 @@ export class FormAddTicketsComponent implements OnInit {
 
 
       if (post.status === 201) {
-        this.isLoading = false;
         // Reset Form 1
         this.router.navigateByUrl("/dashboards/tickets")
         this.firstTicketForm.disable()
@@ -158,6 +159,8 @@ export class FormAddTicketsComponent implements OnInit {
         this.secondTicketForm.reset()
       }
     } catch (error) {
+      this._toastService.error("Failed to submit ticket", "Error");
+    } finally {
       this.isLoading = false;
     }
   }
