@@ -1,0 +1,183 @@
+<main class="p-4 h-full w-full sm:px-5">
+
+    <div class="px-1 pt-3 flex justify-between items-start sm:items-center flex-col sm:flex-row gap-5 sm:gap-0">
+
+        <div class="flex items-center gap-5 w-fit">
+            <!-- Tombol Back -->
+            <button (click)="goBack()" mat-mini-fab color="primary" aria-label="Back">
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+
+            <!-- Judul dan Subtitle -->
+            <div>
+                <h1 class="font-bold text-lg sm:text-3xl">Tickets By Users ({{usersName}})</h1>
+                <p class="text-sm sm:text-base">Overview of ticket volume handled across different Users</p>
+            </div>
+        </div>
+
+        <div class="text-sm text-gray-600">
+            <span class="font-medium text-gray-500 hover:cursor-pointer hover:text-blue-400"
+                [routerLink]="['/dashboards/home']">Home</span>
+            <span class="mx-2 text-gray-400">/</span>
+            <span class="font-semibold text-blue-600 hover:text-blue-500">Tickets</span>
+        </div>
+    </div>
+
+    <div class="overflow-hidden h-fit py-5">
+        <!-- Status Tickets -->
+        <section class="bg-blue-900 p-10 flex flex-col gap-7 rounded-md shadow-xl">
+            <h1 class="text-2xl text-white font-semibold">All Tickets </h1>
+            <div class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 rounded-md">
+                <!-- New Tickets -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            New Tickets
+                        </div>
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-blue-500 sm:text-8xl">
+                            {{summary?.open_tickets}}
+                        </div>
+                        <div class="text-lg font-medium text-blue-600 dark:text-blue-500">
+                            New Tickets
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                            <div class="truncate text-md font-medium">
+                                Hold Tickets:
+                            </div>
+                            <div class="ml-1.5 text-lg font-semibold">
+                                {{summary?.hold_tickets}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Hold Tickets -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Hold Tickets
+                        </div>
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-[#7D7D7D] sm:text-8xl">
+                            {{summary?.hold_tickets}}
+                        </div>
+                        <div class="text-lg font-medium text-[#7D7D7D] dark:text-blue-500">
+                            Hold Tickets
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                            <div class="truncate text-md font-medium">
+                                On Progress:
+                            </div>
+                            <div class="ml-1.5 text-lg font-semibold">
+                                {{summary?.pending_tickets}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- On Progress -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            On Progress
+                        </div>
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-amber-500 sm:text-8xl">
+                            {{summary?.pending_tickets}}
+                        </div>
+                        <div class="text-lg font-medium text-amber-600 dark:text-amber-500">
+                            On Progress
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                            <div class="truncate text-md font-medium">
+                                Resolved Tickets:
+                            </div>
+                            <div class="ml-1.5 text-lg font-semibold">
+                                {{summary?.resolved_tickets}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Critical Tickets -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Critical Tickets
+                        </div>
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-red-500 sm:text-8xl">
+                            {{summary?.critical_tickets}}
+                        </div>
+                        <div class="text-lg font-medium text-red-600 dark:text-red-500">
+                            Critical Tickets
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                            <div class="truncate text-md font-medium">
+                                Total Tickets:
+                            </div>
+                            <div class="ml-1.5 text-lg font-semibold">
+                                {{summary?.total_tickets}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Resolved Tickets -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Resolved Tickets
+                        </div>
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-green-500 sm:text-8xl">
+                            {{summary?.resolved_tickets}}
+                        </div>
+                        <div class="text-lg font-medium text-green-600 dark:text-green-500">
+                            Resolved Tickets
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                            <div class="truncate text-md font-medium">
+                                Critical Tickets:
+                            </div>
+                            <div class="ml-1.5 text-lg font-semibold">
+                                {{summary?.critical_tickets}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Total Tickets -->
+                <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                    <div class="flex items-start justify-between">
+                        <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                            Total Tickets
+                        </div>
+                    </div>
+                    <div class="mt-2 flex flex-col items-center">
+                        <div class="text-7xl font-bold leading-none tracking-tight text-black sm:text-8xl">
+                            {{summary?.total_tickets}}
+                        </div>
+                        <div class="text-lg font-medium text-black dark:text-black">
+                            Total Tickets
+                        </div>
+                        <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                            <div class="truncate text-md font-medium">
+                                New Tickets:
+                            </div>
+                            <div class="ml-1.5 text-lg font-semibold">
+                                {{summary?.open_tickets}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div class="h-fit w-full">
+        <app-ticket></app-ticket>
+    </div>
+</main>

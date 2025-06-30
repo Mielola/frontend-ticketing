@@ -81,7 +81,7 @@ export class GenereateReportComponent implements OnInit {
 
 
   selectedStatus: string = '';
-  statusList: string[] = ['All', 'New', 'On Progress', 'Resolved']
+  statusList: string[] = ['All', 'Hold', 'New', 'On Progress', 'Resolved']
 
   constructor(
     private _apiService: ApiService,

@@ -4,6 +4,7 @@ import { RouterLink } from '@angular/router';
 import { TempTicketsComponent } from 'app/modules/component/table/temp-tickets/temp-tickets.component';
 import { TicketLogsComponent } from 'app/modules/component/table/ticket-logs/ticket-logs.component';
 import { TicketComponent } from 'app/modules/component/table/ticket/ticket.component';
+import { TicketTableService } from 'app/modules/component/table/ticket/ticket.service';
 
 @Component({
   selector: 'app-tickets',
@@ -20,4 +21,9 @@ import { TicketComponent } from 'app/modules/component/table/ticket/ticket.compo
 })
 export class TicketsComponent {
 
+  constructor(
+    private _ticketTableService: TicketTableService,
+  ) {
+    this._ticketTableService.fetchData()
+  }
 }

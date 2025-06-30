@@ -18,5 +18,17 @@ export default [
     {
         path: ':trackingId',
         loadChildren: () => import('app/modules/admin/dashboards/tickets/detail-tickets/detail-tickets.routes')
-    }
+    },
+    {
+        path: 'places/:places_name',
+        loadChildren: () => import('app/modules/admin/dashboards/tickets/places-tickets/places-tickets.routes')
+    },
+    {
+        path: 'category/:category_name',
+        loadChildren: () => import('app/modules/admin/dashboards/tickets/category-tickets/category-tickets.routes')
+    },
+    {
+        path: 'users/:users_name',
+        loadChildren: () => import('app/modules/admin/dashboards/tickets/users-tickets/users-tickets.routes')
+    },
 ] as Routes;

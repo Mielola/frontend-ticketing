@@ -15,6 +15,7 @@ import { ToastrService } from 'ngx-toastr';
 import { distinctUntilChanged, filter } from 'rxjs';
 import { ColumnChartComponent } from "../../../component/card/column-chart/column-chart.component";
 import { BarChartSideComponent } from 'app/modules/component/card/bar-chart-side/bar-chart-side.component';
+import { AnalyticsService } from './analytics.service';
 
 const today = new Date();
 const month = today.getMonth();
@@ -55,12 +56,16 @@ export class AnalyticsComponent implements OnInit {
   pieLabels: string[] = [];
 
   // Chart Tickets Berdasarkan Kategori
-  chartCategoryData: { name: string, data: number[], type: string }[]
+  chartCategoryData: { name: string, data: number[], type: string }[] = []
   chartCategoryLabels: string[] = []
 
   // Chart Ticket Berdasarkan Prioritas
   chartPriorityData: { name: string, data: number[], type: string }[]
   chartPriorityLabels: string[] = []
+
+  // Chart Ticket Req Category
+  ChartReqCategoryData: { name: string, data: number[], type: string }[]
+  ChartReqCategoryLabels: string[] = []
 
   // Chart Ticket Berdasarkan Prioritas
   chartPeriodeData: { name: string, data: number[], type: string }[]
@@ -87,11 +92,22 @@ export class AnalyticsComponent implements OnInit {
     end: new FormControl<Date | null>(new Date()),
   });
 
+
   constructor(
     private fb: FormBuilder,
     private _apiService: ApiService,
     private _toast: ToastrService,
+    private _analyticsService: AnalyticsService,
   ) { }
+
+
+  get currentProducts() {
+    return this._analyticsService.currentProducts()
+  }
+
+  set currentProducts(value) {
+    this._analyticsService.currentProducts.set(value)
+  }
 
   ngOnInit(): void {
     this.fetchProducts()
@@ -125,6 +141,8 @@ export class AnalyticsComponent implements OnInit {
       const startDate = new Date(startDateRaw as Date);
       const endDate = new Date(endDateRaw as Date);
 
+      this.currentProducts = productsName;
+
       if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime()) && productsName) {
         this.fetchAnalytics(
           productsName,
@@ -146,8 +164,9 @@ export class AnalyticsComponent implements OnInit {
       const get = await this._apiService.get("api/V1/list-products");
       this.products = get.data;
 
+      const lastProduct = this.currentProducts;
       this.analyticsForm.patchValue({
-        products_name: this.products[0]
+        products_name: lastProduct && this.products.includes(lastProduct) ? lastProduct : this.products[0]
       })
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -173,14 +192,33 @@ export class AnalyticsComponent implements OnInit {
       this.pieLabels = this.chartUserRole.map(e => e.role);
 
       // Chart Ticket Berdasarkan Category
-      this.chartCategoryData = [
+      const chartCategoryData = (this.data.ChartCategory ?? []).map((e) => e.total_tickets);
+      const chartCategoryLabels = (this.data.ChartCategory ?? []).map((e) => e.category_name);
+
+      if (chartCategoryData?.length > 0) {
+        this.chartCategoryData = [
+          {
+            name: 'Total Tiket',
+            data: chartCategoryData,
+            type: 'bar'
+          },
+        ];
+        this.chartCategoryLabels = chartCategoryLabels;
+
+      } else {
+        this.chartCategoryData = [];
+        this.chartCategoryLabels = [];
+      }
+
+      // Chart Ticket Req Category
+      this.ChartReqCategoryData = [
         {
           name: 'Total Tiket',
-          data: this.data.ChartCategory.map((e) => e.total_tickets),
+          data: this.data.ChartReqCategory.map((e) => e.total_tickets),
           type: 'bar'
         },
-      ];
-      this.chartCategoryLabels = this.data.ChartCategory.map((e) => e.category_name);
+      ]
+      this.ChartReqCategoryLabels = this.data.ChartReqCategory.map((e) => e.name);
 
       // Chart Tikcet Berdasarkan Priority
       this.chartPriorityData = [
@@ -232,7 +270,7 @@ export class AnalyticsComponent implements OnInit {
       const chartPlacesData = (this.data.ChartPlaces ?? []).map((e) => e.total_tickets);
       const chartPlacesLabels = (this.data.ChartPlaces ?? []).map((e) => e.places_name);
 
-      if (chartPlacesData.length > 0) {
+      if (chartPlacesData?.length > 0) {
         this.ChartTicketPlaceData = [
           {
             name: 'Total Tiket',

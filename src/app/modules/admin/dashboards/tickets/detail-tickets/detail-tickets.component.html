@@ -61,6 +61,12 @@
                             </mat-option>
                         </mat-select> </mat-form-field>
 
+                    <!-- Subject Input -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Subject</mat-label>
+                        <input formControlName="subject" matInput [placeholder]="'Subject'" />
+                    </mat-form-field>
+
                     <!-- Category Input -->
                     <mat-form-field class="w-full">
                         <mat-label>Category</mat-label>
@@ -201,10 +207,8 @@
                             <ng-container matColumnDef="tracking_id">
                                 <mat-header-cell *matHeaderCellDef> Tracking ID
                                 </mat-header-cell>
-                                <mat-cell *matCellDef="let element"
-                                    class="text-lg text-blue-600 font-medium underline whitespace-nowrap">
-                                    <a
-                                        [routerLink]="['/dashboards/tickets', element.tickets_id]">{{element.tickets_id}}</a>
+                                <mat-cell *matCellDef="let element" class="text-lg font-medium whitespace-nowrap">
+                                    <a>{{element.tickets_id}}</a>
                                 </mat-cell>
                             </ng-container>
 
@@ -234,6 +238,7 @@
                                     <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
                                                                             'bg-blue-500': element.new_status === 'New',
                                                                             'bg-yellow-500': element.new_status === 'On Progress',
+                                                                            'bg-[#7D7D7D]': element.new_status === 'Hold',
                                                                             'bg-green-500': element.new_status === 'Resolved',
                                                                             }">
                                         <h1 class="font-medium">{{element.new_status}}</h1>

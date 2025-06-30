@@ -52,7 +52,7 @@
                             <section class="bg-blue-900 p-10 flex flex-col gap-7 rounded-md shadow-xl">
                                 <h1 class="text-2xl text-white font-semibold">All Tickets </h1>
                                 <div
-                                    class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-5 rounded-md">
+                                    class="grid w-full min-w-0 grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 rounded-md">
                                     <!-- New Tickets -->
                                     <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
                                         <div class="flex items-start justify-between">
@@ -67,6 +67,31 @@
                                             </div>
                                             <div class="text-lg font-medium text-blue-600 dark:text-blue-500">
                                                 New Tickets
+                                            </div>
+                                            <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
+                                                <div class="truncate text-md font-medium">
+                                                    Hold Tickets:
+                                                </div>
+                                                <div class="ml-1.5 text-lg font-semibold">
+                                                    {{summary?.hold_tickets}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Hold Tickets -->
+                                    <div class="bg-card flex flex-auto flex-col overflow-hidden rounded-2xl p-6 shadow">
+                                        <div class="flex items-start justify-between">
+                                            <div class="truncate text-lg font-medium leading-6 tracking-tight">
+                                                Hold Tickets
+                                            </div>
+                                        </div>
+                                        <div class="mt-2 flex flex-col items-center">
+                                            <div
+                                                class="text-7xl font-bold leading-none tracking-tight text-[#7D7D7D] sm:text-8xl">
+                                                {{summary?.hold_tickets}}
+                                            </div>
+                                            <div class="text-lg font-medium text-[#7D7D7D] dark:text-blue-500">
+                                                Hold Tickets
                                             </div>
                                             <div class="text-secondary mt-5 flex w-full items-baseline justify-center">
                                                 <div class="truncate text-md font-medium">
@@ -197,7 +222,7 @@
                                     <!-- New vs. Closed -->
                                     <div class="flex flex-auto flex-col">
                                         <div class="text-secondary font-medium">
-                                            New vs. Closed
+                                            Products and Category
                                         </div>
                                         <div class="flex flex-auto flex-col">
                                             <apx-chart class="h-80 w-full flex-auto" [chart]="
@@ -238,7 +263,8 @@
                                                 *ngFor="let tickets of recent_tickets">
                                                 <!-- Detail Tickets -->
                                                 <div>
-                                                    <h1 class="text-white">{{tickets.tracking_id == '' ? 'Tidak Ada Subject':tickets.tracking_id}}</h1>
+                                                    <h1 class="text-white">{{tickets.tracking_id == '' ? 'Tidak Ada
+                                                        Subject':tickets.tracking_id}}</h1>
                                                     <div class="flex items-center mt-2 gap-5 text-white opacity-60">
                                                         <p> {{tickets.hari_masuk}}</p>
                                                         <p>{{tickets.user_email}}</p>

@@ -71,6 +71,7 @@
                         <div class="px-3 py-1 text-white whitespace-nowrap rounded-full" [ngClass]="{
                                                         'bg-blue-500': element.new_status === 'New',
                                                         'bg-yellow-500': element.new_status === 'On Progress',
+                                                        'bg-[#7D7D7D]': element.new_status === 'Hold',
                                                         'bg-green-500': element.new_status === 'Resolved',
                                                         }">
                             <h1 class="font-medium">{{element.new_status}}</h1>
@@ -118,7 +119,7 @@
         </mat-table>
     </div>
 
-    <div *ngIf="isNotDataFound && !isLoading"  class="py-10">
+    <div *ngIf="isNotDataFound && !isLoading" class="py-10">
         <div class="flex flex-col items-center">
             <img src="icons/not-found.jpg" alt="not-found.jpg" class="h-64 bg-cover bg-center object-scale-down">
             <br />

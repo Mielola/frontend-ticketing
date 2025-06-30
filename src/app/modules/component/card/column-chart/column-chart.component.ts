@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges, ViewChild } from "@angular/core";
+import { Router } from "@angular/router";
 import { FuseCardComponent } from "@fuse/components/card";
 import {
     ApexChart,
@@ -49,9 +50,12 @@ export class ColumnChartComponent implements OnChanges {
     @Input() seriesData: ApexAxisChartSeries = [];
     @Input() header: string = '';
     @Input() labels: string[] = [];
+    @Input() param?: string = '';
 
 
-    constructor() {
+    constructor(
+        private router: Router,
+    ) {
     }
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -61,11 +65,25 @@ export class ColumnChartComponent implements OnChanges {
                 height: 350,
                 type: "bar",
                 events: {
-                    click: function (chart, w, e) {
+                    click: (event, chartContext, config) => {
+                        if (this.param !== '' && this.param !== undefined && this.param !== null) {
+                            const clickedIndex = config.dataPointIndex;
+                            const label = this.labels[clickedIndex];
+
+                            this.router.navigate([`/dashboards/tickets/${this.param}`, label]);
+                        }
                     }
                 }
             },
             colors: [
+                "#008FFB",
+                "#00E396",
+                "#FEB019",
+                "#FF4560",
+                "#008FFB",
+                "#00E396",
+                "#FEB019",
+                "#FF4560",
                 "#008FFB",
                 "#00E396",
                 "#FEB019",
@@ -125,6 +143,14 @@ export class ColumnChartComponent implements OnChanges {
                 labels: {
                     style: {
                         colors: [
+                            "#008FFB",
+                            "#00E396",
+                            "#FEB019",
+                            "#FF4560",
+                            "#008FFB",
+                            "#00E396",
+                            "#FEB019",
+                            "#FF4560",
                             "#008FFB",
                             "#00E396",
                             "#FEB019",

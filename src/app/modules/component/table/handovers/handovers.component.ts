@@ -71,7 +71,7 @@ export class HandoversComponent implements OnInit, OnDestroy {
   isAdmin: boolean = localStorage.getItem("userRole") === 'admin';
   ticketStatus: boolean = false
 
-  statusList: string[] = ['New', 'On Progress', 'Resolved']
+  statusList: string[] = ['New', 'Hold', 'On Progress', 'Resolved']
   productsItems: { name: string, checked: boolean }[] = []
   category: { name: string, checked: boolean }[] = []
   statusItems: { name: string, checked: boolean }[] = []

@@ -31,20 +31,15 @@
 
     <div class="mt-5 sm:mt-10 h-fit w-full flex flex-col gap-4">
         <div class="w-full grid grid-cols-1 sm:grid-cols-4 gap-2">
+            <app-bar-chart [param]="'places'"
+                *ngIf="ChartTicketPlaceData.length > 0 && ChartTicketPlaceData[0].data.length > 0"
+                [seriesData]="ChartTicketPlaceData" [labels]="ChartTicketPlaceLabels"
+                [header]="'Tickets By Place (' + analyticsForm.get('products_name')?.value + ')'"
+                class="col-span-2 sm:col-span-3 xl:col-span-2">
+            </app-bar-chart>
 
-            <app-bar-chart-side [header]="'Tickets Resolved By Users'" [seriesData]="ChartUserResolvedData"
-                [labels]="ChartUserResolvedLabels" class="col-span-2"></app-bar-chart-side>
-            <app-bar-chart-side [header]="'Tickets By Products'" [seriesData]="ChartTicketProductsData"
-                [labels]="ChartTicketProductsLabels" class="col-span-2"></app-bar-chart-side>
-
-        </div>
-        <div class="w-full grid grid-cols-1 sm:grid-cols-4 gap-2">
-            <app-column-chart [seriesData]="chartPriorityData" [labels]="chartPriorityLabels"
-                [header]="'Tickets By Priority (' + analyticsForm.get('products_name')?.value + ')'"
-                class="col-span-2 sm:col-span-5 xl:col-span-2">
-            </app-column-chart>
-
-            <app-bar-chart [seriesData]="chartCategoryData" [labels]="chartCategoryLabels"
+            <app-bar-chart *ngIf="chartCategoryData?.length > 0" [param]="'category'" [seriesData]="chartCategoryData"
+                [labels]="chartCategoryLabels"
                 [header]="'Tickets By Category (' + analyticsForm.get('products_name')?.value + ')'"
                 class="col-span-2 sm:col-span-3 xl:col-span-2">
             </app-bar-chart>
@@ -56,14 +51,18 @@
 
             <app-column-chart class="col-span-2"
                 [header]="'Tickets Create By Users (' + analyticsForm.get('products_name')?.value + ')'"
-                [seriesData]="chartUserTicketsData" [labels]="chartUserTicketsLabels">
+                [seriesData]="chartUserTicketsData" [labels]="chartUserTicketsLabels" [param]="'users'">
             </app-column-chart>
 
-            <app-bar-chart *ngIf="ChartTicketPlaceData.length > 0 && ChartTicketPlaceData[0].data.length > 0"
-                [seriesData]="ChartTicketPlaceData" [labels]="ChartTicketPlaceLabels"
-                [header]="'Tickets By Place (' + analyticsForm.get('products_name')?.value + ')'"
-                class="col-span-2 sm:col-span-3 xl:col-span-2">
-            </app-bar-chart>
+            <app-bar-chart-side [header]="'Tickets Resolved By Users'" [seriesData]="ChartUserResolvedData"
+                [labels]="ChartUserResolvedLabels" class="col-span-2"></app-bar-chart-side>
+            <app-bar-chart-side [header]="'Tickets By Products'" [seriesData]="ChartTicketProductsData"
+                [labels]="ChartTicketProductsLabels" class="col-span-2"></app-bar-chart-side>
+
+            <app-column-chart [seriesData]="chartPriorityData" [labels]="chartPriorityLabels" [param]="null"
+                [header]="'Tickets By Priority (' + analyticsForm.get('products_name')?.value + ')'"
+                class="col-span-2 sm:col-span-5 xl:col-span-2">
+            </app-column-chart>
 
         </div>
     </div>

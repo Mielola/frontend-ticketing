@@ -55,13 +55,14 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   category: string[] = [];
   disableInput: boolean = true;
   priority: string[] = ['Low', 'Medium', 'High', 'Critical'];
-  status: string[] = ['New', 'On Progress', 'Resolved'];
+  status: string[] = ['New', 'Hold', 'On Progress', 'Resolved'];
   tracking_id: string;
   isLoading: boolean = false
   isNotDataFound: boolean
   shiftStatus: boolean = false
   isAdmin: boolean = localStorage.getItem("userRole") === 'admin';
   place: { id: number, name: string }[] = []
+  subject: string = ''
 
   public displayedColumns = ['tracking_id', 'user', 'new_status', 'priority', 'details', 'update_at',];
   public dataSource = new MatTableDataSource<any>();
@@ -94,6 +95,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       detail_kendala: [{ value: '', disabled: this.disableInput }, Validators.required],
       priority: [{ value: '', disabled: this.disableInput }, Validators.required],
       status: [{ value: '', disabled: this.disableInput }, Validators.required],
+      subject: [{ value: '', disabled: this.disableInput }, Validators.required],
       hari_masuk: [{ value: null, disabled: this.disableInput }, Validators.required],
       waktu_masuk: [{ value: '', disabled: this.disableInput }, Validators.required],
       respon_diberikan: [{ value: '', disabled: this.disableInput }, Validators.required],
@@ -219,6 +221,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     this.data = data.data
 
     this.TicketForm.patchValue({
+      subject: data.data.subject,
       products_name: data.data.products_name,
       places_id: data.data.place_id,
       category_id: data.data.category_id,

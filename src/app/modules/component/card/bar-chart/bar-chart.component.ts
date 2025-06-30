@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, ViewChild, ElementRef, OnDestroy, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Router } from '@angular/router';
 import ApexCharts from 'apexcharts';
 import {
     ChartComponent,
@@ -35,6 +36,11 @@ export class BarChartComponent implements OnChanges {
     @Input() seriesData: ApexAxisChartSeries = [];
     @Input() header: string = '';
     @Input() labels: string[] = [];
+    @Input() param?: string = '';
+
+    constructor(
+        private router: Router
+    ) { }
 
     ngOnChanges(changes: SimpleChanges): void {
         this.chartOptions = {
@@ -44,6 +50,16 @@ export class BarChartComponent implements OnChanges {
                 type: 'bar',
                 zoom: {
                     enabled: false
+                },
+                events: {
+                    click: (event, chartContext, config) => {
+                        if (this.param != '' || this.param != undefined || this.param != null) {
+                            const clickedIndex = config.dataPointIndex;
+                            const label = this.labels[clickedIndex];
+
+                            this.router.navigate([`/dashboards/tickets/${this.param}`, label]);
+                        }
+                    }
                 }
             },
             plotOptions: {
@@ -52,6 +68,7 @@ export class BarChartComponent implements OnChanges {
                     distributed: true,
                     borderRadius: 5,
                     borderRadiusApplication: "around",
+
                 }
             },
             dataLabels: {

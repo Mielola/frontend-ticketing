@@ -68,7 +68,7 @@ export class TicketComponent implements OnInit, OnDestroy {
   ticketStatus: boolean = false
   isAdmin: boolean = localStorage.getItem("userRole") === 'admin';
 
-  statusList: string[] = ['New', 'On Progress', 'Resolved']
+  statusList: string[] = ['New', 'Hold', 'On Progress', 'Resolved']
   productsItems: { name: string, checked: boolean }[] = []
   category: { name: string, checked: boolean }[] = []
   statusItems: { name: string, checked: boolean }[] = []
@@ -99,7 +99,6 @@ export class TicketComponent implements OnInit, OnDestroy {
     private _matDialog: MatDialog,
   ) {
     this._ticketTableService.checkTickets()
-    this._ticketTableService.fetchData()
     effect(() => {
       const getData = this.datas;
 
@@ -167,7 +166,10 @@ export class TicketComponent implements OnInit, OnDestroy {
         return
       }
 
-      this.dataSource.data = getData;
+      this.dataSource.data = getData.map(item => ({
+        ...item,
+        originalStatus: item.status
+      }));
     });
   }
 
@@ -248,6 +250,8 @@ export class TicketComponent implements OnInit, OnDestroy {
     this.dataSource.filterPredicate = (data: any, filter: string) => {
       let filters = JSON.parse(filter);
 
+      console.log(data)
+
       let searchMatch =
         filters.search === '' ||
         data.tracking_id.toLowerCase().includes(filters.search) ||
@@ -256,6 +260,7 @@ export class TicketComponent implements OnInit, OnDestroy {
         data.hari_masuk.toLowerCase().includes(filters.search) ||
         data.waktu_masuk.toLowerCase().includes(filters.search) ||
         data.products_name.toLowerCase().includes(filters.search) ||
+        data.pic.toLowerCase().includes(filters.search) ||
         data.category.toLowerCase().includes(filters.search) ||
         data.subject.toLowerCase().includes(filters.search) ||
         data.status.toLowerCase().includes(filters.search) ||
@@ -325,6 +330,14 @@ export class TicketComponent implements OnInit, OnDestroy {
       .filter(item => item.checked)
       .map(item => item.name.toLowerCase());
     this.applyFilter();
+  }
+
+  onStatusChange(newStatus: string, element: any): void {
+    if (newStatus !== element.originalStatus) {
+      console.log('Status changed:', newStatus);
+      // Terserah mau langsung update atau simpan perubahan dulu
+      this.changeStatus(element.tracking_id, newStatus);
+    }
   }
 
   async changeStatus(ticketId: string, newStatus: string) {
