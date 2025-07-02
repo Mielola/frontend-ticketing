@@ -59,13 +59,13 @@ export class AnalyticsComponent implements OnInit {
   chartCategoryData: { name: string, data: number[], type: string }[] = []
   chartCategoryLabels: string[] = []
 
+  // Chart Tickets berdasarkan category Resolved
+  chartCategoryResolvedData: { name: string, data: number[] }[] = []
+  chartCategoryResolvedLabels: string[] = []
+
   // Chart Ticket Berdasarkan Prioritas
   chartPriorityData: { name: string, data: number[], type: string }[]
   chartPriorityLabels: string[] = []
-
-  // Chart Ticket Req Category
-  ChartReqCategoryData: { name: string, data: number[], type: string }[]
-  ChartReqCategoryLabels: string[] = []
 
   // Chart Ticket Berdasarkan Prioritas
   chartPeriodeData: { name: string, data: number[], type: string }[]
@@ -210,26 +210,6 @@ export class AnalyticsComponent implements OnInit {
         this.chartCategoryLabels = [];
       }
 
-      // Chart Ticket Req Category
-      this.ChartReqCategoryData = [
-        {
-          name: 'Total Tiket',
-          data: this.data.ChartReqCategory.map((e) => e.total_tickets),
-          type: 'bar'
-        },
-      ]
-      this.ChartReqCategoryLabels = this.data.ChartReqCategory.map((e) => e.name);
-
-      // Chart Tikcet Berdasarkan Priority
-      this.chartPriorityData = [
-        {
-          name: 'Total Tiket',
-          data: this.data.ChartPriority.map((e) => e.value),
-          type: 'bar'
-        },
-      ]
-      this.chartPriorityLabels = this.data.ChartPriority.map((e) => e.label);
-
       // Chart Tikcet Berdasarkan Periode
       this.chartPeriodeData = [
         {
@@ -266,6 +246,16 @@ export class AnalyticsComponent implements OnInit {
       ]
       this.ChartTicketProductsLabels = this.data.ChartTicketProducts.map((e) => e.name)
 
+      // Chart Tikcet Berdasarkan Priority
+      this.chartPriorityData = [
+        {
+          name: 'Total Tiket',
+          data: this.data.ChartPriority.map((e) => e.value),
+          type: 'bar'
+        },
+      ]
+      this.chartPriorityLabels = this.data.ChartPriority.map((e) => e.label);
+
       // Chart Total Tickets By Place
       const chartPlacesData = (this.data.ChartPlaces ?? []).map((e) => e.total_tickets);
       const chartPlacesLabels = (this.data.ChartPlaces ?? []).map((e) => e.places_name);
@@ -281,6 +271,23 @@ export class AnalyticsComponent implements OnInit {
       } else {
         this.ChartTicketPlaceData = [];
         this.ChartTicketPlaceLabels = [];
+      }
+
+      // Chart Total Tickets By Category Resolved
+      const chartCategoryResolvedData = (this.data.ChartCategoryResolved ?? []).map((e) => e.total_tickets);
+      const chartCategoryResolvedLabels = (this.data.ChartCategoryResolved ?? []).map((e) => e.name);
+
+      if (chartCategoryResolvedData?.length > 0) {
+        this.chartCategoryResolvedData = [
+          {
+            name: 'Total Tiket',
+            data: chartCategoryResolvedData
+          }
+        ];
+        this.chartCategoryResolvedLabels = chartCategoryResolvedLabels;
+      } else {
+        this.chartCategoryResolvedData = [];
+        this.chartCategoryResolvedLabels = [];
       }
 
     } catch (error) {

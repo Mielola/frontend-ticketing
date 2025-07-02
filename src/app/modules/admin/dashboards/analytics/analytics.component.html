@@ -64,6 +64,11 @@
                 class="col-span-2 sm:col-span-5 xl:col-span-2">
             </app-column-chart>
 
+            <app-column-chart [seriesData]="chartCategoryResolvedData" [labels]="chartCategoryResolvedLabels" [param]="null"
+                [header]="'Tickets By Category Resolved (' + analyticsForm.get('products_name')?.value + ')'"
+                class="col-span-2 sm:col-span-5 xl:col-span-2">
+            </app-column-chart>
+
         </div>
     </div>
 </main>

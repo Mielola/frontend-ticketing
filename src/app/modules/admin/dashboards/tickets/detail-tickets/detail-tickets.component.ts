@@ -12,14 +12,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatStepperModule } from '@angular/material/stepper';
-import { IonLoading } from '@ionic/angular/standalone';
-import { DateTime } from 'luxon';
-import { TicketLogsComponent } from 'app/modules/component/table/ticket-logs/ticket-logs.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { TicketLogsService } from 'app/modules/component/table/ticket-logs/ticket-logs.service';
-import { takeUntil } from 'rxjs';
 import { FuseConfirmationService } from '@fuse/services/confirmation';
 import { ToastrService } from 'ngx-toastr';
 import { TicketTableService } from 'app/modules/component/table/ticket/ticket.service';
@@ -53,6 +48,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   TicketForm!: FormGroup;
   products: string[] = [];
   category: string[] = [];
+  categoryResolved: { id: string, name: string }[]
   disableInput: boolean = true;
   priority: string[] = ['Low', 'Medium', 'High', 'Critical'];
   status: string[] = ['New', 'Hold', 'On Progress', 'Resolved'];
@@ -91,6 +87,8 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       products_name: ['', Validators.required],
       category_id: [{ value: 0, disabled: this.disableInput }, Validators.required],
       places_id: [{ value: null, disabled: this.disableInput }],
+      category_resolved_id: [{ value: null, disabled: this.disableInput }],
+      note_resolved: [{ value: null, disabled: this.disableInput }],
       no_whatsapp: [{ value: '', disabled: this.disableInput }],
       detail_kendala: [{ value: '', disabled: this.disableInput }, Validators.required],
       priority: [{ value: '', disabled: this.disableInput }, Validators.required],
@@ -103,6 +101,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     })
 
     this.fetchDataProducts();
+    this.fetchCategoryResolved()
     this.route.paramMap.subscribe(params => {
       const trackingId = params.get('trackingId');
       if (trackingId) {
@@ -112,6 +111,9 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     });
 
 
+    this.TicketForm.get("status")?.valueChanges.subscribe(async (value) => {
+      this.applyStatusBasedResolvedValidators(value)
+    })
 
     this.TicketForm.get('products_name')?.valueChanges.subscribe(async (value) => {
       if (value) {
@@ -130,6 +132,24 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   goBack() {
     window.history.back();
   }
+
+  applyInitialResolvedValidators() {
+    if (this.data?.category_resolved_id && this.data?.note_resolved) {
+      this.TicketForm.get('note_resolved')?.setValidators([Validators.required]);
+      this.TicketForm.get('category_resolved_id')?.setValidators([Validators.required]);
+    }
+  }
+
+  applyStatusBasedResolvedValidators(status: string) {
+    if (status === 'Resolved') {
+      this.TicketForm.get('note_resolved')?.setValidators([Validators.required]);
+      this.TicketForm.get('category_resolved_id')?.setValidators([Validators.required]);
+    } else {
+      this.TicketForm.get('note_resolved')?.clearValidators();
+      this.TicketForm.get('category_resolved_id')?.clearValidators();
+    }
+  }
+
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
@@ -153,9 +173,15 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
   }
 
   async onSubmit() {
+
+    if (this.TicketForm.invalid) {
+      this._toastService.error('Form tidak valid. Mohon lengkapi semua field yang wajib.', 'Error');
+      this.TicketForm.markAllAsTouched();
+      return;
+    }
+
     try {
       const post = await this._apiService.post(`api/V1/tickets/${this.tracking_id}`, this.TicketForm.value)
-
       if (post.status === 200) {
         this.fetchData(this.tracking_id)
         this._toastService.success("Success Update Ticket", "Success")
@@ -205,6 +231,15 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
     }
   }
 
+  async fetchCategoryResolved() {
+    try {
+      const get = await this._apiService.get("api/V1/category-resolved");
+      this.categoryResolved = get.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  }
+
 
   async fetchDataProducts() {
     try {
@@ -224,6 +259,8 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       subject: data.data.subject,
       products_name: data.data.products_name,
       places_id: data.data.place_id,
+      category_resolved_id: data.data.category_resolved_id,
+      note_resolved: data.data.note_resolved,
       category_id: data.data.category_id,
       no_whatsapp: data.data.no_whatsapp,
       detail_kendala: data.data.detail_kendala,
@@ -234,6 +271,7 @@ export class DetailTicketsComponent implements OnInit, AfterViewInit {
       respon_diberikan: data.data.respon_admin,
       PIC: data.data.pic,
     })
+    this.applyInitialResolvedValidators()
   }
 
   async fetchUsers() {

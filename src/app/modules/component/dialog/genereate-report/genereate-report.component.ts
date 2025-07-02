@@ -73,6 +73,8 @@ export class GenereateReportComponent implements OnInit {
   category: string[] = [];
   place: { id: number, name: string }[] = []
   dataResponse: any
+  categoryResolved: { id: string, name: string }[]
+
 
   hiddenChart: boolean = false;
   @ViewChild('chartContainer', { static: false }) chartContainer!: ElementRef;
@@ -96,8 +98,9 @@ export class GenereateReportComponent implements OnInit {
   ngOnInit(): void {
     this.generateForm = this.fb.group({
       products_name: ['', Validators.required],
-      places_id: [null],
-      category_id: [{ value: 0, }, Validators.required],
+      places_id: [0, Validators.required],
+      category_id: [{ value: '0', }, Validators.required],
+      category_resolved_id: [{ value: 0 }, Validators.required],
       start_date: ['', Validators.required],
       end_date: ['', Validators.required],
       status: ['', Validators.required],
@@ -106,6 +109,7 @@ export class GenereateReportComponent implements OnInit {
     })
 
     this.fetchData()
+    this.fetchCategoryResolved()
     this.generateForm.get('products_name')?.valueChanges.subscribe(async (value) => {
       if (value) {
         const { data } = await this._apiService.post("api/V1/get-data-form", { name: value })
@@ -116,6 +120,15 @@ export class GenereateReportComponent implements OnInit {
         this.disableFields();
       }
     });
+  }
+
+  async fetchCategoryResolved() {
+    try {
+      const get = await this._apiService.get("api/V1/category-resolved");
+      this.categoryResolved = get.data;
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   }
 
   enableFields() {
@@ -156,12 +169,18 @@ export class GenereateReportComponent implements OnInit {
           products_name: this.generateForm.value.products_name,
           start_date: formatDate(this.generateForm.value.start_date),
           end_date: formatDate(this.generateForm.value.end_date),
-          places_id: this.generateForm.value.places_id ? String(this.generateForm.value.places_id) : null,
+          places_id: !this.generateForm.value.places_id ||
+            this.generateForm.value.places_id === 'all'
+            ? null
+            : String(this.generateForm.value.places_id),
           category_id: this.generateForm.value.category_id.toString(),
+          category_resolved_id: this.generateForm.value.category_resolved_id.toString(),
           start_time: this.generateForm.value.start_time,
           end_time: this.generateForm.value.end_time,
           status: this.selectedStatus
         }
+
+        console.log(formData)
 
         const post = await this._apiService.post("api/V1/report", formData)
         this.dataResponse = post
@@ -578,6 +597,7 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
         `${detail.hari_masuk} ${detail.waktu_masuk}`,
         detail.places_name ?? 'Tidak Ada',
         detail.category_name,
+        detail.category_resolved_name,
         detail.subject,
         detail.respon_admin,
         detail.created_at,
@@ -585,7 +605,7 @@ adalah ringkasan error yang ditemukan : `, 20, y, { maxWidth: 170 });
     });
 
     // Tambahkan tabel ke PDF atau laporan
-    await addTable(`A. Ticket`, [['Tracking ID', 'Tickets Entry', 'Place', 'Category', 'Subject', "Action", 'Created At']], tableTickets);
+    await addTable(`A. Ticket`, [['Tracking ID', 'Tickets Entry', 'Place', 'Category', "Category Resolved", 'Subject', "Action", 'Created At']], tableTickets);
     if (this.generateForm.value.products_name) {
 
       try {

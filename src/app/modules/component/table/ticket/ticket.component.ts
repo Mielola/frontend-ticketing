@@ -21,6 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterLink } from '@angular/router';
 import { GenereateReportComponent } from '../../dialog/genereate-report/genereate-report.component';
 import { ImportExcelComponent } from 'app/modules/admin/dashboards/tickets/import-excel/import-excel.component';
+import { FormResolvedComponent } from 'app/modules/admin/dashboards/tickets/form-resolved-tickets/form-resolved.component';
 
 const today = new Date();
 const month = today.getMonth();
@@ -227,6 +228,14 @@ export class TicketComponent implements OnInit, OnDestroy {
     })
   }
 
+  resolvedTickets(element) {
+    this._matDialog.open(FormResolvedComponent, {
+      width: window.innerWidth < 600 ? '90%' : '50%',
+      maxWidth: '100vw',
+      data: element
+    })
+  }
+
   generateReport() {
     this._matDialog.open(GenereateReportComponent, {
       width: window.innerWidth < 600 ? '90%' : '50%',
@@ -334,9 +343,11 @@ export class TicketComponent implements OnInit, OnDestroy {
 
   onStatusChange(newStatus: string, element: any): void {
     if (newStatus !== element.originalStatus) {
-      console.log('Status changed:', newStatus);
-      // Terserah mau langsung update atau simpan perubahan dulu
-      this.changeStatus(element.tracking_id, newStatus);
+      if (newStatus !== 'Resolved') {
+        this.changeStatus(element.tracking_id, newStatus);
+      } else {
+        this.resolvedTickets(element)
+      }
     }
   }
 
@@ -347,7 +358,6 @@ export class TicketComponent implements OnInit, OnDestroy {
       });
       if (status === 200) {
         this._ticketLogsService.fetchDatas()
-
         this._ticketTableService.fetchData()
       }
     } catch (error) {

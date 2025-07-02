@@ -288,10 +288,10 @@
                     <mat-cell *matCellDef="let element" class="py-4 w-full">
                         <mat-form-field hideRequiredMarker class="w-full">
                             <mat-select [(value)]="element.status" placeholder="Select"
+                                (selectionChange)="onStatusChange($event.value, element)"
                                 [disabled]="!isAdmin && (shiftStatus || element?.status === 'Resolved')">
                                 <mat-option *ngFor="let status of statusList" [value]="status"
-                                    class="px-3 py-1 m-2 font-medium text-base rounded-full"
-                                    (click)="changeStatus(element.tracking_id, status)">
+                                    class="px-3 py-1 m-2 font-medium text-base rounded-full">
                                     {{ status }}
                                 </mat-option>
                             </mat-select>

@@ -59,7 +59,8 @@
                                 class="px-3 py-1 m-2 font-medium text-base rounded-full">
                                 {{item.name}}
                             </mat-option>
-                        </mat-select> </mat-form-field>
+                        </mat-select>
+                    </mat-form-field>
 
                     <!-- Subject Input -->
                     <mat-form-field class="w-full">
@@ -190,6 +191,25 @@
                     <textarea formControlName="respon_diberikan" matInput rows="4" cols="50"
                         placeholder="Response Admin"></textarea>
                 </mat-form-field>
+
+
+                <ng-container *ngIf="TicketForm.get('status')?.value === 'Resolved'">
+                    <mat-form-field class="w-full py-4">
+                        <mat-label>Category Resolved</mat-label>
+                        <mat-select formControlName="category_resolved_id">
+                            <mat-option *ngFor="let item of categoryResolved" [value]="item.id"
+                                class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                                {{ item.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full" floatLabel="always">
+                        <mat-label>Note Resolved</mat-label>
+                        <textarea formControlName="note_resolved" matInput rows="4" cols="50"
+                            placeholder="Note Resolved"></textarea>
+                    </mat-form-field>
+                </ng-container>
             </form>
 
             <div class=" h-fit w-full shadow-xl border-[0.4px] border-opacity-20 border-black rounded-lg my-4 p-4">

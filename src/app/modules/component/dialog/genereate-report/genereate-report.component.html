@@ -24,7 +24,7 @@
 
             <!-- Place Input -->
             <mat-form-field class="w-full" *ngIf="place?.length !== 0">
-                <mat-label>Place (Optional)</mat-label>
+                <mat-label>Place</mat-label>
                 <mat-select formControlName="places_id">
                     <mat-option [value]="'all'" class="px-3 py-1 m-2 font-medium text-base rounded-full">
                         All
@@ -46,6 +46,20 @@
                     <mat-option *ngFor="let item of category" [value]="item.id"
                         class="px-3 py-1 m-2 font-medium text-base rounded-full">
                         {{item.category_name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <!-- Category Input -->
+            <mat-form-field class="w-full">
+                <mat-label>Category Resolved</mat-label>
+                <mat-select formControlName="category_resolved_id">
+                    <mat-option [value]="'all'" class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        All
+                    </mat-option>
+                    <mat-option *ngFor="let item of categoryResolved" [value]="item.id"
+                        class="px-3 py-1 m-2 font-medium text-base rounded-full">
+                        {{item.name}}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
